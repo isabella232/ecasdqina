@@ -6,6 +6,11 @@ title: ユーティリティ
 ---
 
 
+時短ライブラリ
+
+# 木の直径
+
+
 ```cpp
 /// Tree Diametor {{"{{"}}{ ///
 
@@ -24,6 +29,9 @@ int treeDiameter(UnWeightedGraph tree) {
 
 /// ---}}} ///
 ```
+
+
+# ダイクストラ
 
 
 ```cpp
