@@ -1,8 +1,8 @@
 {%- if page.comments != false -%}
-  {%- if jekyll.environment == "production" -%}
+  {%- if jekyll.environment == "production" or true -%}
 
     <div id="disqus_thread"></div>
-    <script>
+    <script defer>
       var disqus_config = function () {
         this.page.url = '{{ page.url | absolute_url }}';
         this.page.identifier = '{{ page.url | absolute_url }}';
@@ -13,6 +13,7 @@
 
         s.src = 'https://{{ site.disqus.shortname }}.disqus.com/embed.js';
 
+        s.setAttribute('defer', '');
         s.setAttribute('data-timestamp', +new Date());
         (d.head || d.body).appendChild(s);
       })();
