@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: string/z-algorithm
-title: z-algorithm
+title: Zアルゴリズム
 
 ---
 

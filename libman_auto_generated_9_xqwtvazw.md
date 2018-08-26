@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: data-structure/misc/SparseTable
-title: SparseTable
+title: Sparse Table
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: graph/BiconnectedComponent
-title: BiconnectedComponent
+title: 二重連結成分分解
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: algorithm/Hu-Tucker
-title: Hu-Tucker
+title: Hu-Tuckerのアルゴリズム
 
 ---
 

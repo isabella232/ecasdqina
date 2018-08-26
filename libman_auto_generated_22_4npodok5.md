@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: graph/BiedgeConnectedComponent
-title: BiedgeConnectedComponent
+title: 二辺連結成分分解
 
 ---
 

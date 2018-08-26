@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: graph/general
-title: general
+title: 基本
 
 ---
 

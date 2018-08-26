@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: math/Montgomery
-title: Montgomery
+title: モンゴメリ乗算
 
 ---
 

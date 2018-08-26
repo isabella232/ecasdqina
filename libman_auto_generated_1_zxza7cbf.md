@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: data-structure/SegmentTree/SegmentTree
-title: SegmentTree
+title: 普通のセグメントツリー
 
 ---
 

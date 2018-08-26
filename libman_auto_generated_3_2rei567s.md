@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: data-structure/SegmentTree/SegmentTree2D
-title: SegmentTree2D
+title: 二次元セグメントツリー
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: math/matrix
-title: matrix
+title: 行列の積と累乗
 
 ---
 

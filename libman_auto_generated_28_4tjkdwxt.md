@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: math/moebius
-title: moebius
+title: メビウス関数
 
 ---
 

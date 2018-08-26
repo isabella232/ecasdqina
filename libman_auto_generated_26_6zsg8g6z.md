@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: math/Givens
-title: Givens
+title: 連立一次方程式 (Givens)
 
 ---
 

@@ -8,7 +8,7 @@ url: "https://lumakernel.github.io" # the base hostname & protocol for your site
 twitter_username: lumc_
 github_username:  LumaKernel
 disqus: 
-  short_name: ecas
+  shortname: ecas
 lang: ja
 author: luma
 

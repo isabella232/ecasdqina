@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: graph/StronglyConnectedComponent
-title: StronglyConnectedComponent
+title: 強連結成分分解
 
 ---
 

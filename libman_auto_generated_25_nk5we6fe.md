@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: math/GaussJordan
-title: GaussJordan
+title: 連立一次方程式 (Gauss-Jordan)
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: misc/Factorial
-title: Factorial
+title: 階乗の事前計算
 
 ---
 

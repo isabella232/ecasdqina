@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: misc/ModuloInteger
-title: ModuloInteger
+title: Modudo Integer
 
 ---
 

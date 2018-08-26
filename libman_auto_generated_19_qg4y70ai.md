@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: graph/HL-Decomposition
-title: HL-Decomposition
+title: HL分解
 
 ---
 

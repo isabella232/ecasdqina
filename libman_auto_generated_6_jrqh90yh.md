@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: data-structure/SegmentTree/PersistentSegmentTree
-title: PersistentSegmentTree
+title: 永続セグメントツリー
 
 ---
 

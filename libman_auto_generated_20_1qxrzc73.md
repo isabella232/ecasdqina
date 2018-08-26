@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: graph/lowlink
-title: lowlink
+title: LowLink
 
 ---
 

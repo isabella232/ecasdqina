@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: data-structure/misc/BIT
-title: BIT
+title: Binary Indexed Tree (Fenwick Tree)
 
 ---
 

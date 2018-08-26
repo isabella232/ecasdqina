@@ -9,8 +9,7 @@ title: Manacher
 
 ```cpp
 // [i] = max radius as a palindrome when [i] is center
-// NOTE : 偶数長ほしいなら'
-とか挿入してね
+// NOTE : 偶数長ほしいなら'$'とか挿入してね
 vector< int > Manacher(string s) {
   int n = s.size();
   int i = 0, j = 0;

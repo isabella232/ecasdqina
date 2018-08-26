@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: data-structure/SegmentTree/LazySegmentTree
-title: LazySegmentTree
+title: 遅延セグメントツリー
 
 ---
 

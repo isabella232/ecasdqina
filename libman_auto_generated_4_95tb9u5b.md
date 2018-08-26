@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: data-structure/SegmentTree/DynamicSegmentTree
-title: DynamicSegmentTree
+title: 動的セグメントツリー
 
 ---
 

@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: data-structure/SegmentTree/FractionalCascadingSegmentTree
-title: FractionalCascadingSegmentTree
+title: フラクショナルカスケーディング
 
 ---
 

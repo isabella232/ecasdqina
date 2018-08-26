@@ -1,7 +1,7 @@
 ---
 layout: lib
 permalink: data-structure/misc/LinkCutTree
-title: LinkCutTree
+title: Link/Cut Tree
 
 ---
 
@@ -127,8 +127,7 @@ struct LinkCutTree {
   void cut(Splay *c) {
     expose(c);
 #ifdef DEBUG
-    static const struct CannotCutRoot {
-    } ex;
+    static const struct CannotCutRoot {} ex;
     if(!c->ch[0]) throw ex;
 #endif
     Splay *s = c->ch[0];
@@ -138,8 +137,7 @@ struct LinkCutTree {
   }
   void link(Splay *parent, Splay *child) {
 #ifdef DEBUG
-    static const struct CannotLinkSameNode {
-    } ex;
+    static const struct CannotLinkSameNode {} ex;
     if(same(parent, child)) throw ex;
 #endif
     expose(parent), expose(child);
@@ -158,8 +156,7 @@ struct LinkCutTree {
   }
   Splay *lca(Splay *a, Splay *b) {
 #ifdef DEBUG
-    static const struct CannotLCAAnotherNode {
-    } ex;
+    static const struct CannotLCAAnotherNode {} ex;
     if(!same(a, b)) throw ex;
 #endif
     expose(a), a = expose(b);
