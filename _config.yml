@@ -13,7 +13,10 @@ lang: ja
 author: luma
 
 # Build settings
-markdown: redcarpet
+markdown: kramdown
+# https://kramdown.gettalong.org/syntax_highlighter/rouge.html
+# rougeを切るのがわかりずらかった
+highlighter: true
 theme: minima
 plugins:
   # - jekyll-feed

@@ -11,8 +11,9 @@ permalink: architecture
 
 # 守れてそうなこと
 
-* queryは半開区間[l, r)
-* rangeは閉区間[l, r]
+* query(l, r)は半開区間[l, r)
+* range(l, r)は閉区間[l, r]
+* 無駄にstd::書かない
 
 # これから変えていきたい
 
