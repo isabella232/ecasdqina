@@ -32,7 +32,7 @@ last_update : 2018-08-29
 * [SkewHeap]({{ "data-structure/Heap/SkewHeap" | relative_url }})
 * [RadixHeap]({{ "data-structure/Heap/RadixHeap" | relative_url }})
 
-## 平衡二部探索木(Balanced Binary Search Tree; BBST)
+## [平衡二部探索木(Balanced Binary Search Tree; BBST)]({{ "data-structure/BBST" | relative_url }})
 
 * [RBST]({{ "data-structure/BBST/RBST" | relative_url }})
 * [Treap]({{ "data-structure/BBST/Treap" | relative_url }})
@@ -101,3 +101,6 @@ last_update : 2018-08-29
 
 * [ei1333's page (うしさんのすごいやつ)](https://ei1333.github.io){:target="_blank"}
   * アルゴリズムのリンク集が便利だよ
+* [DEGwerさんの数え上げテクニック集](http://d.hatena.ne.jp/DEGwer/20171220){:target="_blank"}
+* [kirikaさんの整数論集](https://github.com/kirika-comp/articles){:target="_blank"}
+  * seisuuron.tex

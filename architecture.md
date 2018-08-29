@@ -13,7 +13,8 @@ permalink: architecture
 
 * query(l, r)は半開区間[l, r)
 * range(l, r)は閉区間[l, r]
-* 無駄にstd::書かない
+* `std::`書かない
+* ミニマルで再実装しやすい実装
 
 # これから変えていきたい
 
@@ -21,3 +22,4 @@ permalink: architecture
 * コンストラクタ(InputIter frist, InputIter last)をちゃんと用意
 * 自動でビルドするやつは手動に...？（要検討）
   * コンストラクタ(int size)のものだけ手動とか
+* exampleはuncommentされた状態で（formatとか考慮して)

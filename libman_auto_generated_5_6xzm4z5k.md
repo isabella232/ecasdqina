@@ -5,7 +5,6 @@ permalink: data-structure/SegmentTree/FractionalCascadingSegmentTree
 
 ---
 
-reference : https://ei1333.hateblo.jp/entry/2017/12/14/000000
 
 
 ```cpp
@@ -131,3 +130,5 @@ struct FractionalCascadingSegTree {
 // }}}
 ```
 
+
+* [ちょっと変わったセグメント木の使い方 \| ei1333の日記](https://ei1333.hateblo.jp/entry/2017/12/14/000000){:target="_blank"}

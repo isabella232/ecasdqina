@@ -13,7 +13,6 @@ permalink: misc/bit-utility
 
 
 ```cpp
-#reference : https: // www.slideshare.net/KMC_JP/slide-www
 int topbit(int x) {
   x = x & 0xFFFF0000 ? x & 0xFFFF0000 : x;
   x = x & 0xFF00FF00 ? x & 0xFF00FF00 : x;

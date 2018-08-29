@@ -5,18 +5,11 @@ permalink: data-structure/SegmentTree/SegmentTree
 
 ---
 
-reference : https://tomcatowl.github.io/post/ds-and-alg-1/
 
 
 ```cpp
 // NOTE : query in range!
 /// --- SegmentTree Library {{"{{"}}{ ///
-
-// struct Monoid {
-//   using T = _underlying_set_;
-//   static T op(const T& a, const T& b) { return _a_op_b_; }
-//   static constexpr T identity() { return _identity_element_; }
-// };
 
 template < class Monoid >
 struct SegTree {
@@ -37,7 +30,7 @@ public:
     // fill from deep
     for(int i = n - 1; i > 0; i--) prop(i);
   }
-  void set(int i, const T& v) {
+  void set(int i, const T &v) {
     data[i += n] = v;
     while(i >>= 1) prop(i); // propUp
   }
@@ -52,7 +45,7 @@ public:
   }
   inline void dum(int r = -1) {
 #ifdef DEBUG
-    ostream& o =
+    ostream &o =
 #ifdef USE_COUT
         cout
 #else
@@ -69,31 +62,42 @@ public:
 
 /// }}}--- ///
 
-// Monoid examples {{"{{"}}{
+/// --- Monoid examples {{"{{"}}{ ///
 
-constexpr ll inf = numeric_limits< ll >::max();
-// using P = pair<ll, ll>
-
-struct MonoidMin {
-  using T = ll;
-  static T op(const T& a, const T& b) { return min(a, b); }
-  static constexpr T identity() { return inf; }
+struct Nothing {
+  using T = char;
+  using M = char;
+  static constexpr T op(const T &, const T &) { return 0; }
+  static constexpr T identity() { return 0; }
+  template < class X >
+  static constexpr X actInto(const M &, ll, ll, const X &x) {
+    return x;
+  }
 };
-struct MonoidSum {
+
+struct RangeMin {
   using T = ll;
-  static T op(const T& a, const T& b) { return a + b; }
+  static T op(const T &a, const T &b) { return min(a, b); }
+  static constexpr T identity() { return numeric_limits< T >::max(); }
+};
+
+struct RangeMax {
+  using T = ll;
+  static T op(const T &a, const T &b) { return max(a, b); }
+  static constexpr T identity() { return numeric_limits< T >::min(); }
+};
+
+struct RangeSum {
+  using T = ll;
+  static T op(const T &a, const T &b) { return a + b; }
   static constexpr T identity() { return 0; }
 };
-struct MonoidMax {
-  using T = ll;
-  static T op(const T& a, const T& b) { return max(a, b); }
-  static constexpr T identity() { return -inf; }
-};
 
-// }}}
+/// }}}--- ///
 
-// using RMQ = SegTree<MonoidMin>;
-// RMQ rmq(N);
+using RMQ = SegTree< MonoidMin >;
+RMQ rmq(N);
 ```
 
 
+* [データ構造と代数(前編)](https://tomcatowl.github.io/post/ds-and-alg-1/){:target="_blank"}

@@ -15,6 +15,9 @@ IOIで常勝できることはあまりにも有名．
 
 参考になるものを準備しています…
 
+TODO : 区間に対する更新に対し，leftを求めるの，ちょっとどうすればいいかわからないけど，  
+やっている人がいるのでそのうち見てみようと思います．
+
 
 ```cpp
 // when link(p, c) , c is root.
@@ -39,8 +42,8 @@ struct LinkCutTree {
     // call before use
     void eval() {
       if(lazy != M_act::identity()) {
-        val = M_act::actInto(lazy, 1, val);
-        accum = M_act::actInto(lazy, sz, accum);
+        val = M_act::actInto(lazy, -1, 1, val);
+        accum = M_act::actInto(lazy, -1, sz, accum);
         if(ch[0]) ch[0]->lazy = M_act::op(lazy, ch[0]->lazy);
         if(ch[1]) ch[1]->lazy = M_act::op(lazy, ch[1]->lazy);
         lazy = M_act::identity();
@@ -177,7 +180,9 @@ struct LinkCutTree {
 
 /// }}}--- ///
 
-// Monoid, M_act expamles {{"{{"}}{
+/// --- Monoid, M_act examples {{"{{"}}{ ///
+
+/// --- Monoid examples {{"{{"}}{ ///
 
 struct Nothing {
   using T = char;
@@ -185,7 +190,7 @@ struct Nothing {
   static constexpr T op(const T &, const T &) { return 0; }
   static constexpr T identity() { return 0; }
   template < class X >
-  static constexpr X actInto(const M &, ll, const X &x) {
+  static constexpr X actInto(const M &, ll, ll, const X &x) {
     return x;
   }
 };
@@ -208,6 +213,8 @@ struct RangeSum {
   static constexpr T identity() { return 0; }
 };
 
+/// }}}--- ///
+
 // MinAdd m + x
 // MinSet m
 // SumAdd m * n + x
@@ -218,7 +225,7 @@ struct RangeMinAdd {
   using X = RangeMin::T;
   static M op(const M &a, const M &b) { return a + b; }
   static constexpr M identity() { return 0; }
-  static X actInto(const M &m, ll, const X &x) { return m + x; }
+  static X actInto(const M &m, ll, ll, const X &x) { return m + x; }
 };
 
 struct RangeMinSet {
@@ -226,7 +233,7 @@ struct RangeMinSet {
   using X = RangeMin::T;
   static M op(const M &a, const M &) { return a; }
   static constexpr M identity() { return numeric_limits< M >::min(); }
-  static X actInto(const M &m, ll, const X &) { return m; }
+  static X actInto(const M &m, ll, ll, const X &) { return m; }
 };
 
 struct RangeSumAdd {
@@ -234,7 +241,7 @@ struct RangeSumAdd {
   using X = RangeSum::T;
   static M op(const M &a, const M &b) { return a + b; }
   static constexpr M identity() { return 0; }
-  static X actInto(const M &m, ll n, const X &x) { return m * n + x; }
+  static X actInto(const M &m, ll, ll n, const X &x) { return m * n + x; }
 };
 
 struct RangeSumSet {
@@ -242,10 +249,10 @@ struct RangeSumSet {
   using X = RangeSum::T;
   static M op(const M &a, const M &) { return a; }
   static constexpr M identity() { return numeric_limits< M >::min(); }
-  static X actInto(const M &m, ll n, const X &) { return m * n; }
+  static X actInto(const M &m, ll, ll n, const X &) { return m * n; }
 };
 
-// }}}
+/// }}}--- ///
 
 // LinkCutTree< RangeSum, RangeSumSet > lc(N);
 ```
@@ -253,9 +260,9 @@ struct RangeSumSet {
 
 # 検証
 
-* RMQとRUQ - [AOJの]( https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/DSL_2_F/judge/3092002/C++14)
+* RMQとRUQ - [AOJのなんか](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/DSL_2_F/judge/3092002/C++14){:target="_blank"}
   * 遅延セグ木でできることがevert付きでできる
-* LCA - [AOJの](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/GRL_5_C/judge/3092319/C++14){:target="_blank"}
+* LCA - [AOJのなんか](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/GRL_5_C/judge/3092319/C++14){:target="_blank"}
 * HL-Decomp(TLE) [E. The Number Games \| CF](https://codeforces.com/contest/980/submission/41594330){:target="_blank"}
 * HL-Decomp [PCKの問題 \| AOJ]( https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/0367/judge/3093506/C++14)
 
