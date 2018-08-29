@@ -9,7 +9,7 @@ permalink: data-structure/BBST/RBST
 Randomized BST
 [https://www.slideshare.net/iwiwi/2-12188757/46](https://www.slideshare.net/iwiwi/2-12188757/46){:target="_blank"}にすべて
 
-[Treap](data-structure/BBST/Treap)のほうがはやかった
+[Treap]({{ "data-structure/BBST/Treap" | absolute_url }})のほうがはやかった
 
 
 # Sequenceタイプ
