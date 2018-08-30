@@ -17,10 +17,13 @@ google_analytics: UA-50150483-6
 markdown: kramdown
 # https://kramdown.gettalong.org/syntax_highlighter/rouge.html
 # rougeを切るのがわかりずらかった
-highlighter: true
+highlighter: rouge
 theme: minima
 plugins:
   # - jekyll-feed
+kramdown:
+  syntax_highlighter_opts:
+    disable: true
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
