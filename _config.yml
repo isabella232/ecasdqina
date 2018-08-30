@@ -11,6 +11,7 @@ disqus:
   shortname: ecas
 lang: ja
 author: luma
+google_analytics: UA-50150483-6
 
 # Build settings
 markdown: kramdown
