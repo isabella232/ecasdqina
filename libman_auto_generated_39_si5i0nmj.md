@@ -1,6 +1,6 @@
 ---
 layout: lib
-title: ラグランジュ緩和問題(永遠に未完成)
+title: ラグランジュ緩和問題 (永遠に未完成)
 permalink: math/LagrangianRelaxation
 
 ---

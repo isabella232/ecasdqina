@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-08-29
+last_update : 2018-08-31
 ---
 
 えかライブラリだよ
@@ -40,7 +40,7 @@ last_update : 2018-08-29
 # グラフ
 
 * [基本]({{ "graph/general" | relative_url }})
-* [強連結成分分解(Kosaraju's algorithm)]({{ "graph/StronglyConnectedComponent" | relative_url }})
+* [強連結成分分解 (Kosaraju's algorithm)]({{ "graph/StronglyConnectedComponent" | relative_url }})
 * [HL分解]({{ "graph/HL-Decomposition" | relative_url }})
 * [LowLink]({{ "graph/lowlink" | relative_url }})
 * [二重連結成分分解]({{ "graph/BiconnectedComponent" | relative_url }})
@@ -52,8 +52,8 @@ last_update : 2018-08-29
 ## フロー
 
 * [二部マッチング]({{ "graph/flow/bipartiteMatching" | relative_url }})
-* [最大フロー(Dinic)]({{ "graph/flow/Dinic" | relative_url }})
-* [最大フロー(Ford-Fulkerson)]({{ "graph/flow/FordFulkerson" | relative_url }})
+* [最大フロー (Dinic)]({{ "graph/flow/Dinic" | relative_url }})
+* [最大フロー (Ford-Fulkerson)]({{ "graph/flow/FordFulkerson" | relative_url }})
 * [最小費用流]({{ "graph/flow/MinCostFlow" | relative_url }})
 
 # 数学
@@ -63,27 +63,30 @@ last_update : 2018-08-29
 * [連立一次方程式 (Givens)]({{ "math/Givens" | relative_url }})
 * [行列の積と累乗]({{ "math/matrix" | relative_url }})
 * [メビウス関数]({{ "math/moebius" | relative_url }})
-* [高速フーリエ変換(FFT)，数論変換(NTT)]({{ "math/FFT" | relative_url }})
+* [高速フーリエ変換 (FFT)，数論変換 (NTT)]({{ "math/FFT" | relative_url }})
 * [モンゴメリ乗算]({{ "math/Montgomery" | relative_url }})
 * [モノイド，モノイド作用]({{ "math/Monoid" | relative_url }})
-* [ラグランジュ緩和問題(永遠に未完成)]({{ "math/LagrangianRelaxation" | relative_url }})
+* [ラグランジュ緩和問題 (永遠に未完成)]({{ "math/LagrangianRelaxation" | relative_url }})
 
 # 幾何
 
 * [基本]({{ "geometory/geometory" | relative_url }})
-* [凸法(Graham Scan, Andrew Scan)]({{ "geometory/grahamscan-polar" | relative_url }})
+* [凸包 (Graham Scan, Andrew Scan)]({{ "geometory/grahamscan-polar" | relative_url }})
 
 # アルゴリズム
 
 * [高速ゼータ変換]({{ "algorithm/FastZetaTransform" | relative_url }})
-* [最適二分探索木(Hu-Tucker)]({{ "algorithm/Hu-Tucker" | relative_url }})
+* [最適二分探索木 (Hu-Tucker)]({{ "algorithm/Hu-Tucker" | relative_url }})
 
 # [文字列]({{ "string" | relative_url }})
 
-* [最長回文半径(Manacher)]({{ "string/Manacher" | relative_url }})
-* [s\[0;i-1\]の接頭辞と接尾辞が一致する最大の長さ(KMP法), 最小周期]({{ "string/KMP" | relative_url }})
-* [sとs\[i;-1\]の最長共通接頭辞(z-algorithm)]({{ "string/z-algorithm" | relative_url }})
-* [文字列検索(Aho-Corasick法)]({{ "string/AhoCorasick" | relative_url }})
+* [最長回文半径 (Manacher)]({{ "string/Manacher" | relative_url }})
+* [s\[0,i-1\]の接頭辞と接尾辞が一致する最大の長さ (KMP法), 最小周期]({{ "string/KMP" | relative_url }})
+* [sとs\[i, -1\]の最長共通接頭辞 (z-algorithm)]({{ "string/z-algorithm" | relative_url }})
+* [文字列検索 (Aho-Corasick法)]({{ "string/AhoCorasick" | relative_url }})
+* [接尾辞配列 (Suffix Array) (Manber & Myers)]({{ "string/SA-with-Manber-Myers" | relative_url }})
+* [接尾辞配列 (Suffix Array) (SA-IS)]({{ "string/SA-IS" | relative_url }})
+* [LCP配列]({{ "string/LCP-Array" | relative_url }})
 * [木を文字列に変換する]({{ "string/tree-to-string" | relative_url }})
 * [文字列ユーティリティ]({{ "string/string-utility" | relative_url }})
 

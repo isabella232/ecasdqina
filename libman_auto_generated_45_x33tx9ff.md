@@ -1,6 +1,6 @@
 ---
 layout: lib
-title: 最長回文半径(Manacher)
+title: 最長回文半径 (Manacher)
 permalink: string/Manacher
 
 ---

@@ -1,6 +1,6 @@
 ---
 layout: lib
-title: 文字列検索(Aho-Corasick法)
+title: 文字列検索 (Aho-Corasick法)
 permalink: string/AhoCorasick
 
 ---

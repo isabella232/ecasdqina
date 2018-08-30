@@ -95,7 +95,7 @@ struct RangeSum {
 
 /// }}}--- ///
 
-using RMQ = SegTree< MonoidMin >;
+using RMQ = SegTree< RangeMin >;
 RMQ rmq(N);
 ```
 

@@ -1,6 +1,6 @@
 ---
 layout: lib
-title: 最適二分探索木(Hu-Tucker)
+title: 最適二分探索木 (Hu-Tucker)
 permalink: algorithm/Hu-Tucker
 
 ---

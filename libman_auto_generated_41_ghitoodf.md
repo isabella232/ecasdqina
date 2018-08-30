@@ -1,6 +1,6 @@
 ---
 layout: lib
-title: '凸法(Graham Scan, Andrew Scan)'
+title: '凸包 (Graham Scan, Andrew Scan)'
 permalink: geometory/grahamscan-polar
 
 ---

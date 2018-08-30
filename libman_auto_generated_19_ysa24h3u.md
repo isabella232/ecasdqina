@@ -1,6 +1,6 @@
 ---
 layout: lib
-title: 強連結成分分解(Kosaraju's algorithm)
+title: 強連結成分分解 (Kosaraju's algorithm)
 permalink: graph/StronglyConnectedComponent
 
 ---
@@ -8,7 +8,7 @@ permalink: graph/StronglyConnectedComponent
 
 蟻本に乗ってるほう．
 
-Tarjan'sも有名，そのうち書きたい．
+TODO : Tarjan'sも有名，そのうち書きたい．
 
 
 ```cpp

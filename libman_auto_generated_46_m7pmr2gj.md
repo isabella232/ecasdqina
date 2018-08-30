@@ -1,6 +1,6 @@
 ---
 layout: lib
-title: 's[0;i-1]の接頭辞と接尾辞が一致する最大の長さ(KMP法), 最小周期'
+title: 's[0,i-1]の接頭辞と接尾辞が一致する最大の長さ (KMP法), 最小周期'
 permalink: string/KMP
 
 ---
@@ -8,7 +8,7 @@ permalink: string/KMP
 
 Knuth-Morris-Pratt法
 
-s[0;i-1]の文字全部と全部は当然一致するので，**1文字以上少ないもの**のみ考慮．
+s[0,i-1]の文字全部と全部は当然一致するので，**1文字以上少ないもの**のみ考慮．
 
 KMPのKはKnuthのKだけど，  
 これがあることによって均し計算量は変わらないけど一回あたりの計算量（なんとなく瞬間最悪計算量とよんでいる）が落ちるらしく，それを使う問題があるらしい（らしい
@@ -19,7 +19,7 @@ KMPのKはKnuthのKだけど，
 
 
 ```cpp
-// [i] = size of longest common suffix and prefix in s[0;i-1]
+// [i] = size of longest common suffix and prefix in s[0,i-1]
 // 瞬間最悪計算量 O(N)
 // 均し計算量 O(N)
 vector< int > MP(string s) {
@@ -40,7 +40,7 @@ vector< int > MP(string s) {
 
 
 ```cpp
-// [i] = size of longest common suffix and prefix in s[0;i-1]
+// [i] = size of longest common suffix and prefix in s[0,i-1]
 // 瞬間最悪計算量 O(log N)
 // 均し計算量 O(N)
 vector< int > KMP(string s) {
@@ -80,7 +80,7 @@ KMPを用いて各iについてs[0;i]の最小周期がわかる．
 
 
 ```cpp
-// [i] = min cycle length in [0;i]
+// [i] = min cycle length in [0,i]
 // 最小周期長
 // NOTE : justである必要なし
 vector< int > cycle(string s) {
