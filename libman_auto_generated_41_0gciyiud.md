@@ -9,7 +9,7 @@ permalink: geometory/geometory
 たまにコンテストでつかったのがある，くらいで，  
 検証はしていない．
 
-HCPCのスライド[kika1](https://www.slideshare.net/hcpc_hokudai/kika-80076550),[kika2](https://www.slideshare.net/hcpc_hokudai/kika2-80076551),[kika3](https://www.slideshare.net/hcpc_hokudai/kika3-80076552){:target="_blank"}を参考に．  
+HCPCのスライド[kika1](https://www.slideshare.net/hcpc_hokudai/kika-80076550){:target="_blank"},[kika2](https://www.slideshare.net/hcpc_hokudai/kika2-80076551){:target="_blank"},[kika3](https://www.slideshare.net/hcpc_hokudai/kika3-80076552){:target="_blank"}を参考に．  
 ただしこれらには結構間違いがあったので注意．  
 ちなみに以下のものも間違っている可能性があるので注意．
 
@@ -198,8 +198,8 @@ vector< Line > tangentLine(Circle c, Point p) {
     res.emplace_back(ajacentLine(c, p));
   else if(c.second < d) {
     Point a = c.first + c.second * normalize(p - c.first);
-    vector< Point > b = intersections(Circle(c.first, norm(c.first - p)),
-                                      Line(a, a + normal(c.first - p)));
+    vector< Point > b = intersections(
+        Circle(c.first, norm(c.first - p)), Line(a, a + normal(c.first - p)));
     for(size_t i = 0; i < b.size(); i++) {
       res.emplace_back(p, c.first + c.second * normalize(b[i] - c.first));
     }

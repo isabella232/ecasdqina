@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-08-31
+last_update : 2018-09-01
 ---
 
 えかライブラリだよ
@@ -41,6 +41,7 @@ last_update : 2018-08-31
 
 * [基本]({{ "graph/general" | relative_url }})
 * [強連結成分分解 (Kosaraju's algorithm)]({{ "graph/StronglyConnectedComponent" | relative_url }})
+* [木のダブリング]({{ "graph/DoublingTree" | relative_url }})
 * [HL分解]({{ "graph/HL-Decomposition" | relative_url }})
 * [LowLink]({{ "graph/lowlink" | relative_url }})
 * [二重連結成分分解]({{ "graph/BiconnectedComponent" | relative_url }})
@@ -81,7 +82,7 @@ last_update : 2018-08-31
 # [文字列]({{ "string" | relative_url }})
 
 * [最長回文半径 (Manacher)]({{ "string/Manacher" | relative_url }})
-* [s\[0,i-1\]の接頭辞と接尾辞が一致する最大の長さ (KMP法), 最小周期]({{ "string/KMP" | relative_url }})
+* [s\[0,i-1\]の接頭辞と接尾辞が一致する最大の長さ (Prefix Function, KMP法), 最小周期]({{ "string/KMP" | relative_url }})
 * [sとs\[i, -1\]の最長共通接頭辞 (z-algorithm)]({{ "string/z-algorithm" | relative_url }})
 * [文字列検索 (Aho-Corasick法)]({{ "string/AhoCorasick" | relative_url }})
 * [接尾辞配列 (Suffix Array) (Manber & Myers)]({{ "string/SA-with-Manber-Myers" | relative_url }})
@@ -97,13 +98,17 @@ last_update : 2018-08-31
 * [ビット操作ユーティリティ]({{ "misc/bit-utility" | relative_url }})
 * [階乗の事前計算]({{ "misc/Factorial" | relative_url }})
 * [XorShift]({{ "misc/XorShift" | relative_url }})
-* [ダブリング (for グラフ)]({{ "misc/DoublingParent" | relative_url }})
 * [BigInteger]({{ "misc/bigint" | relative_url }})
 
 # リンク集
 
-* [ei1333's page (うしさんのすごいやつ)](https://ei1333.github.io){:target="_blank"}
+* [ei1333's page (うしさんのすごいやつ)](https://ei1333.github.io){:target="_blank"}<!--_-->
   * アルゴリズムのリンク集が便利だよ
-* [DEGwerさんの数え上げテクニック集](http://d.hatena.ne.jp/DEGwer/20171220){:target="_blank"}
-* [kirikaさんの整数論集](https://github.com/kirika-comp/articles){:target="_blank"}
+* [DEGwerさんの数え上げテクニック集](http://d.hatena.ne.jp/DEGwer/20171220){:target="_blank"}<!--_-->
+* [kirikaさんの整数論集](https://github.com/kirika-comp/articles){:target="_blank"}<!--_-->
   * seisuuron.tex
+* [E-Maxx Algorithms in English](https://cp-algorithms.com){:target="_blank"}<!--_-->
+  * もともとロシア語のものを英語に翻訳したものらしい
+  * いろいろある
+* [競技プログラミング練習問題集 - はまやんはまやんはまやん](https://www.hamayanhamayan.com/entry/2100/01/01/000000){:target="_blank"}<!--_-->
+

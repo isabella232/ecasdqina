@@ -111,6 +111,6 @@ private:
 
 # 参考
 
-* [Dinic's algorithm - wikipedia(en)](https://en.wikipedia.org/wiki/Dinic%27s_algorithm)
-* [Dinic法 - Algoogle](http://algoogle.hadrori.jp/algorithm/dinic.html)
+* [Dinic's algorithm - wikipedia(en)](https://en.wikipedia.org/wiki/Dinic%27s_algorithm){:target="_blank"}
+* [Dinic法 - Algoogle](http://algoogle.hadrori.jp/algorithm/dinic.html){:target="_blank"}
 

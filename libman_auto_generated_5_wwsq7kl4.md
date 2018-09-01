@@ -45,8 +45,8 @@ struct FractionalCascadingSegTree {
       if(i >= n - 1) {
         sort(begin(indices[i]), end(indices[i]));
         if(doUnique)
-          indices[i].erase(unique(begin(indices[i]), end(indices[i])),
-                           end(indices[i]));
+          indices[i].erase(
+              unique(begin(indices[i]), end(indices[i])), end(indices[i]));
         ini(dat[i], indices[i]);
         continue;
       }
