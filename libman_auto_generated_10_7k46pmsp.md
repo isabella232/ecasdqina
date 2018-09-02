@@ -21,6 +21,7 @@ TODO : 区間に対する更新に対し，leftを求めるの，ちょっとど
 
 ```cpp
 // when link(p, c) , c is root.
+// cut(c), c is not root
 // use make(int index, Monoid::T x)
 // lc[index] to access nodes
 /// --- LinkCutTree Library {{"{{"}}{ ///
@@ -35,7 +36,7 @@ struct LinkCutTree {
     Splay *ch[2] = {nullptr, nullptr}, *p = nullptr;
     X val, accum;
     M lazy = M_act::identity(); ///////
-    // BSTの大きさ // 実際の部分木の大きさ，ではない
+    // size of BST // not of real subtree
     int sz = 1;
     bool isRoot() { return !p || (p->ch[0] != this && p->ch[1] != this); }
     bool rev = false;
@@ -176,6 +177,14 @@ struct LinkCutTree {
     expose(a);
     return a->accum;
   }
+  // root of subtree
+  Splay *getRoot(Splay *a) {
+    expose(a);
+    Splay *t = a;
+    while(t->ch[0]) t = t->ch[0];
+    t->splay();
+    return t;
+  }
 };
 
 /// }}}--- ///
@@ -265,4 +274,15 @@ struct RangeSumSet {
 * LCA - [AOJのなんか](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/GRL_5_C/judge/3092319/C++14){:target="_blank"}
 * HL-Decomp(TLE) [E. The Number Games \| CF](https://codeforces.com/contest/980/submission/41594330){:target="_blank"}
 * HL-Decomp [PCKの問題 \| AOJ]( https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/0367/judge/3093506/C++14)
+* 部分木サイズ，link/cut，部分木root [E - Black Cats Deployment - AC](https://beta.atcoder.jp/contests/cf17-tournament-round3-open/submissions/3128272){:target="_blank"}<!--_-->
+  * なんかいい感じのLCT向け問題を見つけてしまった(想定解ではない)
+  * cutができて，サイズが分かるUnionFind的な扱いをする
+  * evertがないとき，部分木のサイズを計算できる
+  * (cutの後にlinkがあるとかは，部分木野サイズは対応が難しいかも)
+  * 部分木のroot取得もある
+
+# 練習
+
+* [E - Black Cats Deployment - AC](https://beta.atcoder.jp/contests/cf17-tournament-round3-open/tasks/asaporo2_e){:target="_blank"}<!--_-->
+  * ぜひやってみてください
 
