@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-09-01
+last_update : 2018-09-02
 ---
 
 えかライブラリだよ
@@ -94,7 +94,7 @@ last_update : 2018-09-01
 # いろいろ
 
 * [Convex Hull Trick (動的も)]({{ "misc/ConvexHullTrick" | relative_url }})
-* [Modudo Integer]({{ "misc/ModuloInteger" | relative_url }})
+* [Modulo Integer]({{ "misc/ModuloInteger" | relative_url }})
 * [ビット操作ユーティリティ]({{ "misc/bit-utility" | relative_url }})
 * [階乗の事前計算]({{ "misc/Factorial" | relative_url }})
 * [XorShift]({{ "misc/XorShift" | relative_url }})

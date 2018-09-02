@@ -1,6 +1,6 @@
 ---
 layout: lib
-title: Modudo Integer
+title: Modulo Integer
 permalink: misc/ModuloInteger
 
 ---
@@ -9,15 +9,22 @@ permalink: misc/ModuloInteger
 
 
 ```cpp
-// require math library
 /// --- ModInt Library {{"{{"}}{ ///
 template < ll mod = (ll) 1e9 + 7 >
 struct ModInt {
+  ll extgcd(ll a, ll b, ll &x, ll &y) {
+    ll d;
+    return b == 0 ? (x = 1, y = 0, a)
+                  : (d = extgcd(b, a % b, y, x), y -= a / b * x, d);
+  }
+  ll modinv(ll a) {
+    ll x = 0, y = 0;
+    extgcd(a, mod, x, y);
+    return (x + mod) % mod;
+  }
   ll val;
   ModInt() : val(0) {}
   ModInt(ll val) : val((val % mod + mod) % mod) {}
-  operator int() const { return val; }
-  operator ll() const { return val; }
   ModInt operator+(ModInt const &rhs) const { return ModInt(val + rhs.val); }
   ModInt operator-(ModInt const &rhs) const { return ModInt(val - rhs.val); }
   ModInt operator*(ModInt const &rhs) const { return ModInt(val * rhs.val); }
@@ -74,7 +81,7 @@ struct ModInt {
   }
   template < typename T >
   ModInt operator/(T const &rhs) const {
-    return ModInt(val * modinv(rhs, mod));
+    return ModInt(val * modinv(rhs));
   }
   template < typename T >
   ModInt &operator+=(T const &rhs) {
