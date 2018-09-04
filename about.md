@@ -23,3 +23,5 @@ using ll = long long;
 
 公開しているページは[LumaKernel/ecasdqina](https://github.com/LumaKernel/ecasdqina){:target="_blank"}に，  
 ライブラリのソース本体は[LumaKernel/lib-cpp](https://github.com/LumaKernel/lib-cpp){:target="_blank"}にあります．
+
+[ほしいものリスト]({{ "wishlist" | absolute_url }})

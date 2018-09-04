@@ -1,5 +1,6 @@
 ---
 layout: home
+title: トップ
 last_update : 2018-09-04
 ---
 
