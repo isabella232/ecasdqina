@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-09-04
+last_update : 2018-09-05
 ---
 
 えかライブラリだよ
@@ -87,7 +87,7 @@ last_update : 2018-09-04
 * [文字列検索 (Aho-Corasick法)]({{ "string/AhoCorasick" | relative_url }})
 * [接尾辞配列 (Suffix Array) (Manber & Myers)]({{ "string/SA-with-Manber-Myers" | relative_url }})
 * [接尾辞配列 (Suffix Array) (SA-IS)]({{ "string/SA-IS" | relative_url }})
-* [LCP配列]({{ "string/LCP-Array" | relative_url }})
+* [LCP配列 (Kasai's algorithm)]({{ "string/LCP-Array" | relative_url }})
 * [木を文字列に変換する]({{ "string/tree-to-string" | relative_url }})
 * [文字列ユーティリティ]({{ "string/string-utility" | relative_url }})
 
