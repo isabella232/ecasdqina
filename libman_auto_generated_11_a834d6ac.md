@@ -1,10 +1,13 @@
 ---
 layout: lib
-title: UnionFind
+title: Union Find (DSU)
 permalink: data-structure/misc/UnionFind
 
 ---
 
+
+Union Find; UF  
+Disjoint Set Union; DSU
 
 kruskal法や矛盾検知，他いろいろつかえる便利ですごい．
 
@@ -38,4 +41,5 @@ struct UF {
 
 # 検証
 
-https://beta.atcoder.jp/contests/atc001/submissions/1177718
+* [B - Union Find - AC](https://beta.atcoder.jp/contests/atc001/submissions/2147616){:target="_blank"}<!--_-->
+

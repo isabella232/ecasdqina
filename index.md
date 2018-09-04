@@ -1,6 +1,5 @@
 ---
 layout: home
-title: トップ
 last_update : 2018-09-04
 ---
 
@@ -25,7 +24,7 @@ last_update : 2018-09-04
 * [BIT2D]({{ "data-structure/misc/BIT2D" | relative_url }})
 * [Sparse Table]({{ "data-structure/misc/SparseTable" | relative_url }})
 * [Link/Cut Tree]({{ "data-structure/misc/LinkCutTree" | relative_url }})
-* [UnionFind]({{ "data-structure/misc/UnionFind" | relative_url }})
+* [Union Find (DSU)]({{ "data-structure/misc/UnionFind" | relative_url }})
 
 ## Heap
 
