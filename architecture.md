@@ -23,3 +23,4 @@ permalink: architecture
 * 自動でビルドするやつは手動に...？（要検討）
   * コンストラクタ(int size)のものだけ手動とか
 * exampleはuncommentされた状態で（formatとか考慮して)
+* ASCII-onlyに（HackerRank対策）

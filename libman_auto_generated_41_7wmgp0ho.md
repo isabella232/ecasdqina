@@ -6,14 +6,61 @@ permalink: geometory/geometory
 ---
 
 
-たまにコンテストでつかったのがある，くらいで，  
-検証はしていない．
+# 使い方
 
-HCPCのスライド[kika1](https://www.slideshare.net/hcpc_hokudai/kika-80076550){:target="_blank"},[kika2](https://www.slideshare.net/hcpc_hokudai/kika2-80076551){:target="_blank"},[kika3](https://www.slideshare.net/hcpc_hokudai/kika3-80076552){:target="_blank"}を参考に．  
-ただしこれらには結構間違いがあったので注意．  
-ちなみに以下のものも間違っている可能性があるので注意．
+## 定数
 
-大事なのは考察です．
+* EPS : イプシロン．誤差がどこまでか
+
+## クラス
+
+* Scalar : スカラー
+* Point(Scalar, Scalar) : 点，ベクトルとしても使う
+* Circle(Point, Scalar radius) : 円
+* Line(Point, Point) : 直線
+* Segment(Point, Point) : 線分
+  * 交点求めるときの端点の扱いなどに注意
+* Polygon : 多角形，vector\<Point>，ccwである必要があったりなかったり
+
+## 関数
+
+### 色々
+
+* sign(Scalar) : EPS考慮のsign
+* ccw(Point a, Point b, Point c) : 三点の並び方，コメントのメモを参照
+* normalize(Point) : 正規化．そのベクトルの方向の単位ベクトル
+* normal(Point) : 法線ベクトル
+* arg(Point a, Point b) : [0, PI]の範囲で2つのベクトルの角度を返す
+* arg(Scalar a, Scalar b, Scalar c) : 三角形の長さから角度Aを返す
+* area3(Point a, Point b) : 三角形の面積
+* area3(Scalar a, Scalar b, Scalar c) : 三角形の三辺の長さから三角形の面積
+* dist(~, ~) : 距離
+* isCrossing(Segment, Segment) : 2つの線分が交差しているか
+* intersection(Line, Line) : 直線の交点
+
+### 円
+
+* cpr(Circle, Circle) : 円と円の関係，コメントのメモを参照
+* intersections(Circle, Circle)
+* intersections(Circle, Line)
+* area(Circle) : 円の面積
+* ajacentLine(Circle, Point) : 円周上のある点を通る接線
+* tangentLines(Circle, Point) : 円の外のある点を通る接線
+* commonTangentLines(Circle, Circle) : 円と円の共通接線
+
+### 多角形
+
+* area(Polygon) : 面積
+* inside(Polygon, Point) : ある点が多角形の内部にあるかどうか
+  * 0 : 外側にある
+  * 1 : 内側にある
+  * -1 : 多角形の頂点上にある
+  * -2 : 多角形の辺上にある
+* caliper(Polygon ccwConvex) : 最遠点対を求めその距離を返す
+  * ccwConvexはGrahamScanで生成されるようなccw順で凸包であるようなもの
+
+HCPCのスライド[kika1](https://www.slideshare.net/hcpc_hokudai/kika-80076550){:target="_blank"},[kika2](https://www.slideshare.net/hcpc_hokudai/kika2-80076551){:target="_blank"},[kika3](https://www.slideshare.net/hcpc_hokudai/kika3-80076552){:target="_blank"}を見ながら大体計算しながら作ったが，間違っている可能性はあるので注意．
+スライドにも間違い(たぶん)があったりしたので注意．  
 
 
 ```cpp
@@ -24,16 +71,16 @@ constexpr Scalar PI = 3.14159265358979323;
 /// --- Geometory Library {{"{{"}}{ ///
 using Point = complex< Scalar >;
 using Polygon = vector< Point >;
-struct Line : pair< Point, Point > {
+struct Line : public pair< Point, Point > {
   Line(Point a, Point b) : pair< Point, Point >(a, b) {}
 };
-struct Segment : pair< Point, Point > {
+struct Segment : public pair< Point, Point > {
   Segment(Point a, Point b) : pair< Point, Point >(a, b) {}
 };
 #define X real()
 #define Y imag()
-#define dot(a, b) real(conj(a) * b)
-#define cross(a, b) imag(conj(a) * b)
+#define dot(a, b) real(conj(a) * (b))
+#define cross(a, b) imag(conj(a) * (b))
 #define norm abs
 
 int sign(Scalar x) {
@@ -47,7 +94,7 @@ int sign(Scalar x) {
 // +2 : a--b--c
 // -2 : b--c--a
 //  0 : b--a--c
-int ccw(Point a, Point b, Point c) {
+int ccw(const Point &a, Point b, Point c) {
   b -= a;
   c -= a;
   if(cross(b, c) > EPS) return +1;
@@ -57,12 +104,16 @@ int ccw(Point a, Point b, Point c) {
   return -2;
 }
 
-inline Point normalize(Point v) { return v / norm(v); }
+inline Point normalize(const Point &v) { return v / norm(v); }
 
-inline Point normal(Point v) { return v * Point(cos(PI / 2), sin(PI / 2)); }
+inline Point normal(const Point &v) {
+  return v * Point(cos(PI / 2), sin(PI / 2));
+}
 
 // [0, pi]
-Scalar arg(Point a, Point b) { return acos(dot(a, b) / norm(a) / norm(b)); }
+Scalar arg(const Point &a, const Point &b) {
+  return acos(dot(a, b) / norm(a) / norm(b));
+}
 
 // triangle, arg a
 Scalar arg(Scalar a, Scalar b, Scalar c) {
@@ -70,7 +121,9 @@ Scalar arg(Scalar a, Scalar b, Scalar c) {
 }
 
 // Sarrus
-Scalar area3(Point a, Point b) { return abs(a.X * b.Y - a.Y * b.X) / 2; }
+Scalar area3(const Point &a, const Point &b) {
+  return abs(a.X * b.Y - a.Y * b.X) / 2;
+}
 
 // Heron's formula
 Scalar area3(Scalar a, Scalar b, Scalar c) {
@@ -78,12 +131,12 @@ Scalar area3(Scalar a, Scalar b, Scalar c) {
   return sqrt(s * (s - a) * (s - b) * (s - c));
 }
 
-Scalar dist(Line line, Point p) {
+Scalar dist(const Line &line, const Point &p) {
   return cross(p - line.first, line.second - line.first) /
          abs(line.second - line.first);
 }
 
-Scalar dist(Segment segment, Point p) {
+Scalar dist(const Segment &segment, const Point &p) {
   if(sign(dot(segment.first - segment.second, p - segment.second)) *
          sign(dot(segment.second - segment.first, p - segment.first)) >=
      0)
@@ -92,7 +145,7 @@ Scalar dist(Segment segment, Point p) {
     return min(norm(p - segment.first), norm(p - segment.second));
 }
 
-Scalar dist(Segment a, Segment b) {
+Scalar dist(const Segment &a, const Segment &b) {
   return min({
       dist(a, b.first),
       dist(a, b.second),
@@ -101,18 +154,18 @@ Scalar dist(Segment a, Segment b) {
   });
 }
 
-// NOTE : It depends.
-bool isCrossing(Segment a, Segment b) {
+bool isCrossing(const Segment &a, const Segment &b) {
   return ccw(a.first, a.second, b.first) * ccw(a.first, a.second, b.second) <=
              0 &&
          ccw(b.first, b.second, a.first) * ccw(b.first, b.second, a.second) <=
              0;
 }
 
-Point intersection(Line a, Line b) {
-  return a.first + (a.second - a.first) *
-                       cross(a.first - b.first, b.second - b.first) /
-                       cross(a.first - a.second, b.second - b.first);
+Point intersection(const Line &a, const Line &b) {
+  return a.first +              //
+         (a.second - a.first) * //
+             cross(a.first - b.first, b.second - b.first) *
+             cross(a.first - a.second, b.second - b.first);
 }
 
 /// }}}--- ///
@@ -131,7 +184,7 @@ using Circle = pair< Point, Scalar >;
 //  3 : 1 share (B in A)
 //  4 : 1 share (A in B)
 //  0 : 2 share
-int cpr(Circle a, Circle b) {
+int cpr(const Circle &a, const Circle &b) {
   Scalar d = norm(a.first - b.first);
   if(a.second + b.second + EPS < d) return -1;
   if(b.second + d + EPS < a.second) return 1;
@@ -142,7 +195,7 @@ int cpr(Circle a, Circle b) {
   return 0;
 }
 
-vector< Point > intersections(Circle a, Circle b) {
+vector< Point > intersections(const Circle &a, const Circle &b) {
   vector< Point > res;
   // normalize(b-a) * R_A
   Point x = a.second * normalize(b.first - a.first);
@@ -156,7 +209,7 @@ vector< Point > intersections(Circle a, Circle b) {
   return res;
 }
 
-vector< Point > intersections(Circle a, Line line) {
+vector< Point > intersections(const Circle &a, const Line &line) {
   vector< Point > res;
   Point n = normal(line.first - line.second);
   Point p = intersection(line, Line(a.first, a.first + n));
@@ -172,7 +225,7 @@ vector< Point > intersections(Circle a, Line line) {
   return res;
 }
 
-inline Scalar area(Circle a) { return PI * a.second * a.second; }
+inline Scalar area(const Circle &a) { return PI * a.second * a.second; }
 
 Scalar shareArea(Circle a, Circle b) {
   Scalar d = norm(a.first - b.first);
@@ -186,12 +239,12 @@ Scalar shareArea(Circle a, Circle b) {
   return a.second * a.second * s1 + b.second * b.second * s2 - tri2;
 }
 
-inline Line ajacentLine(Circle c, Point p) {
+inline Line ajacentLine(const Circle &c, const Point &p) {
   return Line(p, p + normal(p - c.first));
 }
 
 // the tangentLine of c passing p
-vector< Line > tangentLine(Circle c, Point p) {
+vector< Line > tangentLines(const Circle &c, const Point &p) {
   vector< Line > res;
   Scalar d = norm(p - c.first);
   if(abs(d - c.second) < EPS)
@@ -207,13 +260,13 @@ vector< Line > tangentLine(Circle c, Point p) {
   return res;
 }
 
-vector< Line > commonTangengLine(Circle a, Circle b) {
+vector< Line > commonTangentLines(Circle a, Circle b) {
   vector< Line > res;
   if(a.second + EPS < b.second) swap(a, b);
   if(norm(a.first - b.first) < EPS) return res;
 
   Point p = a.first + (b.first - a.first) * a.second / (a.second + b.second);
-  if(norm(a.first - p) + EPS > a.second) res = tangentLine(a, p);
+  if(norm(a.first - p) + EPS > a.second) res = tangentLines(a, p);
   if(abs(a.second - b.second) < EPS) {
     Point n = normal(normalize(b.first - a.first) * a.second);
     res.emplace_back(a.first + n, b.first + n);
@@ -221,7 +274,7 @@ vector< Line > commonTangengLine(Circle a, Circle b) {
   } else {
     Point q = a.first + (b.first - a.first) * a.second / (a.second - b.second);
     if(abs(a.first - q) + EPS > a.second) {
-      vector< Line > tmp = tangentLine(a, q);
+      vector< Line > tmp = tangentLines(a, q);
       res.insert(begin(res), begin(tmp), end(tmp));
     }
   }
@@ -235,7 +288,7 @@ vector< Line > commonTangengLine(Circle a, Circle b) {
 ```cpp
 /// --- Geometory Polygon Library {{"{{"}}{ ///
 // ok for either ccw or cw
-Scalar area(Polygon poly) {
+Scalar area(const Polygon &poly) {
   if(poly.size() < 3) return 0;
   Scalar res = cross(poly[poly.size() - 1], poly[0]);
   for(size_t i = 0; i < poly.size() - 1; i++) {
@@ -248,7 +301,7 @@ Scalar area(Polygon poly) {
 //  1 : inside
 // -1 : on vertex
 // -2 : on line
-int inside(Polygon poly, Point p) {
+int inside(const Polygon &poly, const Point &p) {
   int cnt = 0;
   for(size_t i = 0; i < poly.size(); i++) {
     size_t ii = i, jj = (i + 1) % poly.size();
@@ -269,7 +322,7 @@ int inside(Polygon poly, Point p) {
 }
 
 // param ccwConvex must be ccw and convex
-Scalar caliper(Polygon ccwConvex) {
+Scalar caliper(const Polygon &ccwConvex) {
   constexpr auto comp = [](Point a, Point b) {
     return a.X == b.X ? a.Y < b.Y : a.X < b.X;
   };
