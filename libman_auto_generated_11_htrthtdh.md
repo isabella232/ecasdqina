@@ -50,7 +50,7 @@ struct UF {
 
 # 練習
 
-* [H - Union Sets (600) - AC](https://beta.atcoder.jp/contests/code-thanks-festival-2017-open/tasks/code_thanks_festival_2017_h)
-* [D - Propagating Edges (800) - AC](https://beta.atcoder.jp/contests/soundhound2018-summer-final-open/tasks/soundhound2018_summer_final_d)
-* [E - Black Cats Deployment (800) - AC](https://beta.atcoder.jp/contests/cf17-tournament-round3-open/tasks/asaporo2_e)
+* [H - Union Sets (600) - AC](https://beta.atcoder.jp/contests/code-thanks-festival-2017-open/tasks/code_thanks_festival_2017_h){:target="_blank"}<!--_-->
+* [D - Propagating Edges (800) - AC](https://beta.atcoder.jp/contests/soundhound2018-summer-final-open/tasks/soundhound2018_summer_final_d){:target="_blank"}<!--_-->
+* [E - Black Cats Deployment (800) - AC](https://beta.atcoder.jp/contests/cf17-tournament-round3-open/tasks/asaporo2_e){:target="_blank"}<!--_-->
 

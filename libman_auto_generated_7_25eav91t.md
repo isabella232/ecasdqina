@@ -5,7 +5,7 @@ permalink: data-structure/misc/BIT
 
 ---
 
-getは自分で配列を用意することで $O(log N)$ を $O(1)$ にできる．
+getは自分で配列を用意することで $O(\log N)$ を $O(1)$ にできる．
 
 
 ```cpp
