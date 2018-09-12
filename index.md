@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-09-08
+last_update : 2018-09-13
 ---
 
 えかライブラリだよ
@@ -76,6 +76,11 @@ last_update : 2018-09-08
 
 # アルゴリズム
 
+* [クエリ平方分割 (Mo's Algorithm)]({{ "algorithm/Mo" | relative_url }})
+* [Rollback可能なデータ構造とクエリ平方分割（Moの上位互換）]({{ "algorithm/MoEx" | relative_url }})
+* [時空間Mo (三次元Mo，Mo with Update)]({{ "algorithm/Mo3D" | relative_url }})
+* [きたまさ法]({{ "algorithm/Kitamasa" | relative_url }})
+* [Garner's algorithm]({{ "algorithm/Garner" | relative_url }})
 * [高速ゼータ変換]({{ "algorithm/FastZetaTransform" | relative_url }})
 * [最適二分探索木 (Hu-Tucker)]({{ "algorithm/Hu-Tucker" | relative_url }})
 
@@ -99,6 +104,11 @@ last_update : 2018-09-08
 * [階乗の事前計算]({{ "misc/Factorial" | relative_url }})
 * [XorShift]({{ "misc/XorShift" | relative_url }})
 * [BigInteger]({{ "misc/bigint" | relative_url }})
+
+# ハマりポイント
+
+* [C++における左辺と右辺の評価順序]({{ "trap/eval-order" | relative_url }})
+* [不適切な評価関数をsortなどに使っている]({{ "trap/improper-comparison" | relative_url }})
 
 # リンク集
 
