@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-09-13
+last_update : 2018-09-30
 ---
 
 えかライブラリだよ
@@ -46,6 +46,7 @@ last_update : 2018-09-13
 * [LowLink]({{ "graph/lowlink" | relative_url }})
 * [二重連結成分分解]({{ "graph/BiconnectedComponent" | relative_url }})
 * [二辺連結成分分解]({{ "graph/BiedgeConnectedComponent" | relative_url }})
+* [全方位木DP (るま式)]({{ "graph/DP-all-subtree" | relative_url }})
 * [ユーティリティ]({{ "graph/utility" | relative_url }})
 * [木の同型判定]({{ "graph/is-same-tree" | relative_url }})
 * [最小全域木 (TODO)]({{ "graph/MST" | relative_url }})
