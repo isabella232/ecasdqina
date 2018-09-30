@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-09-30
+last_update : 2018-10-01
 ---
 
 えかライブラリだよ
@@ -66,6 +66,7 @@ last_update : 2018-09-30
 * [行列の積と累乗]({{ "math/matrix" | relative_url }})
 * [メビウス関数]({{ "math/moebius" | relative_url }})
 * [高速フーリエ変換 (FFT)，数論変換 (NTT)]({{ "math/FFT" | relative_url }})
+* [オイラーのトーシェント関数（ファイ関数）の性質]({{ "math/EulerTotient" | relative_url }})
 * [モンゴメリ乗算]({{ "math/Montgomery" | relative_url }})
 * [モノイド，モノイド作用]({{ "math/Monoid" | relative_url }})
 * [ラグランジュ緩和問題 (永遠に未完成)]({{ "math/LagrangianRelaxation" | relative_url }})

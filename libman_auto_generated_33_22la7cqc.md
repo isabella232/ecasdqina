@@ -6,6 +6,7 @@ permalink: math/general
 ---
 
 
+
 ```cpp
 /// --- isPrime {{"{{"}}{ ///
 
@@ -53,6 +54,11 @@ map< ll, int > primeFactors(ll n) {
 ```
 
 
+# オイラーのトーシェント関数
+
+[オイラーのトーシェント関数の性質]({{ "math/EulerTotient" | absolute_url }}) に色々書きました
+
+
 ```cpp
 // O(N^.5)
 /// --- phi {{"{{"}}{ ///
@@ -71,6 +77,7 @@ ll phi(ll n) {
 ```
 
 
+
 ```cpp
 // O(N log log N)
 /// --- phi2 {{"{{"}}{ ///
@@ -87,6 +94,9 @@ vector< int > phi2(int n) {
 }
 /// }}}--- ///
 ```
+
+
+---
 
 
 ```cpp
