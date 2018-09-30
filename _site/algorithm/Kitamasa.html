@@ -31,6 +31,7 @@
             { left: "$", right: "$", display: false },
           ]
         });
+        
       });
   </script>
 <link rel="stylesheet" href="/ecasdqina/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/ecasdqina/feed.xml" title="るまライブラリ" /></head>
@@ -76,12 +77,11 @@
 
 <p>任意の整数 $n$ について，</p>
 
-<div class="kdmath">$$
+<script type="math/tex; mode=display">% <![CDATA[
 \begin{aligned}
 &a_{n+K} &&= c_0a_n + c_1a_{n+1} + \cdots + c_{K-1}a_{n+K-1} \\
 &&&= \sum_{i=0}^{K-1} c_ia_{n+i}
-\end{aligned}
-$$</div>
+\end{aligned} %]]></script>
 
 <p>が成り立つこと．</p>
 
@@ -90,15 +90,11 @@ $$</div>
 <p>任意の $n, m, l$ について，<br />
 ある $s = (s_i)_{i=0}^{K-1}$ が存在し，</p>
 
-<div class="kdmath">$$
-a_n = \sum_{i=0}^{K-1}s_ia_{l+i}
-$$</div>
+<script type="math/tex; mode=display">a_n = \sum_{i=0}^{K-1}s_ia_{l+i}</script>
 
 <p>を満たす<strong>ならば</strong></p>
 
-<div class="kdmath">$$
-a_{n+\textcolor{red}m} = \sum_{i=0}^{K-1}s_ia_{l+\textcolor{red}m+i}
-$$</div>
+<script type="math/tex; mode=display">a_{n+\textcolor{red}m} = \sum_{i=0}^{K-1}s_ia_{l+\textcolor{red}m+i}</script>
 
 <p>が成り立つ．</p>
 
@@ -161,12 +157,11 @@ $$</div>
 
 <p>が導かれます．$(4)$ を $(3)$ に代入して，</p>
 
-<div class="kdmath">$$
+<script type="math/tex; mode=display">% <![CDATA[
 \begin{aligned}
 &(5)\ a_{u + v} &&= \sum_{i=0}^{K-1} b_{u, i} \sum_{j=0}^{K-1} b_{v, j} \cdot a_{i+j} \\
 &&&= \sum_{i=0}^{K-1}\sum_{j=0}^{K-1} b_{u, i} \cdot b_{v, j} \cdot a_{i+j}
-\end{aligned}
-$$</div>
+\end{aligned} %]]></script>
 
 <p>が得られます．さて， $b_ {u + v} = (b_ {u+v,i})_ {i=0}^{K-1}$ が求めたいのですが，<br />
 このままでは係数が $a_0$ から $a_ {2K-2}$ のものになってしまいます．</p>
