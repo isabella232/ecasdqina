@@ -24,7 +24,7 @@ plugins:
 kramdown:
   syntax_highlighter_opts:
     disable: true
-  math_engine: null
+  # math_engine: null
 
 
 
