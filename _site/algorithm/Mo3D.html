@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>時空間Mo (三次元Mo，Mo with Update) | るまライブラリ</title>
+<meta name="generator" content="Jekyll v3.8.3" />
+<meta property="og:title" content="時空間Mo (三次元Mo，Mo with Update)" />
+<meta name="author" content="luma" />
+<meta property="og:locale" content="ja" />
+<meta name="description" content="ぼくが競プロで使うライブラリです．" />
+<meta property="og:description" content="ぼくが競プロで使うライブラリです．" />
+<link rel="canonical" href="http://localhost:4000/ecasdqina/algorithm/Mo3D" />
+<meta property="og:url" content="http://localhost:4000/ecasdqina/algorithm/Mo3D" />
+<meta property="og:site_name" content="るまライブラリ" />
+<script type="application/ld+json">
+{"headline":"時空間Mo (三次元Mo，Mo with Update)","@type":"WebPage","url":"http://localhost:4000/ecasdqina/algorithm/Mo3D","author":{"@type":"Person","name":"luma"},"description":"ぼくが競プロで使うライブラリです．","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/combine/npm/katex@0.10.0-rc/dist/katex.min.js,npm/katex@0.10.0-rc/dist/contrib/auto-render.min.js"></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+          ]
+        });
+      });
+  </script>
+<link rel="stylesheet" href="/ecasdqina/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/ecasdqina/feed.xml" title="るまライブラリ" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/ecasdqina/">るまライブラリ</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/ecasdqina/about">このサイトについて</a><a class="page-link" href="/ecasdqina/architecture">設計思想</a><a class="page-link" href="/ecasdqina/one">one</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">時空間Mo (三次元Mo，Mo with Update)</h1>
+  </header>
+
+  <div class="post-content">
+    <p>時空間Moって名前が好き</p>
+
+<p>三次元っていうのは，Left, Right, Timeの三軸．</p>
+
+<p><a href="http://localhost:4000/ecasdqina/algorithm/Mo">通常のMo</a>に加え，更新をする．</p>
+
+<p>計算量は $O(N^{5/3})$ なので，いつでも使えるというわけではないが，強い．</p>
+
+<p>バケットのサイズを $B$ とおくと，</p>
+
+<ul>
+  <li>左端Leftが動く回数は $O(QB)$，</li>
+  <li>右端Rightが動く回数は $O(QB + \frac{N^2}{B})$</li>
+  <li>Timeが動く回数は $O(\frac{N^3}{B^2})$</li>
+</ul>
+
+<p>$N = Q$ と仮定すると， $B=N^{2/3}$ とすることで上記の $O(N^{5/3})$ が得られます．</p>
+
+<p>詳細・図解が<a href="https://ei1333.hateblo.jp/entry/2017/09/11/211011" target="_blank">うしさんの解説記事</a><!--_-->に詳しく書いてあるので見てみてください…</p>
+
+<p>Moに加えて，変数 $time$ を，$[0, time]$ を処理済みとして保持します．</p>
+
+<h1 id="実装">実装</h1>
+
+<pre><code class="language-cpp">// Mo3D(N, JUST Q, double k)
+// favored : k = 6
+// 1: insert
+// 2: build
+/// --- Mo3D Library {{{ ///
+
+struct Mo3D {
+  const int width;
+  int q = 0;
+  vector&lt; int &gt; le, ri, idx, order;
+  int nl = 0, nr = 0, time = -1;
+  Mo3D(int n, int q, double k = 1)
+      : width(int(k* pow(max(n, q), 2.0 / 3.0) + 1.0)),
+        le(q),
+        ri(q),
+        idx(q),
+        order(q) {}
+  inline void insert(int t, int l, int r) {
+    idx[q] = t;
+    le[q] = l;
+    ri[q] = r;
+    order[q] = q;
+    q++;
+  }
+  inline void build() {
+    sort(begin(order), begin(order) + q, [&amp;](int a, int b) {
+      const int al = le[a] / width, bl = le[b] / width;
+      const int ar = ri[a] / width, br = ri[b] / width;
+      return al != bl ? al &lt; bl : ar != br ? ar &lt; br : idx[a] &lt; idx[b];
+    });
+    nl = nr = le[order[0]];
+    for(int i = 0; i &lt; q; i++) {
+      const int id = order[i];
+      while(time &lt; idx[id]) addQuery(++time);
+      while(time &gt; idx[id]) remQuery(time--);
+      while(nl &gt; le[id]) add(--nl);
+      while(nr &lt; ri[id]) add(nr++);
+      while(nl &lt; le[id]) rem(nl++);
+      while(nr &gt; ri[id]) rem(--nr);
+      next(id);
+    }
+  }
+  inline void next(int i);
+  inline void addQuery(int i);
+  inline void remQuery(int i);
+  inline void add(int i);
+  inline void rem(int i);
+};
+
+/// }}}--- ///
+
+// i is sequential
+// idx[i] is absolute
+inline void Mo3D::next(int i) {}
+inline void Mo3D::addQuery(int i) {}
+inline void Mo3D::remQuery(int i) {}
+inline void Mo3D::add(int i) {}
+inline void Mo3D::rem(int i) {}
+</code></pre>
+
+<h1 id="検証">検証</h1>
+
+<ul>
+  <li><a href="https://codeforces.com/contest/940/submission/42752956" target="_blank">F - Machine Learning - CF</a><!--_--></li>
+</ul>
+
+<h1 id="練習">練習</h1>
+
+<ul>
+  <li><a href="https://codeforces.com/contest/940/problem/F" target="_blank">F - Machine Learning - CF</a><!--_--></li>
+</ul>
+
+<h1 id="参考">参考</h1>
+
+<ul>
+  <li><a href="https://ei1333.hateblo.jp/entry/2017/09/11/211011" target="_blank">Mo’s algorithm - ei1333の日記</a><!--_--></li>
+</ul>
+
+  </div><div id="disqus_thread"></div>
+    <script defer>
+      var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/ecasdqina/algorithm/Mo3D';
+        this.page.identifier = 'http://localhost:4000/ecasdqina/algorithm/Mo3D';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+
+        s.src = 'https://ecas.disqus.com/embed.js';
+
+        s.setAttribute('defer', '');
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript></article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/ecasdqina/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/LumaKernel"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#github"></use></svg> <span class="username">LumaKernel</span></a></li><li><a href="https://www.twitter.com/lumc_"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">lumc_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>ぼくが競プロで使うライブラリです．</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

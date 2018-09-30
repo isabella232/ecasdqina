@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>階乗の事前計算 | るまライブラリ</title>
+<meta name="generator" content="Jekyll v3.8.3" />
+<meta property="og:title" content="階乗の事前計算" />
+<meta name="author" content="luma" />
+<meta property="og:locale" content="ja" />
+<meta name="description" content="ぼくが競プロで使うライブラリです．" />
+<meta property="og:description" content="ぼくが競プロで使うライブラリです．" />
+<link rel="canonical" href="http://localhost:4000/ecasdqina/misc/Factorial" />
+<meta property="og:url" content="http://localhost:4000/ecasdqina/misc/Factorial" />
+<meta property="og:site_name" content="るまライブラリ" />
+<script type="application/ld+json">
+{"headline":"階乗の事前計算","@type":"WebPage","url":"http://localhost:4000/ecasdqina/misc/Factorial","author":{"@type":"Person","name":"luma"},"description":"ぼくが競プロで使うライブラリです．","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/combine/npm/katex@0.10.0-rc/dist/katex.min.js,npm/katex@0.10.0-rc/dist/contrib/auto-render.min.js"></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+          ]
+        });
+      });
+  </script>
+<link rel="stylesheet" href="/ecasdqina/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/ecasdqina/feed.xml" title="るまライブラリ" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/ecasdqina/">るまライブラリ</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/ecasdqina/about">このサイトについて</a><a class="page-link" href="/ecasdqina/architecture">設計思想</a><a class="page-link" href="/ecasdqina/one">one</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">階乗の事前計算</h1>
+  </header>
+
+  <div class="post-content">
+    <p><code>constexpr</code>でコンパイル時に事前計算．</p>
+
+<p>事前計算はむしろ $O(N \sqrt{N})$ とかかかるようなときにしたいという気持ちになる (たとえば $O(N)$ ならメモリに展開したりと結局同じ時間かかるという指摘があった) けど，<br />
+意外とコンパイルのタイムアウトに引っかかったりする．</p>
+
+<p>あとローカルで余計に時間がかかるので僕は<code>constexpr</code>を外して使う．</p>
+
+<p><span style="color:red">重複組み合わせ H を使う場合はNを大きめ(2倍とか)にとる必要がある（1敗）</span></p>
+
+<pre><code class="language-cpp">// WARN : use H with larger N
+/// --- Modulo Factorial {{{ ///
+template &lt; int N, int mod = (int) 1e9 + 7 &gt;
+struct Factorial {
+  constexpr ll extgcd(ll a, ll b, ll &amp;x, ll &amp;y) {
+    ll d = 0;
+    return b == 0 ? (x = 1, y = 0, a)
+                  : (d = extgcd(b, a % b, y, x), y -= a / b * x, d);
+  }
+  constexpr ll modinv(ll a) {
+    ll x = 0, y = 0;
+    extgcd(a, mod, x, y);
+    return (x + mod) % mod;
+  }
+  int arr[N + 1], inv[N + 1];
+  ll operator[](int i) const { return arr[i]; }
+  constexpr Factorial() : arr(), inv() {
+    arr[0] = 1;
+    for(int i = 1; i &lt;= N; i++) {
+      arr[i] = (ll) i * arr[i - 1] % mod;
+    }
+    inv[N] = modinv(arr[N]);
+    for(int i = N - 1; i &gt;= 0; i--) {
+      inv[i] = (ll)(i + 1) * inv[i + 1] % mod;
+    }
+  }
+  ll C(int n, int r) const {
+    if(n &lt; 0 || r &lt; 0 || n &lt; r) return 0;
+    return (ll) arr[n] * inv[r] % mod * inv[n - r] % mod;
+  }
+  ll H(int n, int r) const { return C(n + r - 1, r); }
+};
+/// }}}--- ///
+
+const int N = 1e5 + 10;
+constexpr Factorial &lt; N * 2 ?, mod &gt; fact;
+</code></pre>
+
+
+  </div><div id="disqus_thread"></div>
+    <script defer>
+      var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/ecasdqina/misc/Factorial';
+        this.page.identifier = 'http://localhost:4000/ecasdqina/misc/Factorial';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+
+        s.src = 'https://ecas.disqus.com/embed.js';
+
+        s.setAttribute('defer', '');
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript></article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/ecasdqina/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/LumaKernel"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#github"></use></svg> <span class="username">LumaKernel</span></a></li><li><a href="https://www.twitter.com/lumc_"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">lumc_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>ぼくが競プロで使うライブラリです．</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

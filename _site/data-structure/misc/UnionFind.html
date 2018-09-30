@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Union Find (DSU) | るまライブラリ</title>
+<meta name="generator" content="Jekyll v3.8.3" />
+<meta property="og:title" content="Union Find (DSU)" />
+<meta name="author" content="luma" />
+<meta property="og:locale" content="ja" />
+<meta name="description" content="ぼくが競プロで使うライブラリです．" />
+<meta property="og:description" content="ぼくが競プロで使うライブラリです．" />
+<link rel="canonical" href="http://localhost:4000/ecasdqina/data-structure/misc/UnionFind" />
+<meta property="og:url" content="http://localhost:4000/ecasdqina/data-structure/misc/UnionFind" />
+<meta property="og:site_name" content="るまライブラリ" />
+<script type="application/ld+json">
+{"headline":"Union Find (DSU)","@type":"WebPage","url":"http://localhost:4000/ecasdqina/data-structure/misc/UnionFind","author":{"@type":"Person","name":"luma"},"description":"ぼくが競プロで使うライブラリです．","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/combine/npm/katex@0.10.0-rc/dist/katex.min.js,npm/katex@0.10.0-rc/dist/contrib/auto-render.min.js"></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+          ]
+        });
+      });
+  </script>
+<link rel="stylesheet" href="/ecasdqina/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/ecasdqina/feed.xml" title="るまライブラリ" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/ecasdqina/">るまライブラリ</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/ecasdqina/about">このサイトについて</a><a class="page-link" href="/ecasdqina/architecture">設計思想</a><a class="page-link" href="/ecasdqina/one">one</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Union Find (DSU)</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Union Find; UF<br />
+Disjoint Set Union; DSU</p>
+
+<p>kruskal法や矛盾検知(これを利用して二部グラフ判定)，他いろいろつかえる便利ですごい．</p>
+
+<p>アッカーマン関数の逆関数はこの宇宙に書き下せるどのような数字(おそらく十進数を想定)をぶち込んでも4以下を返す関数なので，クエリの係数は4程度．(参考は英語wiki)</p>
+
+<p>UFのunite(merge)中に森を構築したりできる（練習問題にあります）<br />
+unite時に新しい頂点xを用意して，unite(a, x), unite(x, b)とかましてやると，<br />
+二分木になる．<br />
+2つの頂点のLCAが初めて2つが連結になった瞬間．</p>
+
+<h1 id="永続化について">永続化について</h1>
+
+<p>部分永続については<a href="https://camypaper.bitbucket.io/2016/12/18/adc2016/" target="_blank">紙ぺーぱーさんのこれ</a><!--_-->とか<a href="http://noshi91.hatenablog.com/entry/2018/02/18/161529" target="_blank">noshiさんのこれ</a><!--_-->とかですね．</p>
+
+<p>完全永続については<a href="http://noshi91.hatenablog.com/entry/2018/05/30/191943" target="_blank">noshiさんのこれ</a><!--_-->で触れられていますね（何もわからない</p>
+
+<h1 id="実装">実装</h1>
+
+<pre><code class="language-cpp">/// --- Union Find Library {{{ ///
+
+struct UF {
+  int n;
+  vector&lt; int &gt; par, rank;
+  UF(int n) : n(n), par(n, -1), rank(n, 0) {}
+  int find(int x) { return par[x] &lt; 0 ? x : par[x] = find(par[x]); }
+  int size(int x) { return -par[find(x)]; }
+  bool same(int a, int b) { return find(a) == find(b); }
+  void unite(int a, int b) {
+    a = find(a);
+    b = find(b);
+    if(a == b) return;
+    if(rank[a] &gt; rank[b]) swap(a, b);
+    par[b] += par[a];
+    par[a] = b;
+    if(rank[a] == rank[b]) rank[b]++;
+  }
+};
+
+/// }}}--- ///
+</code></pre>
+
+<h1 id="検証">検証</h1>
+
+<ul>
+  <li><a href="https://beta.atcoder.jp/contests/atc001/submissions/2147616" target="_blank">B - Union Find - AC</a><!--_--></li>
+</ul>
+
+<h1 id="練習">練習</h1>
+
+<ul>
+  <li><a href="https://beta.atcoder.jp/contests/code-thanks-festival-2017-open/tasks/code_thanks_festival_2017_h" target="_blank">H - Union Sets (600) - AC</a><!--_--></li>
+  <li><a href="https://beta.atcoder.jp/contests/soundhound2018-summer-final-open/tasks/soundhound2018_summer_final_d" target="_blank">D - Propagating Edges (800) - AC</a><!--_--></li>
+  <li><a href="https://beta.atcoder.jp/contests/cf17-tournament-round3-open/tasks/asaporo2_e" target="_blank">E - Black Cats Deployment (800) - AC</a><!--_--></li>
+</ul>
+
+
+  </div><div id="disqus_thread"></div>
+    <script defer>
+      var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/ecasdqina/data-structure/misc/UnionFind';
+        this.page.identifier = 'http://localhost:4000/ecasdqina/data-structure/misc/UnionFind';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+
+        s.src = 'https://ecas.disqus.com/embed.js';
+
+        s.setAttribute('defer', '');
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript></article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/ecasdqina/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/LumaKernel"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#github"></use></svg> <span class="username">LumaKernel</span></a></li><li><a href="https://www.twitter.com/lumc_"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">lumc_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>ぼくが競プロで使うライブラリです．</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

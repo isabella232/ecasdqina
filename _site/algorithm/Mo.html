@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>クエリ平方分割 (Mo’s Algorithm) | るまライブラリ</title>
+<meta name="generator" content="Jekyll v3.8.3" />
+<meta property="og:title" content="クエリ平方分割 (Mo’s Algorithm)" />
+<meta name="author" content="luma" />
+<meta property="og:locale" content="ja" />
+<meta name="description" content="ぼくが競プロで使うライブラリです．" />
+<meta property="og:description" content="ぼくが競プロで使うライブラリです．" />
+<link rel="canonical" href="http://localhost:4000/ecasdqina/algorithm/Mo" />
+<meta property="og:url" content="http://localhost:4000/ecasdqina/algorithm/Mo" />
+<meta property="og:site_name" content="るまライブラリ" />
+<script type="application/ld+json">
+{"headline":"クエリ平方分割 (Mo’s Algorithm)","@type":"WebPage","url":"http://localhost:4000/ecasdqina/algorithm/Mo","author":{"@type":"Person","name":"luma"},"description":"ぼくが競プロで使うライブラリです．","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/combine/npm/katex@0.10.0-rc/dist/katex.min.js,npm/katex@0.10.0-rc/dist/contrib/auto-render.min.js"></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+          ]
+        });
+      });
+  </script>
+<link rel="stylesheet" href="/ecasdqina/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/ecasdqina/feed.xml" title="るまライブラリ" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/ecasdqina/">るまライブラリ</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/ecasdqina/about">このサイトについて</a><a class="page-link" href="/ecasdqina/architecture">設計思想</a><a class="page-link" href="/ecasdqina/one">one</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">クエリ平方分割 (Mo&#39;s Algorithm)</h1>
+  </header>
+
+  <div class="post-content">
+    <p>Moのアルゴリズム（クエリの平方分割）</p>
+
+<p>オフラインでstaticなデータに対するクエリに答えられます．</p>
+
+<p>配列の長さが $N$ のとき，<br />
+区間について答えるクエリ $Q$ 個に，<br />
+$O(N \sqrt{Q} f(N))$ で答えることができる．</p>
+
+<p>ただし，$f(N)$ とは 区間 $[l, r)$ に対する答えから，<br />
+$[l + 1, r), [l - 1, r), [l, r + 1), [l, r - 1)$ を答える(伸縮する，と呼ぶことにする)のにかかる時間である．
+<!--]--></p>
+
+<p>伸縮にかかる時間は $O(1)$ や $O(\log N)$ だが， $O(\log N)$ はTLEになるかもしれない．</p>
+
+<p>“出現した種類数”，”k個以上出現するもの” とかが基本的なキーワード．(あくまでも基本なのでね)</p>
+
+<h1 id="参考">参考</h1>
+
+<ul>
+  <li><a href="https://ei1333.hateblo.jp/entry/2017/09/11/211011" target="_blank">Mo’s algorithm - ei1333の日記</a><!--_--></li>
+  <li><a href="http://snuke.hatenablog.com/entry/2016/07/01/000000" target="_blank">Mo’s algorithm の上位互換の話 - あなたは嘘つきですかと聞かれたら「YES」と答えるブログ</a><!--_-->
+    <ul>
+      <li>Mo自体についてもガッツリ書かれています</li>
+      <li>計算量の証明はここを参照</li>
+      <li>このライブラリは別のところ( <a href="http://localhost:4000/ecasdqina/algorithm/MoEx">Rollback可能なデータ構造とMo</a> )においてあります</li>
+    </ul>
+  </li>
+</ul>
+
+<p>更新ができるMoは <a href="http://localhost:4000/ecasdqina/algorithm/Mo3D">時空間Mo</a></p>
+
+<h1 id="moの高速化">Moの高速化</h1>
+
+<p>以下で議論されていた内容など．</p>
+
+<ul>
+  <li><a href="https://discuss.codechef.com/questions/119615/query-regarding-mos-algorithm" target="_blank">Query regarding Mo’s Algorithm - CodeChef Discussion</a><!--_--></li>
+</ul>
+
+<ol>
+  <li><span style="color:red">ソートの比較関数を変える</span>
+    <ul>
+      <li>ブロックのパリティによって，右端をleft to rightにするかその逆にするかを交互にすれば，右端の移動回数が1/2になります．</li>
+      <li>コードもほんの少し変更するだけでよく，目に見えて速くなるのでおすすめです．</li>
+      <li>不適切な評価関数を使わないように気をつけてください (<a href="http://localhost:4000/ecasdqina/trap/improper-comparison">詳細</a>)</li>
+    </ul>
+  </li>
+  <li>ブロックのサイズを変える
+    <ul>
+      <li>これは必ずしも速くなるとは言えず，<br />
+  試してみるしかない．係数を2,3などにする．</li>
+    </ul>
+  </li>
+  <li>add, remのクロック数を減らす
+    <ul>
+      <li>これはかなり有効ですが，同じ $O(1)$ であれば，<br />
+  想定回であれば大抵大丈夫で，余計に考察することになるかもしれません．</li>
+    </ul>
+  </li>
+  <li>ベタ書きする
+    <ul>
+      <li>問題に合わせて最適な実装にします</li>
+      <li>うーん，コンテスト終わった後のお楽しみ程度の認識．</li>
+    </ul>
+  </li>
+</ol>
+
+<p>ただ，これらを組み合わせると3,4倍にも高速になります．<br />
+(なりますというか，これができるのはだいぶ変態)</p>
+
+<h1 id="木上のmo">木上のMo</h1>
+
+<p>詳しくはうしさんの記事を見てください．</p>
+
+<p>オイラーツアーすると，部分木に対するクエリが 区間 $[in_v, out_v)$ に対するクエリに変わります．
+<!--]--></p>
+
+<p>パスに対するクエリは，頂点にデータがあるときは，亜種オイラーツアーみたいなのをして区間クエリと一点（LCA）の更新に置き換えます</p>
+
+<h1 id="実装">実装</h1>
+
+<p>区間はすべて $[l, r)$ (半開区間) です</p>
+
+<p>全部に <code>inline</code> がついてて気持ち悪いという気持ちになるが，ほんとそう</p>
+
+<pre><code class="language-cpp">// Mo(N, JUST Q, double k)
+// favored : k = 2
+// 1: insert
+// 2: build
+/// --- Mo Library {{{ ///
+
+struct Mo {
+  const int width;
+  int q = 0;
+  vector&lt; int &gt; le, ri, order;
+  int nl = 0, nr = 0;
+  Mo(int n, int q, double k = 1)
+      : width(int(k* n / sqrt(q) + 1.0)), le(q), ri(q), order(q) {}
+  inline void insert(int l, int r) {
+    le[q] = l;
+    ri[q] = r;
+    order[q] = q;
+    q++;
+  }
+  inline void build() {
+    sort(begin(order), begin(order) + q, [&amp;](int a, int b) {
+      const int ab = le[a] / width, bb = le[b] / width;
+      return ab != bb ? ab &lt; bb : ab &amp; 1 ? ri[a] &lt; ri[b] : ri[b] &lt; ri[a];
+    });
+    nl = nr = le[order[0]];
+    for(int i = 0; i &lt; q; i++) {
+      const int id = order[i];
+      while(nl &gt; le[id]) add(--nl);
+      while(nl &lt; le[id]) rem(nl++);
+      while(nr &lt; ri[id]) add(nr++);
+      while(nr &gt; ri[id]) rem(--nr);
+      next(id);
+    }
+  }
+  inline void next(int i);
+  inline void add(int i);
+  inline void rem(int i);
+};
+
+/// }}}--- ///
+
+inline void Mo::next(int i) {}
+inline void Mo::add(int i) {}
+inline void Mo::rem(int i) {}
+</code></pre>
+
+<h2 id="木上の頂点にデータがあるパスクエリmo">木上の頂点にデータがあるパスクエリMo</h2>
+
+<p>うしさんの解説を見てください</p>
+
+<pre><code class="language-cpp">// MoTreeVertex(N, JUST Q, double k)
+// favored : k = 2
+// 1: addEdge
+// 2: prebuild
+// 3: insert
+// 4: build
+/// --- MoTreeVertex Library {{{ ///
+
+struct MoTreeVertex {
+  const int n, logn, m;
+  const int width;
+  int q = 0;
+  vector&lt; vector&lt; int &gt; &gt; par;
+  vector&lt; int &gt; dep;
+  vector&lt; int &gt; in, vs;
+  vector&lt; vector&lt; int &gt; &gt; g;
+  vector&lt; int8_t &gt; flag;
+  vector&lt; int &gt; le, ri, lcas, order;
+  int nl = 0, nr = 0;
+  int log(int x) {
+    int h = 1;
+    while((1 &lt;&lt; h) &lt; x) h++;
+    return h;
+  }
+  MoTreeVertex(int n, int q, double k = 1)
+      : n(n),
+        logn(log(n)),
+        m(2 * n - 1),
+        width(int(k* m / sqrt(q) + 1.0)),
+        q(q),
+        par(logn, vector&lt; int &gt;(n, -1)),
+        dep(n),
+        in(n),
+        g(n),
+        flag(n),
+        le(q),
+        ri(q),
+        lcas(q),
+        order(q) {
+    vs.reserve(m);
+  }
+  inline void addEdge(int u, int v) {
+    g[u].emplace_back(v);
+    g[v].emplace_back(u);
+  }
+  inline void prebuild() {
+    dfs(0, -1, 0);
+    for(int k = 1; k &lt; logn; k++)
+      for(int i = 0; i &lt; n; i++) {
+        int p = par[k - 1][i];
+        if(p == -1) continue;
+        par[k][i] = par[k - 1][p];
+      }
+  }
+  void dfs(int i, int p, int d) {
+    dep[i] = d;
+    par[0][i] = p;
+    in[i] = vs.size();
+    vs.emplace_back(i);
+    for(int j : g[i])
+      if(j != p) {
+        dfs(j, i, d + 1);
+        vs.emplace_back(j);
+      }
+  }
+  inline int lca(int u, int v) {
+    if(dep[u] &gt; dep[v]) swap(u, v);
+    for(int k = logn - 1; k &gt;= 0; k--) {
+      int nv = par[k][v];
+      if(nv != -1 &amp;&amp; dep[nv] &gt;= dep[u]) v = nv;
+    }
+    if(u == v) return u;
+    for(int k = logn - 1; k &gt;= 0; k--) {
+      int nu = par[k][u], nv = par[k][v];
+      if(nu != nv) u = nu, v = nv;
+    }
+    return par[0][u];
+  }
+  inline void insert(int u, int v) {
+    if(in[u] &gt; in[v]) swap(u, v);
+    le[q] = in[u] + 1;
+    ri[q] = in[v] + 1;
+    lcas[q] = lca(u, v);
+    order[q] = q;
+    q++;
+  }
+  inline void build() {
+    sort(begin(order), begin(order) + q, [&amp;](int a, int b) {
+      const int ab = le[a] / width, bb = le[b] / width;
+      return ab != bb ? ab &lt; bb : ab &amp; 1 ? ri[a] &lt; ri[b] : ri[b] &lt; ri[a];
+    });
+    nl = nr = le[order[0]];
+    for(int i = 0; i &lt; q; i++) {
+      if(i &gt; 0) rem(lcas[order[i - 1]]);
+      const int id = order[i];
+      while(nl &gt; le[id]) flip(vs[--nl]);
+      while(nr &lt; ri[id]) flip(vs[nr++]);
+      while(nl &lt; le[id]) flip(vs[nl++]);
+      while(nr &gt; ri[id]) flip(vs[--nr]);
+      add(lcas[id]);
+      next(id);
+    }
+  }
+  inline void flip(int i) {
+    if(flag[i] ^= 1)
+      add(i);
+    else
+      rem(i);
+  }
+  inline void next(int id);
+  inline void add(int i);
+  inline void rem(int i);
+};
+
+/// }}}--- ///
+
+inline void MoTreeVertex::next(int id) {}
+inline void MoTreeVertex::add(int i) {}
+inline void MoTreeVertex::rem(int i) {}
+</code></pre>
+
+<h1 id="注意点">注意点</h1>
+
+<p>比較関数が <code>operator&lt;</code> 相当ではなく <code>operator&lt;=</code> 相当にならないように気をつけてください．(実装を参照) (<a href="http://localhost:4000/ecasdqina/trap/improper-comparison">詳細</a>)</p>
+
+<h1 id="検証">検証</h1>
+
+<ul>
+  <li><a href="https://codeforces.com/contest/86/submission/42720275" target="_blank">D - Powerful array - CF (4334ms)</a><!--_-->
+    <ul>
+      <li><a href="https://codeforces.com/contest/86/submission/33239378" target="_blank">meooowさんの高速化された1058ms解</a><!--_--></li>
+    </ul>
+  </li>
+  <li>木上のMo - <a href="https://codeforces.com/contest/375/submission/42721054" target="_blank">D - Tree and Queries - CF</a><!--_-->
+    <ul>
+      <li>$N \leq 10^5$ はだいぶ安心してMoを投げられます</li>
+    </ul>
+  </li>
+  <li>木上の頂点にデータがあるパスクエリMo - <a href="https://www.spoj.com/files/src/22296870/" target="_blank">COT2 - Count on a tree II - SPOJ</a><!--_--></li>
+  <li>同上 - <a href="https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/2270/judge/3127075/C++14" target="_blank">The L-th Number - AOJ</a><!--_--></li>
+</ul>
+
+<h1 id="練習">練習</h1>
+
+<ul>
+  <li><a href="https://codeforces.com/contest/86/problem/D" target="_blank">D - Powerful array - CF</a><!--_--></li>
+  <li><a href="https://codeforces.com/contest/375/problem/D" target="_blank">D - Tree and Queries - CF</a><!--_--></li>
+  <li><a href="https://www.spoj.com/problems/COT2/" target="_blank">COT2 - Count on a tree II - SPOJ</a><!--_--></li>
+  <li><a href="https://onlinejudge.u-aizu.ac.jp/problems/2270" target="_blank">The L-th Number - AOJ</a><!--_--></li>
+</ul>
+
+
+  </div><div id="disqus_thread"></div>
+    <script defer>
+      var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/ecasdqina/algorithm/Mo';
+        this.page.identifier = 'http://localhost:4000/ecasdqina/algorithm/Mo';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+
+        s.src = 'https://ecas.disqus.com/embed.js';
+
+        s.setAttribute('defer', '');
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript></article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/ecasdqina/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/LumaKernel"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#github"></use></svg> <span class="username">LumaKernel</span></a></li><li><a href="https://www.twitter.com/lumc_"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">lumc_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>ぼくが競プロで使うライブラリです．</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

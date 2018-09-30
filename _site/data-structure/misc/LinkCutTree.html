@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>Link/Cut Tree | るまライブラリ</title>
+<meta name="generator" content="Jekyll v3.8.3" />
+<meta property="og:title" content="Link/Cut Tree" />
+<meta name="author" content="luma" />
+<meta property="og:locale" content="ja" />
+<meta name="description" content="ぼくが競プロで使うライブラリです．" />
+<meta property="og:description" content="ぼくが競プロで使うライブラリです．" />
+<link rel="canonical" href="http://localhost:4000/ecasdqina/data-structure/misc/LinkCutTree" />
+<meta property="og:url" content="http://localhost:4000/ecasdqina/data-structure/misc/LinkCutTree" />
+<meta property="og:site_name" content="るまライブラリ" />
+<script type="application/ld+json">
+{"headline":"Link/Cut Tree","@type":"WebPage","url":"http://localhost:4000/ecasdqina/data-structure/misc/LinkCutTree","author":{"@type":"Person","name":"luma"},"description":"ぼくが競プロで使うライブラリです．","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/combine/npm/katex@0.10.0-rc/dist/katex.min.js,npm/katex@0.10.0-rc/dist/contrib/auto-render.min.js"></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+          ]
+        });
+      });
+  </script>
+<link rel="stylesheet" href="/ecasdqina/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/ecasdqina/feed.xml" title="るまライブラリ" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/ecasdqina/">るまライブラリ</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/ecasdqina/about">このサイトについて</a><a class="page-link" href="/ecasdqina/architecture">設計思想</a><a class="page-link" href="/ecasdqina/one">one</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">Link/Cut Tree</h1>
+  </header>
+
+  <div class="post-content">
+    <p>森(もしくは根付き有向木(Arborescence)の集合)への更新とクエリを順不同で高速に．</p>
+
+<p>根の変更クエリ(evert)には乗せるモノイドに対する要求があり，その条件は平衡二分探索木がreverseで要求するものと同じ(<a href="http://localhost:4000/ecasdqina/math/Monoid">モノイド</a>をみて)．</p>
+
+<p>動的木の一種．</p>
+
+<p>IOIで常勝できることはあまりにも有名．</p>
+
+<p>参考になるものを準備しています…</p>
+
+<p>TODO : 区間に対する更新に対し，leftを求めるの，ちょっとどうすればいいかわからないけど，<br />
+やっている人がいるのでそのうち見てみようと思います．</p>
+
+<pre><code class="language-cpp">// when link(p, c) , c is root.
+// cut(c), c is not root
+// use make(int index, Monoid::T x)
+// lc[index] to access nodes
+/// --- LinkCutTree Library {{{ ///
+
+template &lt; class Monoid, class M_act &gt;
+struct LinkCutTree {
+  using X = typename Monoid::T;
+  using M = typename M_act::M;
+
+  // Splay sequence {{{
+  struct Splay {
+    Splay *ch[2] = {nullptr, nullptr}, *p = nullptr;
+    X val, accum;
+    M lazy = M_act::identity(); ///////
+    // size of BST // not of real subtree
+    int sz = 1;
+    bool isRoot() { return !p || (p-&gt;ch[0] != this &amp;&amp; p-&gt;ch[1] != this); }
+    bool rev = false;
+    // call before use
+    void eval() {
+      if(lazy != M_act::identity()) {
+        val = M_act::actInto(lazy, -1, 1, val);
+        accum = M_act::actInto(lazy, -1, sz, accum);
+        if(ch[0]) ch[0]-&gt;lazy = M_act::op(lazy, ch[0]-&gt;lazy);
+        if(ch[1]) ch[1]-&gt;lazy = M_act::op(lazy, ch[1]-&gt;lazy);
+        lazy = M_act::identity();
+      }
+      if(rev) {
+        swap(ch[0], ch[1]);
+        if(ch[0]) ch[0]-&gt;rev ^= 1;
+        if(ch[1]) ch[1]-&gt;rev ^= 1;
+        // accum = reverse(accum, sz)
+        rev = false;
+      }
+    }
+    void evalDown() {
+      vector&lt; Splay * &gt; b2t;
+      Splay *t = this;
+      for(; !t-&gt;isRoot(); t = t-&gt;p) b2t.emplace_back(t);
+      t-&gt;eval();
+      while(b2t.size()) b2t.back()-&gt;eval(), b2t.pop_back();
+      // vector&lt; Splay * &gt;().swap(b2t);
+    }
+    X accumulated(Splay *a) { return !a ? Monoid::identity() : a-&gt;accum; }
+    int size(Splay *a) { return !a ? 0 : a-&gt;sz; }
+    // call after touch
+    void prop() {
+      if(ch[0]) ch[0]-&gt;eval(); ////
+      if(ch[1]) ch[1]-&gt;eval(); ////
+      sz = size(ch[0]) + 1 + size(ch[1]);
+      accum =
+          Monoid::op(Monoid::op(accumulated(ch[0]), val), accumulated(ch[1]));
+    }
+    Splay(const X &amp;val) : val(val), accum(val) {}
+    Splay *rotate(bool R) {
+      Splay *t = ch[!R];
+      if((ch[!R] = t-&gt;ch[R])) ch[!R]-&gt;p = this;
+      t-&gt;ch[R] = this; ////
+      if((t-&gt;p = p)) {
+        if(t-&gt;p-&gt;ch[0] == this) t-&gt;p-&gt;ch[0] = t;
+        if(t-&gt;p-&gt;ch[1] == this) t-&gt;p-&gt;ch[1] = t;
+      }
+      p = t;
+      prop(), t-&gt;prop();
+      return t;
+    }
+    // bottom-up
+    void splay() {
+      evalDown();
+      while(!isRoot()) {
+        Splay *q = p;
+        if(q-&gt;isRoot()) {
+          q-&gt;rotate(q-&gt;ch[0] == this);
+        } else {
+          Splay *r = q-&gt;p;
+          bool V = r-&gt;ch[0] == q;
+          if(q-&gt;ch[!V] == this)
+            r-&gt;rotate(V);
+          else
+            q-&gt;rotate(!V);
+          p-&gt;rotate(V); ///////
+        }
+      }
+    }
+  };
+  // }}}
+
+  vector&lt; Splay * &gt; data;
+  LinkCutTree(int n) : data(n) {}
+  Splay *operator[](int i) { return data[i]; }
+  Splay *make(int i, const X &amp;x = Monoid::identity()) {
+    return data[i] = new Splay(x);
+  }
+  const X &amp;get(Splay *x) {
+    x-&gt;evalDown();
+    return x-&gt;val;
+  }
+  void set(Splay *x, const X &amp;val) {
+    x-&gt;splay();
+    x-&gt;val = val;
+    x-&gt;prop();
+  }
+  Splay *expose(Splay *x) {
+    Splay *prv = nullptr, *now = x;
+    for(; now; prv = now, now = now-&gt;p) {
+      now-&gt;splay();
+      now-&gt;ch[1] = prv;
+      now-&gt;prop();
+    }
+    x-&gt;splay(); /////
+    return prv;
+  }
+  void cut(Splay *c) {
+    expose(c);
+#ifdef DEBUG
+    static const struct CannotCutRoot {} ex;
+    if(!c-&gt;ch[0]) throw ex;
+#endif
+    Splay *s = c-&gt;ch[0];
+    c-&gt;ch[0] = nullptr;
+    c-&gt;prop();
+    s-&gt;p = nullptr;
+  }
+  void link(Splay *parent, Splay *child) {
+#ifdef DEBUG
+    static const struct CannotLinkSameNode {} ex;
+    if(same(parent, child)) throw ex;
+#endif
+    expose(parent), expose(child);
+    child-&gt;p = parent;
+    parent-&gt;ch[1] = child;
+    parent-&gt;prop();
+  }
+  void evert(Splay *x) {
+    expose(x);
+    x-&gt;rev = true;
+  }
+  bool same(Splay *a, Splay *b) {
+    if(a == b) return true;
+    expose(a), expose(b);
+    return a-&gt;p != nullptr;
+  }
+  Splay *lca(Splay *a, Splay *b) {
+#ifdef DEBUG
+    static const struct CannotLCAAnotherNode {} ex;
+    if(!same(a, b)) throw ex;
+#endif
+    expose(a), a = expose(b);
+    return !a ? b : a;
+  }
+  void act(Splay *a, const M &amp;m) { expose(a), a-&gt;lazy = m; }
+  X query(Splay *a) {
+    expose(a);
+    return a-&gt;accum;
+  }
+  // root of subtree
+  Splay *getRoot(Splay *a) {
+    expose(a);
+    Splay *t = a;
+    while(t-&gt;ch[0]) t = t-&gt;ch[0];
+    t-&gt;splay();
+    return t;
+  }
+};
+
+/// }}}--- ///
+
+/// --- Monoid, M_act examples {{{ ///
+
+/// --- Monoid examples {{{ ///
+
+struct Nothing {
+  using T = char;
+  using M = char;
+  static constexpr T op(const T &amp;, const T &amp;) { return 0; }
+  static constexpr T identity() { return 0; }
+  template &lt; class X &gt;
+  static constexpr X actInto(const M &amp;, ll, ll, const X &amp;x) {
+    return x;
+  }
+};
+
+struct RangeMin {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return min(a, b); }
+  static constexpr T identity() { return numeric_limits&lt; T &gt;::max(); }
+};
+
+struct RangeMax {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return max(a, b); }
+  static constexpr T identity() { return numeric_limits&lt; T &gt;::min(); }
+};
+
+struct RangeSum {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return a + b; }
+  static constexpr T identity() { return 0; }
+};
+
+/// }}}--- ///
+
+// MinAdd m + x
+// MinSet m
+// SumAdd m * n + x
+// SumSet m * n
+
+struct RangeMinAdd {
+  using M = ll;
+  using X = RangeMin::T;
+  static M op(const M &amp;a, const M &amp;b) { return a + b; }
+  static constexpr M identity() { return 0; }
+  static X actInto(const M &amp;m, ll, ll, const X &amp;x) { return m + x; }
+};
+
+struct RangeMinSet {
+  using M = ll;
+  using X = RangeMin::T;
+  static M op(const M &amp;a, const M &amp;) { return a; }
+  static constexpr M identity() { return numeric_limits&lt; M &gt;::min(); }
+  static X actInto(const M &amp;m, ll, ll, const X &amp;) { return m; }
+};
+
+struct RangeSumAdd {
+  using M = ll;
+  using X = RangeSum::T;
+  static M op(const M &amp;a, const M &amp;b) { return a + b; }
+  static constexpr M identity() { return 0; }
+  static X actInto(const M &amp;m, ll, ll n, const X &amp;x) { return m * n + x; }
+};
+
+struct RangeSumSet {
+  using M = ll;
+  using X = RangeSum::T;
+  static M op(const M &amp;a, const M &amp;) { return a; }
+  static constexpr M identity() { return numeric_limits&lt; M &gt;::min(); }
+  static X actInto(const M &amp;m, ll, ll n, const X &amp;) { return m * n; }
+};
+
+/// }}}--- ///
+
+// LinkCutTree&lt; RangeSum, RangeSumSet &gt; lc(N);
+</code></pre>
+
+<h1 id="検証">検証</h1>
+
+<ul>
+  <li>RMQとRUQ - <a href="https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/DSL_2_F/judge/3092002/C++14" target="_blank">AOJのなんか</a>
+    <ul>
+      <li>遅延セグ木でできることがevert付きでできる</li>
+    </ul>
+  </li>
+  <li>LCA - <a href="https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/GRL_5_C/judge/3092319/C++14" target="_blank">AOJのなんか</a></li>
+  <li>HL-Decomp(TLE) <a href="https://codeforces.com/contest/980/submission/41594330" target="_blank">E. The Number Games | CF</a></li>
+  <li>HL-Decomp <a href="https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/0367/judge/3093506/C++14">PCKの問題 | AOJ</a></li>
+  <li>部分木サイズ，link/cut，部分木root <a href="https://beta.atcoder.jp/contests/cf17-tournament-round3-open/submissions/3128272" target="_blank">E - Black Cats Deployment - AC</a><!--_-->
+    <ul>
+      <li>なんかいい感じのLCT向け問題を見つけてしまった(想定解ではない)</li>
+      <li>cutができて，サイズが分かるUnionFind的な扱いをする</li>
+      <li>evertがないとき，部分木のサイズを計算できる</li>
+      <li>(cutの後にlinkがあるとかは，部分木のサイズは対応が難しいかも)</li>
+      <li>部分木のroot取得もある</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="練習">練習</h1>
+
+<ul>
+  <li><a href="https://beta.atcoder.jp/contests/cf17-tournament-round3-open/tasks/asaporo2_e" target="_blank">E - Black Cats Deployment - AC</a><!--_-->
+    <ul>
+      <li>ぜひやってみてください</li>
+    </ul>
+  </li>
+</ul>
+
+
+  </div><div id="disqus_thread"></div>
+    <script defer>
+      var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/ecasdqina/data-structure/misc/LinkCutTree';
+        this.page.identifier = 'http://localhost:4000/ecasdqina/data-structure/misc/LinkCutTree';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+
+        s.src = 'https://ecas.disqus.com/embed.js';
+
+        s.setAttribute('defer', '');
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript></article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/ecasdqina/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/LumaKernel"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#github"></use></svg> <span class="username">LumaKernel</span></a></li><li><a href="https://www.twitter.com/lumc_"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">lumc_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>ぼくが競プロで使うライブラリです．</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

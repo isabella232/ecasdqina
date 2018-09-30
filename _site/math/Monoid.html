@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>モノイド，モノイド作用 | るまライブラリ</title>
+<meta name="generator" content="Jekyll v3.8.3" />
+<meta property="og:title" content="モノイド，モノイド作用" />
+<meta name="author" content="luma" />
+<meta property="og:locale" content="ja" />
+<meta name="description" content="ぼくが競プロで使うライブラリです．" />
+<meta property="og:description" content="ぼくが競プロで使うライブラリです．" />
+<link rel="canonical" href="http://localhost:4000/ecasdqina/math/Monoid" />
+<meta property="og:url" content="http://localhost:4000/ecasdqina/math/Monoid" />
+<meta property="og:site_name" content="るまライブラリ" />
+<script type="application/ld+json">
+{"headline":"モノイド，モノイド作用","@type":"WebPage","url":"http://localhost:4000/ecasdqina/math/Monoid","author":{"@type":"Person","name":"luma"},"description":"ぼくが競プロで使うライブラリです．","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/combine/npm/katex@0.10.0-rc/dist/katex.min.js,npm/katex@0.10.0-rc/dist/contrib/auto-render.min.js"></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+          ]
+        });
+      });
+  </script>
+<link rel="stylesheet" href="/ecasdqina/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/ecasdqina/feed.xml" title="るまライブラリ" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/ecasdqina/">るまライブラリ</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/ecasdqina/about">このサイトについて</a><a class="page-link" href="/ecasdqina/architecture">設計思想</a><a class="page-link" href="/ecasdqina/one">one</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">モノイド，モノイド作用</h1>
+  </header>
+
+  <div class="post-content">
+    <p>データにも構造があるように，数学にも構造がある（適当）．</p>
+
+<p>雑な認識で書きます．</p>
+
+<p>セグメントツリーっていうのはRMQやRSQができることで有名だけど，<br />
+“$ax + b$に変更する”みたいなのをもつこともできる．<br />
+蟻本に乗ってるクレーンのやつとか?<br />
+それらを少しでも同じ舞台に乗せるために十分条件としてモノイドというものが挙げられる．</p>
+
+<p>モノイドは集合 $X$ と演算子 $\bullet$ ふたつでひとつの $(X, \bullet)$ を考える．<br />
+そして任意の元 $a,b,c \in X$ に対して以下を満たす．</p>
+
+<ul>
+  <li>閉じている ($a \bullet b \in X$)</li>
+  <li>結合律がある ($(a \bullet b) \bullet c=a \bullet (b \bullet c)$)</li>
+  <li>単位元がある ($e \bullet a=a \bullet e=a$となるような$e$の存在(閉じているので当然 $e \in X$ ))</li>
+</ul>
+
+<p>$X = \bm{Z}$ (整数ね), $\bullet = +$ (たしざん)などが，ま，いけるね．</p>
+
+<p>そして列 $a_1, a_1, \cdots , a_n \in X$ がありましたら，<br />
+セグメントツリーにこれを乗せることで，任意の有効な $l \lt r$に対して，<br />
+$a_l \bullet \cdots \bullet a_{r-1}$ をもともめることが<br />
+$O(log(r-l))$ でできると一般化できるわけですね．(必要十分かどうかよくわからないけど)</p>
+
+<p>あと，[0, r]しか求めないBITでも使えます．</p>
+
+<ul>
+  <li>逆元がある ($a \bullet a^{-1} = a^{-1} \bullet a = e$となるような $a^{-1}$ の存在)</li>
+</ul>
+
+<p>が追加されることで群，</p>
+
+<ul>
+  <li>交換則がある ($a \bullet b = b \bullet a$)</li>
+</ul>
+
+<p>がさらに追加されてアーベル群となるわけですが，</p>
+
+<p>アーベル群のとき，[l, r]を求めることのできるBITになります．<br />
+[0, r]を求めて，[0, l - 1]を引けばいいわけです．</p>
+
+<p>SparseTableは少しかわっていて，なんかよくわからない名前のアだったのであんま触れません．(参考を参照)</p>
+
+<p>ほかのデータ構造では，さらに追加の条件を加えて，<br />
+いろいろなことができちゃったりします．<br />
+わーすごーい．</p>
+
+<h2 id="モノイドであって群ではないもの">モノイドであって群ではないもの</h2>
+
+<p>あんま書きたいこととは関係なのでざっくりいうと，<br />
+フィボナッチ数列の行列二分累乗のときの行列とか，<br />
+さっき書いた $x$ を $ax + b$ に変えちゃうやつ（演算子 $\bullet$の話)とか，<br />
+(参考: <a href="http://d.hatena.ne.jp/DEGwer/20131211/1386757368" target="_blank">DEGwerさんの記事</a>, <a href="https://github.com/kirika-comp/articles" target="_blank">kirikaさんの整数論集</a>)
+まーそのうち足すかもね．</p>
+
+<h1 id="モノイド作用">モノイド作用</h1>
+
+<p>なんやかんやありましてモノイド作用というのが綺麗に，<br />
+遅延セグ木に乗る十分条件になるということです．</p>
+
+<p>モノイド $(X, \bullet)$ と $(M, *)$ , <br />
+外部演算 $\circ:M \times X \to X$ というのを考えます．<br />
+データに使うのが前者，遅延伝播に使うのが後者のモノイドです．</p>
+
+<p>そして任意の元 $x \in X$ と $a, b \in M$ について，</p>
+<ul>
+  <li>$e \circ x = x$ が成り立つ</li>
+  <li>$a \circ (b \circ x) = (a * b) \circ x$ が成り立つ</li>
+</ul>
+
+<p>ことが条件です．( $e$ は単位元)</p>
+
+<h2 id="遅延セグメントツリーでさらに要求されること">遅延セグメントツリーでさらに要求されること</h2>
+
+<p>$a_1, \cdots ,a_n \in X$, $m \in M$ とします．<br />
+$x = (a_l \bullet \cdots \bullet a_{r-1})$ と $l$ , $r$, $m$ から，<br />
+$y = ((m \circ a_l) \bullet \cdots \bullet (m \circ a_r))$を求める高速な関数<br />
+$f(X, integer, integer, M): X$ があるといい．</p>
+
+<p>設計としては$r-l=sz$として$l$, $sz$を使うようにしている．</p>
+
+<p>また，この関数には $actInto$ という名前をなんとなくつけた．<br />
+$m$が潜り込んでいる感じがしたのでそうした．</p>
+
+<p>はたして $l$と$sz$を両方使う問題があるのかということだが，<br />
+この前出会った(<a href="https://yukicoder.me/problems/no/235" target="_blank">めぐるはめぐる (5) | yukicoder</a>, TODO : 解説)</p>
+
+<h2 id="bbstのreverseでさらに要求されること">BBSTのreverseでさらに要求されること</h2>
+
+<p><a href="http://localhost:4000/ecasdqina/data-structure/misc/LinkCutTree">Link/Cut Tree</a>の evert の要求も同じ．</p>
+
+<p>$x = (a_l \bullet \cdots \bullet a_{r-1})$ と $l$ , $r$ から，<br />
+$y = a_{r-1} \bullet \cdots \bullet a_l$を求める高速な関数<br />
+$f(X, integer, integer): X$ があるといい．
+$reverse$ と名付けた．</p>
+
+<p>これが<code>X reverse(X x, int, int) { return x; }</code>以外だったら自分でその場で書くような設計にしておいた．</p>
+
+<h1 id="実装">実装</h1>
+
+<h2 id="モノイドの例">モノイドの例</h2>
+
+<pre><code class="language-cpp">/// --- Monoid examples {{{ ///
+
+struct Nothing {
+  using T = char;
+  using M = char;
+  static constexpr T op(const T &amp;, const T &amp;) { return 0; }
+  static constexpr T identity() { return 0; }
+  template &lt; class X &gt;
+  static constexpr X actInto(const M &amp;, ll, ll, const X &amp;x) {
+    return x;
+  }
+};
+
+struct RangeMin {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return min(a, b); }
+  static constexpr T identity() { return numeric_limits&lt; T &gt;::max(); }
+};
+
+struct RangeMax {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return max(a, b); }
+  static constexpr T identity() { return numeric_limits&lt; T &gt;::min(); }
+};
+
+struct RangeSum {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return a + b; }
+  static constexpr T identity() { return 0; }
+};
+
+/// }}}--- ///
+</code></pre>
+
+<h2 id="モノイドモノイド作用の例">モノイド，モノイド作用の例</h2>
+
+<pre><code class="language-cpp">/// --- Monoid, M_act examples {{{ ///
+
+/// --- Monoid examples {{{ ///
+
+struct Nothing {
+  using T = char;
+  using M = char;
+  static constexpr T op(const T &amp;, const T &amp;) { return 0; }
+  static constexpr T identity() { return 0; }
+  template &lt; class X &gt;
+  static constexpr X actInto(const M &amp;, ll, ll, const X &amp;x) {
+    return x;
+  }
+};
+
+struct RangeMin {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return min(a, b); }
+  static constexpr T identity() { return numeric_limits&lt; T &gt;::max(); }
+};
+
+struct RangeMax {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return max(a, b); }
+  static constexpr T identity() { return numeric_limits&lt; T &gt;::min(); }
+};
+
+struct RangeSum {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return a + b; }
+  static constexpr T identity() { return 0; }
+};
+
+/// }}}--- ///
+
+// MinAdd m + x
+// MinSet m
+// SumAdd m * n + x
+// SumSet m * n
+
+struct RangeMinAdd {
+  using M = ll;
+  using X = RangeMin::T;
+  static M op(const M &amp;a, const M &amp;b) { return a + b; }
+  static constexpr M identity() { return 0; }
+  static X actInto(const M &amp;m, ll, ll, const X &amp;x) { return m + x; }
+};
+
+struct RangeMinSet {
+  using M = ll;
+  using X = RangeMin::T;
+  static M op(const M &amp;a, const M &amp;) { return a; }
+  static constexpr M identity() { return numeric_limits&lt; M &gt;::min(); }
+  static X actInto(const M &amp;m, ll, ll, const X &amp;) { return m; }
+};
+
+struct RangeSumAdd {
+  using M = ll;
+  using X = RangeSum::T;
+  static M op(const M &amp;a, const M &amp;b) { return a + b; }
+  static constexpr M identity() { return 0; }
+  static X actInto(const M &amp;m, ll, ll n, const X &amp;x) { return m * n + x; }
+};
+
+struct RangeSumSet {
+  using M = ll;
+  using X = RangeSum::T;
+  static M op(const M &amp;a, const M &amp;) { return a; }
+  static constexpr M identity() { return numeric_limits&lt; M &gt;::min(); }
+  static X actInto(const M &amp;m, ll, ll n, const X &amp;) { return m * n; }
+};
+
+/// }}}--- ///
+</code></pre>
+
+<h1 id="参考">参考</h1>
+
+<ul>
+  <li><a href="https://tomcatowl.github.io/post/ds-and-alg-1/" target="_blank">データ構造と代数(前編)</a></li>
+  <li><a href="https://tomcatowl.github.io/post/ds-and-alg-2/" target="_blank">データ構造と代数(後編)</a></li>
+</ul>
+
+  </div><div id="disqus_thread"></div>
+    <script defer>
+      var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/ecasdqina/math/Monoid';
+        this.page.identifier = 'http://localhost:4000/ecasdqina/math/Monoid';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+
+        s.src = 'https://ecas.disqus.com/embed.js';
+
+        s.setAttribute('defer', '');
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript></article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/ecasdqina/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/LumaKernel"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#github"></use></svg> <span class="username">LumaKernel</span></a></li><li><a href="https://www.twitter.com/lumc_"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">lumc_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>ぼくが競プロで使うライブラリです．</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>木のダブリング | るまライブラリ</title>
+<meta name="generator" content="Jekyll v3.8.3" />
+<meta property="og:title" content="木のダブリング" />
+<meta name="author" content="luma" />
+<meta property="og:locale" content="ja" />
+<meta name="description" content="ぼくが競プロで使うライブラリです．" />
+<meta property="og:description" content="ぼくが競プロで使うライブラリです．" />
+<link rel="canonical" href="http://localhost:4000/ecasdqina/graph/DoublingTree" />
+<meta property="og:url" content="http://localhost:4000/ecasdqina/graph/DoublingTree" />
+<meta property="og:site_name" content="るまライブラリ" />
+<script type="application/ld+json">
+{"headline":"木のダブリング","@type":"WebPage","url":"http://localhost:4000/ecasdqina/graph/DoublingTree","author":{"@type":"Person","name":"luma"},"description":"ぼくが競プロで使うライブラリです．","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/combine/npm/katex@0.10.0-rc/dist/katex.min.js,npm/katex@0.10.0-rc/dist/contrib/auto-render.min.js"></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+          ]
+        });
+      });
+  </script>
+<link rel="stylesheet" href="/ecasdqina/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/ecasdqina/feed.xml" title="るまライブラリ" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/ecasdqina/">るまライブラリ</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/ecasdqina/about">このサイトについて</a><a class="page-link" href="/ecasdqina/architecture">設計思想</a><a class="page-link" href="/ecasdqina/one">one</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">木のダブリング</h1>
+  </header>
+
+  <div class="post-content">
+    <p>ダブリング自体は木でなくともできます．(数列とか?)</p>
+
+<p>$ O(logN) $ で1クエリを処理でき，<a href="http://localhost:4000/ecasdqina/graph/HL-Decomposition">HL分解</a>より時間計算量で有利ですが，<br />
+空間計算量は $ O(N log N) $ とちょっと増えます．
+<a href="http://localhost:4000/ecasdqina/graph/HL-Decomposition">HL分解</a>とちがって，<br />
+遅延させたりもできず，通常のセグ木でできることができます．</p>
+
+<pre><code class="language-cpp">// DoublingTree ( &lt;graph&gt; , initial? )
+// set (i, val) or assign ( &lt;data&gt; )
+// WARN : build(root = 0) !!!
+//     or dfs(roots) &amp; init() !!
+// lca (a, b)
+// query(hi, a, hi_inclusive?)
+/// --- Doubilng Tree Library {{{ ///
+
+template &lt; class Monoid &gt;
+struct DoublingTree {
+  using T = typename Monoid::T;
+  int n, logn;
+  vector&lt; vector&lt; int &gt; &gt; tree;
+  vector&lt; int &gt; depth; // 0-indexed
+  // [logn][n]
+  vector&lt; vector&lt; int &gt; &gt; par;
+  vector&lt; vector&lt; T &gt; &gt; dat;
+  int log(int n) {
+    int h = 1;
+    while((1 &lt;&lt; h) &lt; n) h++;
+    return h;
+  }
+  DoublingTree(int n, const T &amp;initial = Monoid::identity())
+      : n(n),
+        logn(log(n)),
+        tree(n),
+        depth(n),
+        par(logn, vector&lt; int &gt;(n)),
+        dat(logn, vector&lt; T &gt;(n, initial)) {}
+  template &lt; class InputIter,
+             class = typename iterator_traits&lt; InputIter &gt;::value_type &gt;
+  DoublingTree(InputIter first, InputIter last,
+               const T &amp;initial = Monoid::identity())
+      : DoublingTree(distance(first, last), initial) {
+    copy(first, last, begin(tree));
+  }
+  DoublingTree(const vector&lt; vector&lt; int &gt; &gt; &amp;tree,
+               const T &amp;initial = Monoid::identity())
+      : DoublingTree(begin(tree), end(tree), initial) {}
+  void set(int i, const T &amp;val) { dat[0][i] = val; }
+  template &lt; class InputIter,
+             class = typename iterator_traits&lt; InputIter &gt;::value_type &gt;
+  void assign(InputIter first, InputIter last) {
+    assert(distance(first, last) &lt;= n);
+    copy(first, last, begin(dat[0]));
+  }
+  void build(const vector&lt; int &gt; &amp;roots) {
+    for(int root : roots) dfs(root);
+    init();
+  }
+  void build(int root = 0) {
+    dfs(root);
+    init();
+  }
+  void init() {
+    for(int k = 1; k &lt; logn; k++) {
+      for(int i = 0; i &lt; n; i++) {
+        int p = par[k - 1][i];
+        if(p == -1) {
+          par[k][i] = -1;
+          continue;
+        }
+        dat[k][i] = Monoid::op(dat[k - 1][p], dat[k - 1][i]);
+        par[k][i] = par[k - 1][p];
+      }
+    }
+  }
+  void dfs(int i, int p = -1, int d = 0) {
+    depth[i] = d;
+    par[0][i] = p;
+    for(int j : tree[i])
+      if(j != p) {
+        dfs(j, i, d + 1);
+      }
+  }
+
+public:
+  int lca(int a, int b) {
+    if(depth[a] &lt; depth[b]) swap(a, b);
+    for(int k = logn - 1; k &gt;= 0; k--) {
+      int na = par[k][a];
+      if(na == -1 || depth[na] &lt; depth[b]) continue;
+      a = na;
+    }
+    if(a == b) return a;
+    for(int k = logn - 1; k &gt;= 0; k--) {
+      int na = par[k][a];
+      int nb = par[k][b];
+      if(na == nb) continue;
+      a = na, b = nb;
+    }
+    return par[0][a];
+  }
+  T query(int hi, int a, bool inclusive = true) {
+    T res = Monoid::identity();
+    for(int k = logn - 1; k &gt;= 0; k--) {
+      int na = par[k][a];
+      if(na == -1 || depth[na] &lt; depth[hi]) continue;
+      res = Monoid::op(dat[k][a], res);
+      a = na;
+    }
+    if(inclusive) res = Monoid::op(dat[0][hi], res);
+    return res;
+  }
+};
+
+/// }}}--- ///
+
+/// --- Monoid examples {{{ ///
+
+struct Nothing {
+  using T = char;
+  using M = char;
+  static constexpr T op(const T &amp;, const T &amp;) { return 0; }
+  static constexpr T identity() { return 0; }
+  template &lt; class X &gt;
+  static constexpr X actInto(const M &amp;, ll, ll, const X &amp;x) {
+    return x;
+  }
+};
+
+struct RangeMin {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return min(a, b); }
+  static constexpr T identity() { return numeric_limits&lt; T &gt;::max(); }
+};
+
+struct RangeMax {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return max(a, b); }
+  static constexpr T identity() { return numeric_limits&lt; T &gt;::min(); }
+};
+
+struct RangeSum {
+  using T = ll;
+  static T op(const T &amp;a, const T &amp;b) { return a + b; }
+  static constexpr T identity() { return 0; }
+};
+
+/// }}}--- ///
+
+DoublingTree&lt; RangeSum &gt; eca(N);
+</code></pre>
+
+<h1 id="検証">検証</h1>
+
+<ul>
+  <li><a href="https://beta.atcoder.jp/contests/arc039/submissions/2136670" target="_blank">D - 旅行会社高橋君 - AC</a><!--_--></li>
+  <li>HackerRankの問題でやろうとしたらMLEった（Aborted, REとは限らない）</li>
+</ul>
+
+
+  </div><div id="disqus_thread"></div>
+    <script defer>
+      var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/ecasdqina/graph/DoublingTree';
+        this.page.identifier = 'http://localhost:4000/ecasdqina/graph/DoublingTree';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+
+        s.src = 'https://ecas.disqus.com/embed.js';
+
+        s.setAttribute('defer', '');
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript></article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/ecasdqina/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/LumaKernel"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#github"></use></svg> <span class="username">LumaKernel</span></a></li><li><a href="https://www.twitter.com/lumc_"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">lumc_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>ぼくが競プロで使うライブラリです．</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

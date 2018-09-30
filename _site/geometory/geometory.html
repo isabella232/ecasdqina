@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ja"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><!-- Begin Jekyll SEO tag v2.5.0 -->
+<title>基本 | るまライブラリ</title>
+<meta name="generator" content="Jekyll v3.8.3" />
+<meta property="og:title" content="基本" />
+<meta name="author" content="luma" />
+<meta property="og:locale" content="ja" />
+<meta name="description" content="ぼくが競プロで使うライブラリです．" />
+<meta property="og:description" content="ぼくが競プロで使うライブラリです．" />
+<link rel="canonical" href="http://localhost:4000/ecasdqina/geometory/geometory" />
+<meta property="og:url" content="http://localhost:4000/ecasdqina/geometory/geometory" />
+<meta property="og:site_name" content="るまライブラリ" />
+<script type="application/ld+json">
+{"headline":"基本","@type":"WebPage","url":"http://localhost:4000/ecasdqina/geometory/geometory","author":{"@type":"Person","name":"luma"},"description":"ぼくが競プロで使うライブラリです．","@context":"http://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.11.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();
+  </script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0-rc/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/combine/npm/katex@0.10.0-rc/dist/katex.min.js,npm/katex@0.10.0-rc/dist/contrib/auto-render.min.js"></script>
+  <script defer>
+    document.addEventListener("DOMContentLoaded", function () {
+        renderMathInElement(document.body, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+          ]
+        });
+      });
+  </script>
+<link rel="stylesheet" href="/ecasdqina/assets/main.css"><link type="application/atom+xml" rel="alternate" href="http://localhost:4000/ecasdqina/feed.xml" title="るまライブラリ" /></head>
+<body><header class="site-header" role="banner">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/ecasdqina/">るまライブラリ</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/ecasdqina/about">このサイトについて</a><a class="page-link" href="/ecasdqina/architecture">設計思想</a><a class="page-link" href="/ecasdqina/one">one</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post">
+
+  <header class="post-header">
+    <h1 class="post-title">基本</h1>
+  </header>
+
+  <div class="post-content">
+    <h1 id="使い方">使い方</h1>
+
+<h2 id="定数">定数</h2>
+
+<ul>
+  <li>EPS : イプシロン．誤差がどこまでか</li>
+</ul>
+
+<h2 id="クラス">クラス</h2>
+
+<ul>
+  <li>Scalar : スカラー</li>
+  <li>Point(Scalar, Scalar) : 点，ベクトルとしても使う</li>
+  <li>Circle(Point, Scalar radius) : 円</li>
+  <li>Line(Point, Point) : 直線</li>
+  <li>Segment(Point, Point) : 線分
+    <ul>
+      <li>交点求めるときの端点の扱いなどに注意</li>
+    </ul>
+  </li>
+  <li>Polygon : 多角形，vector&lt;Point&gt;，ccwである必要があったりなかったり</li>
+</ul>
+
+<h2 id="関数">関数</h2>
+
+<h3 id="色々">色々</h3>
+
+<ul>
+  <li>sign(Scalar) : EPS考慮のsign</li>
+  <li>ccw(Point a, Point b, Point c) : 三点の並び方，コメントのメモを参照</li>
+  <li>normalize(Point) : 正規化．そのベクトルの方向の単位ベクトル</li>
+  <li>normal(Point) : 法線ベクトル</li>
+  <li>arg(Point a, Point b) : [0, PI]の範囲で2つのベクトルの角度を返す</li>
+  <li>arg(Scalar a, Scalar b, Scalar c) : 三角形の長さから角度Aを返す</li>
+  <li>area3(Point a, Point b) : 三角形の面積</li>
+  <li>area3(Scalar a, Scalar b, Scalar c) : 三角形の三辺の長さから三角形の面積</li>
+  <li>dist(~, ~) : 距離</li>
+  <li>isCrossing(Segment, Segment) : 2つの線分が交差しているか</li>
+  <li>intersection(Line, Line) : 直線の交点</li>
+</ul>
+
+<h3 id="円">円</h3>
+
+<ul>
+  <li>cpr(Circle, Circle) : 円と円の関係，コメントのメモを参照</li>
+  <li>intersections(Circle, Circle)</li>
+  <li>intersections(Circle, Line)</li>
+  <li>area(Circle) : 円の面積</li>
+  <li>ajacentLine(Circle, Point) : 円周上のある点を通る接線</li>
+  <li>tangentLines(Circle, Point) : 円の外のある点を通る接線</li>
+  <li>commonTangentLines(Circle, Circle) : 円と円の共通接線</li>
+</ul>
+
+<h3 id="多角形">多角形</h3>
+
+<ul>
+  <li>area(Polygon) : 面積</li>
+  <li>inside(Polygon, Point) : ある点が多角形の内部にあるかどうか
+    <ul>
+      <li>0 : 外側にある</li>
+      <li>1 : 内側にある</li>
+      <li>-1 : 多角形の頂点上にある</li>
+      <li>-2 : 多角形の辺上にある</li>
+    </ul>
+  </li>
+  <li>caliper(Polygon ccwConvex) : 最遠点対を求めその距離を返す
+    <ul>
+      <li>ccwConvexはGrahamScanで生成されるようなccw順で凸包であるようなもの</li>
+    </ul>
+  </li>
+</ul>
+
+<p>HCPCのスライド<a href="https://www.slideshare.net/hcpc_hokudai/kika-80076550" target="_blank">kika1</a>,<a href="https://www.slideshare.net/hcpc_hokudai/kika2-80076551" target="_blank">kika2</a>,<a href="https://www.slideshare.net/hcpc_hokudai/kika3-80076552" target="_blank">kika3</a>を見ながら大体計算しながら作ったが，間違っている可能性はあるので注意．
+スライドにも間違い(たぶん)があったりしたので注意．</p>
+
+<pre><code class="language-cpp">using Scalar = long double;
+// EPS
+constexpr Scalar EPS = 1e-11;
+constexpr Scalar PI = 3.14159265358979323;
+/// --- Geometory Library {{{ ///
+using Point = complex&lt; Scalar &gt;;
+using Polygon = vector&lt; Point &gt;;
+struct Line : public pair&lt; Point, Point &gt; {
+  Line(Point a, Point b) : pair&lt; Point, Point &gt;(a, b) {}
+};
+struct Segment : public pair&lt; Point, Point &gt; {
+  Segment(Point a, Point b) : pair&lt; Point, Point &gt;(a, b) {}
+};
+#define X real()
+#define Y imag()
+#define dot(a, b) real(conj(a) * (b))
+#define cross(a, b) imag(conj(a) * (b))
+#define norm abs
+
+int sign(Scalar x) {
+  if(x &lt; -EPS) return -1;
+  if(x &gt; +EPS) return +1;
+  return 0;
+}
+
+// +1 : a-&gt;b-&gt;c is ccw
+// -1 : a-&gt;b-&gt;c is cw
+// +2 : a--b--c
+// -2 : b--c--a
+//  0 : b--a--c
+int ccw(const Point &amp;a, Point b, Point c) {
+  b -= a;
+  c -= a;
+  if(cross(b, c) &gt; EPS) return +1;
+  if(cross(b, c) &lt; -EPS) return -1;
+  if(dot(b, c) &lt; 0) return 0;
+  if(norm(b) &lt; norm(c)) return +2;
+  return -2;
+}
+
+inline Point normalize(const Point &amp;v) { return v / norm(v); }
+
+inline Point normal(const Point &amp;v) {
+  return v * Point(cos(PI / 2), sin(PI / 2));
+}
+
+// [0, pi]
+Scalar arg(const Point &amp;a, const Point &amp;b) {
+  return acos(dot(a, b) / norm(a) / norm(b));
+}
+
+// triangle, arg a
+Scalar arg(Scalar a, Scalar b, Scalar c) {
+  return acos((b * b + c * c - a * a) / (2 * b * c));
+}
+
+// Sarrus
+Scalar area3(const Point &amp;a, const Point &amp;b) {
+  return abs(a.X * b.Y - a.Y * b.X) / 2;
+}
+
+// Heron's formula
+Scalar area3(Scalar a, Scalar b, Scalar c) {
+  Scalar s = (a + b + c) / 2;
+  return sqrt(s * (s - a) * (s - b) * (s - c));
+}
+
+Scalar dist(const Line &amp;line, const Point &amp;p) {
+  return cross(p - line.first, line.second - line.first) /
+         abs(line.second - line.first);
+}
+
+Scalar dist(const Segment &amp;segment, const Point &amp;p) {
+  if(sign(dot(segment.first - segment.second, p - segment.second)) *
+         sign(dot(segment.second - segment.first, p - segment.first)) &gt;=
+     0)
+    return dist(Line(segment.first, segment.second), p);
+  else
+    return min(norm(p - segment.first), norm(p - segment.second));
+}
+
+Scalar dist(const Segment &amp;a, const Segment &amp;b) {
+  return min({
+      dist(a, b.first),
+      dist(a, b.second),
+      dist(b, a.first),
+      dist(b, a.second),
+  });
+}
+
+bool isCrossing(const Segment &amp;a, const Segment &amp;b) {
+  return ccw(a.first, a.second, b.first) * ccw(a.first, a.second, b.second) &lt;=
+             0 &amp;&amp;
+         ccw(b.first, b.second, a.first) * ccw(b.first, b.second, a.second) &lt;=
+             0;
+}
+
+Point intersection(const Line &amp;a, const Line &amp;b) {
+  return a.first +              //
+         (a.second - a.first) * //
+             cross(a.first - b.first, b.second - b.first) *
+             cross(a.first - a.second, b.second - b.first);
+}
+
+/// }}}--- ///
+</code></pre>
+
+<pre><code class="language-cpp">/// --- Geometory Circle Library {{{ ///
+// center, radius
+using Circle = pair&lt; Point, Scalar &gt;;
+
+// -1 : 0 share (outside)
+//  1 : 0 share (B in A)
+//  2 : 0 share (A in B)
+// -3 : 1 share (outside)
+//  3 : 1 share (B in A)
+//  4 : 1 share (A in B)
+//  0 : 2 share
+int cpr(const Circle &amp;a, const Circle &amp;b) {
+  Scalar d = norm(a.first - b.first);
+  if(a.second + b.second + EPS &lt; d) return -1;
+  if(b.second + d + EPS &lt; a.second) return 1;
+  if(a.second + d + EPS &lt; b.second) return 2;
+  if(abs(a.second + b.second - d) &lt; EPS) return -3;
+  if(abs(b.second + d - a.second) &lt; EPS) return 3;
+  if(abs(a.second + d - b.second) &lt; EPS) return 4;
+  return 0;
+}
+
+vector&lt; Point &gt; intersections(const Circle &amp;a, const Circle &amp;b) {
+  vector&lt; Point &gt; res;
+  // normalize(b-a) * R_A
+  Point x = a.second * normalize(b.first - a.first);
+  if(abs(cpr(a, b)) &gt;= 3) {
+    res.emplace_back(a.first + x);
+  } else if(cpr(a, b) == 0) {
+    Scalar s = arg(b.second, norm(b.first - a.first), a.second);
+    res.emplace_back(a.first + x * Point(cos(s), sin(s)));
+    res.emplace_back(a.first + x * Point(cos(-s), sin(-s)));
+  }
+  return res;
+}
+
+vector&lt; Point &gt; intersections(const Circle &amp;a, const Line &amp;line) {
+  vector&lt; Point &gt; res;
+  Point n = normal(line.first - line.second);
+  Point p = intersection(line, Line(a.first, a.first + n));
+  Scalar d = norm(a.first - p);
+  if(abs(d - a.second) &lt; EPS) {
+    res.emplace_back(p);
+  } else if(abs(d) &lt; a.second) {
+    Scalar len = sqrt(a.second * a.second - d * d);
+    Point share = len * normalize(line.first - line.second);
+    res.emplace_back(p + share);
+    res.emplace_back(p - share);
+  }
+  return res;
+}
+
+inline Scalar area(const Circle &amp;a) { return PI * a.second * a.second; }
+
+Scalar shareArea(Circle a, Circle b) {
+  Scalar d = norm(a.first - b.first);
+  if(a.second + b.second &lt; d + EPS) return 0;
+  if(a.second &lt; b.second) swap(a, b);
+  if(b.second + d &lt; a.second + EPS) return area(b);
+  Scalar s1 = arg(b.second, a.second, d), s2 = arg(a.second, b.second, d);
+  Scalar tri2 =
+      (a.second * a.second * sin(s1 * 2) + b.second * b.second * sin(s2 * 2)) /
+      2;
+  return a.second * a.second * s1 + b.second * b.second * s2 - tri2;
+}
+
+inline Line ajacentLine(const Circle &amp;c, const Point &amp;p) {
+  return Line(p, p + normal(p - c.first));
+}
+
+// the tangentLine of c passing p
+vector&lt; Line &gt; tangentLines(const Circle &amp;c, const Point &amp;p) {
+  vector&lt; Line &gt; res;
+  Scalar d = norm(p - c.first);
+  if(abs(d - c.second) &lt; EPS)
+    res.emplace_back(ajacentLine(c, p));
+  else if(c.second &lt; d) {
+    Point a = c.first + c.second * normalize(p - c.first);
+    vector&lt; Point &gt; b = intersections(
+        Circle(c.first, norm(c.first - p)), Line(a, a + normal(c.first - p)));
+    for(size_t i = 0; i &lt; b.size(); i++) {
+      res.emplace_back(p, c.first + c.second * normalize(b[i] - c.first));
+    }
+  }
+  return res;
+}
+
+vector&lt; Line &gt; commonTangentLines(Circle a, Circle b) {
+  vector&lt; Line &gt; res;
+  if(a.second + EPS &lt; b.second) swap(a, b);
+  if(norm(a.first - b.first) &lt; EPS) return res;
+
+  Point p = a.first + (b.first - a.first) * a.second / (a.second + b.second);
+  if(norm(a.first - p) + EPS &gt; a.second) res = tangentLines(a, p);
+  if(abs(a.second - b.second) &lt; EPS) {
+    Point n = normal(normalize(b.first - a.first) * a.second);
+    res.emplace_back(a.first + n, b.first + n);
+    res.emplace_back(a.first - n, b.first - n);
+  } else {
+    Point q = a.first + (b.first - a.first) * a.second / (a.second - b.second);
+    if(abs(a.first - q) + EPS &gt; a.second) {
+      vector&lt; Line &gt; tmp = tangentLines(a, q);
+      res.insert(begin(res), begin(tmp), end(tmp));
+    }
+  }
+  return res;
+}
+
+/// }}}--- ///
+</code></pre>
+
+<pre><code class="language-cpp">/// --- Geometory Polygon Library {{{ ///
+// ok for either ccw or cw
+Scalar area(const Polygon &amp;poly) {
+  if(poly.size() &lt; 3) return 0;
+  Scalar res = cross(poly[poly.size() - 1], poly[0]);
+  for(size_t i = 0; i &lt; poly.size() - 1; i++) {
+    res += cross(poly[i], poly[i + 1]);
+  }
+  return abs(res) / 2;
+}
+
+//  0 : outside
+//  1 : inside
+// -1 : on vertex
+// -2 : on line
+int inside(const Polygon &amp;poly, const Point &amp;p) {
+  int cnt = 0;
+  for(size_t i = 0; i &lt; poly.size(); i++) {
+    size_t ii = i, jj = (i + 1) % poly.size();
+    if(norm(poly[i] - p) &lt; EPS) return -1;
+    if(poly[ii].Y &gt; poly[jj].Y) swap(ii, jj);
+    if(poly[ii].Y - EPS &lt; p.Y &amp;&amp; p.Y &lt; poly[jj].Y + EPS) {
+      if(abs(poly[ii].Y - poly[jj].Y) &lt; EPS) { // parallel
+        if(poly[ii].X &gt; poly[jj].X) swap(ii, jj);
+        if(poly[ii].X - EPS &lt; p.X &amp;&amp; p.X &lt; poly[jj].X + EPS) return -2;
+      } else {
+        Point q =
+            intersection(Line(poly[ii], poly[jj]), Line(p, p + Point(1, 0)));
+        if(p.X &lt; q.X &amp;&amp; p.Y &gt; poly[ii].Y + EPS) cnt++; // count only upside
+      }
+    }
+  }
+  return cnt &amp; 1;
+}
+
+// param ccwConvex must be ccw and convex
+Scalar caliper(const Polygon &amp;ccwConvex) {
+  constexpr auto comp = [](Point a, Point b) {
+    return a.X == b.X ? a.Y &lt; b.Y : a.X &lt; b.X;
+  };
+  size_t i, j;
+  for(size_t k = 0; k &lt; ccwConvex.size(); k++) {
+    if(comp(ccwConvex[i], ccwConvex[k])) j = k;
+    if(!comp(ccwConvex[j], ccwConvex[k])) i = k;
+  }
+  Scalar res = 0;
+  size_t si = i, sj = j;
+  while(i != si || j != sj) {
+    res = max(res, norm(ccwConvex[i] - ccwConvex[j]));
+    if(cross(ccwConvex[(i + 1) % ccwConvex.size()] - ccwConvex[i],
+             ccwConvex[(j + 1) % ccwConvex.size()] - ccwConvex[j]) &lt; 0)
+      i = (i + 1) % ccwConvex.size();
+    else
+      j = (j + 1) % ccwConvex.size();
+  }
+  return res;
+}
+/// }}}--- ///
+</code></pre>
+
+
+  </div><div id="disqus_thread"></div>
+    <script defer>
+      var disqus_config = function () {
+        this.page.url = 'http://localhost:4000/ecasdqina/geometory/geometory';
+        this.page.identifier = 'http://localhost:4000/ecasdqina/geometory/geometory';
+      };
+
+      (function() {
+        var d = document, s = d.createElement('script');
+
+        s.src = 'https://ecas.disqus.com/embed.js';
+
+        s.setAttribute('defer', '');
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+      })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript></article>
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/ecasdqina/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col footer-col-2"><ul class="social-media-list"><li><a href="https://github.com/LumaKernel"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#github"></use></svg> <span class="username">LumaKernel</span></a></li><li><a href="https://www.twitter.com/lumc_"><svg class="svg-icon"><use xlink:href="/ecasdqina/assets/minima-social-icons.svg#twitter"></use></svg> <span class="username">lumc_</span></a></li></ul>
+</div>
+
+      <div class="footer-col footer-col-3">
+        <p>ぼくが競プロで使うライブラリです．</p>
+      </div>
+    </div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
