@@ -9,9 +9,33 @@ last_update : 2018-10-11
 
 # データ構造
 
+## セグメントツリー
+
+* [普通のセグメントツリー]({{ "data-structure/SegmentTree/SegmentTree" | relative_url }})
+* [遅延セグメントツリー]({{ "data-structure/SegmentTree/LazySegmentTree" | relative_url }})
+* [二次元セグメントツリー]({{ "data-structure/SegmentTree/SegmentTree2D" | relative_url }})
+* [動的セグメントツリー]({{ "data-structure/SegmentTree/DynamicSegmentTree" | relative_url }})
+* [フラクショナルカスケーディング]({{ "data-structure/SegmentTree/FractionalCascadingSegmentTree" | relative_url }})
+* [永続セグメントツリー]({{ "data-structure/SegmentTree/PersistentSegmentTree" | relative_url }})
+
 ## いろいろ
 
+* [Binary Indexed Tree (Fenwick Tree)]({{ "data-structure/misc/BIT" | relative_url }})
+* [BIT2D]({{ "data-structure/misc/BIT2D" | relative_url }})
+* [Sparse Table]({{ "data-structure/misc/SparseTable" | relative_url }})
+* [Link/Cut Tree]({{ "data-structure/misc/LinkCutTree" | relative_url }})
 * [Union Find (DSU)]({{ "data-structure/misc/UnionFind" | relative_url }})
+
+## Heap
+
+* [併合可能heap (LeftistHeap)]({{ "data-structure/Heap/LeftistHeap" | relative_url }})
+* [併合可能Heap (SkewHeap)]({{ "data-structure/Heap/SkewHeap" | relative_url }})
+* [RadixHeap]({{ "data-structure/Heap/RadixHeap" | relative_url }})
+
+## [平衡二部探索木(Balanced Binary Search Tree; BBST)]({{ "data-structure/BBST" | relative_url }})
+
+* [RBST]({{ "data-structure/BBST/RBST" | relative_url }})
+* [Treap]({{ "data-structure/BBST/Treap" | relative_url }})
 
 # グラフ
 
