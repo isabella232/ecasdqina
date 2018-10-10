@@ -120,12 +120,12 @@ vector< ll > conv(const vector< ll > &ar, const vector< ll > &br) {
 
 # 検証
 
-* [C - 高速フーリエ変換 - AC](https://beta.atcoder.jp/contests/atc001/submissions/3377830){:target="_blank"}<!--_-->
+* [C - 高速フーリエ変換 - AtCoder](https://beta.atcoder.jp/contests/atc001/submissions/3377830){:target="_blank"}<!--_-->
 
 # 練習問題
 
-* [C - 高速フーリエ変換 - AC](https://beta.atcoder.jp/contests/atc001/tasks/fft_c){:target="_blank"}<!--_-->
-* [E - Couple - AC](https://beta.atcoder.jp/contests/ukuku09/tasks/ukuku09_e){:target="_blank"}<!--_-->
+* [C - 高速フーリエ変換 - AtCoder](https://beta.atcoder.jp/contests/atc001/tasks/fft_c){:target="_blank"}<!--_-->
+* [E - Couple - AtCoder](https://beta.atcoder.jp/contests/ukuku09/tasks/ukuku09_e){:target="_blank"}<!--_-->
 * [0025 - のえるちゃん選び - ねねじゃっじ](https://luzhiled.me/problems/25){:target="_blank"}<!--_-->
 
 # 参考

@@ -71,4 +71,4 @@ private:
 
 # 検証
 
-[D - 旅行会社高橋君 \| AC](https://beta.atcoder.jp/contests/arc039/submissions/2136670){:target="_blank"}
+[D - 旅行会社高橋君 - AtCoder](https://beta.atcoder.jp/contests/arc039/submissions/2136670){:target="_blank"}

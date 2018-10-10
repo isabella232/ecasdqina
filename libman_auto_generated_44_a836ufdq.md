@@ -42,7 +42,7 @@ vector< int > Zalgorithm(string s) {
 
 # 検証
 
-* [F - 最良表現 \| AC](https://beta.atcoder.jp/contests/arc060/submissions/2213612){:target="_blank"}
+* [F - 最良表現 - AtCoder](https://beta.atcoder.jp/contests/arc060/submissions/2213612){:target="_blank"}
   * 解説を書き写しただけでよく理解していない解法
   * そのうち証明と合わせて読みたい一品
   * KMPで解けるからいいんだよ！

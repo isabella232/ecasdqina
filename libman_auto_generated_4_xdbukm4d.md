@@ -162,6 +162,6 @@ DoublingTree< RangeSum > eca(N);
 
 # 検証
 
-* [D - 旅行会社高橋君 - AC](https://beta.atcoder.jp/contests/arc039/submissions/2136670){:target="_blank"}<!--_-->
+* [D - 旅行会社高橋君 - AtCoder](https://beta.atcoder.jp/contests/arc039/submissions/2136670){:target="_blank"}<!--_-->
 * HackerRankの問題でやろうとしたらMLEった（Aborted, REとは限らない）
 
