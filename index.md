@@ -28,7 +28,7 @@ last_update : 2018-10-11
 
 ## Heap
 
-* [併合可能heap (LeftistHeap)]({{ "data-structure/Heap/LeftistHeap" | relative_url }})
+* [併合可能Heap (LeftistHeap)]({{ "data-structure/Heap/LeftistHeap" | relative_url }})
 * [併合可能Heap (SkewHeap)]({{ "data-structure/Heap/SkewHeap" | relative_url }})
 * [RadixHeap]({{ "data-structure/Heap/RadixHeap" | relative_url }})
 

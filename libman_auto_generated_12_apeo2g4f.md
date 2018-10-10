@@ -1,6 +1,6 @@
 ---
 layout: lib
-title: 併合可能heap (LeftistHeap)
+title: 併合可能Heap (LeftistHeap)
 permalink: data-structure/Heap/LeftistHeap
 
 ---
