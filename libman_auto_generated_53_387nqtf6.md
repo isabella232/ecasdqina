@@ -13,7 +13,7 @@ permalink: misc/bit-utility
 
 
 ```cpp
-int topbit(int x) {
+int msb(int x) {
   x = x & 0xFFFF0000 ? x & 0xFFFF0000 : x;
   x = x & 0xFF00FF00 ? x & 0xFF00FF00 : x;
   x = x & 0xF0F0F0F0 ? x & 0xF0F0F0F0 : x;
@@ -26,7 +26,7 @@ int topbit(int x) {
 
 
 ```cpp
-int topbitll(ll x) {
+int msbll(ll x) {
   x = x & 0xFFFFFFFF00000000 ? x & 0xFFFFFFFF00000000 : x;
   x = x & 0xFFFF0000FFFF0000 ? x & 0xFFFF0000FFFF0000 : x;
   x = x & 0xFF00FF00FF00FF00 ? x & 0xFF00FF00FF00FF00 : x;
@@ -40,7 +40,7 @@ int topbitll(ll x) {
 
 
 ```cpp
-int logbin(int x) {
+int logmsb(int x) {
   int h = 0;
   x = x & 0xFFFF0000 ? (h += 16, x) & 0xFFFF0000 : x;
   x = x & 0xFF00FF00 ? (h += 8, x) & 0xFF00FF00 : x;
@@ -54,7 +54,7 @@ int logbin(int x) {
 
 
 ```cpp
-int logbinll(ll x) {
+int logmsbll(ll x) {
   int h = 0;
   x = x & 0xFFFFFFFF00000000 ? (h += 32, x) & 0xFFFFFFFF00000000 : x;
   x = x & 0xFFFF0000FFFF0000 ? (h += 16, x) & 0xFFFF0000FFFF0000 : x;

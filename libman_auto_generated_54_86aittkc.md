@@ -32,7 +32,11 @@ struct Factorial {
   }
   int arr[N + 1], inv[N + 1];
   ll operator[](int i) const { return arr[i]; }
-  constexpr Factorial() : arr(), inv() {
+#if !defined(DEBUG)
+  constexpr
+#endif
+      Factorial()
+      : arr(), inv() {
     arr[0] = 1;
     for(int i = 1; i <= N; i++) {
       arr[i] = (ll) i * arr[i - 1] % mod;
@@ -51,6 +55,6 @@ struct Factorial {
 /// }}}--- ///
 
 const int N = 1e5 + 10;
-constexpr Factorial < N * 2 ?, mod > fact;
+Factorial < N * 2 ?, mod > fact;
 ```
 

@@ -2,7 +2,7 @@
 title: るまライブラリ
 # email: your-email@example.com
 description: >- # this means to ignore newlines until "baseurl:"
-  ぼくが競プロで使うライブラリです．
+  Lumaが競プロで使うライブラリ
 baseurl: "/ecasdqina" # the subpath of your site, e.g. /blog
 url: "https://lumakernel.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: lumc_
@@ -26,6 +26,7 @@ kramdown:
     disable: true
   # math_engine: null
 
+katex_version: 0.10.0-rc.1
 
 
 # Exclude from processing.

@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-10-01
+last_update : 2018-10-10
 ---
 
 えかライブラリだよ
@@ -9,33 +9,9 @@ last_update : 2018-10-01
 
 # データ構造
 
-## セグメントツリー
-
-* [普通のセグメントツリー]({{ "data-structure/SegmentTree/SegmentTree" | relative_url }})
-* [遅延セグメントツリー]({{ "data-structure/SegmentTree/LazySegmentTree" | relative_url }})
-* [二次元セグメントツリー]({{ "data-structure/SegmentTree/SegmentTree2D" | relative_url }})
-* [動的セグメントツリー]({{ "data-structure/SegmentTree/DynamicSegmentTree" | relative_url }})
-* [フラクショナルカスケーディング]({{ "data-structure/SegmentTree/FractionalCascadingSegmentTree" | relative_url }})
-* [永続セグメントツリー]({{ "data-structure/SegmentTree/PersistentSegmentTree" | relative_url }})
-
 ## いろいろ
 
-* [Binary Indexed Tree (Fenwick Tree)]({{ "data-structure/misc/BIT" | relative_url }})
-* [BIT2D]({{ "data-structure/misc/BIT2D" | relative_url }})
-* [Sparse Table]({{ "data-structure/misc/SparseTable" | relative_url }})
-* [Link/Cut Tree]({{ "data-structure/misc/LinkCutTree" | relative_url }})
 * [Union Find (DSU)]({{ "data-structure/misc/UnionFind" | relative_url }})
-
-## Heap
-
-* [LeftistHeap]({{ "data-structure/Heap/LeftistHeap" | relative_url }})
-* [SkewHeap]({{ "data-structure/Heap/SkewHeap" | relative_url }})
-* [RadixHeap]({{ "data-structure/Heap/RadixHeap" | relative_url }})
-
-## [平衡二部探索木(Balanced Binary Search Tree; BBST)]({{ "data-structure/BBST" | relative_url }})
-
-* [RBST]({{ "data-structure/BBST/RBST" | relative_url }})
-* [Treap]({{ "data-structure/BBST/Treap" | relative_url }})
 
 # グラフ
 
@@ -65,11 +41,19 @@ last_update : 2018-10-01
 * [連立一次方程式 (Givens)]({{ "math/Givens" | relative_url }})
 * [行列の積と累乗]({{ "math/matrix" | relative_url }})
 * [メビウス関数]({{ "math/moebius" | relative_url }})
-* [高速フーリエ変換 (FFT)，数論変換 (NTT)]({{ "math/FFT" | relative_url }})
 * [オイラーのトーシェント関数（ファイ関数）の性質]({{ "math/EulerTotient" | relative_url }})
+* [包除原理]({{ "math/PIE" | relative_url }})
+* [中国剰余定理 (CRT)]({{ "math/CRT" | relative_url }})
 * [モンゴメリ乗算]({{ "math/Montgomery" | relative_url }})
 * [モノイド，モノイド作用]({{ "math/Monoid" | relative_url }})
 * [ラグランジュ緩和問題 (永遠に未完成)]({{ "math/LagrangianRelaxation" | relative_url }})
+
+## FFT
+
+* [FFT導入]({{ "math/FFT/introduction" | relative_url }})
+* [基本的なFFT]({{ "math/FFT/standard" | relative_url }})
+* [数論変換 (Number Theoretic Transform; NTT)]({{ "math/FFT/NTT" | relative_url }})
+* [Cooley-Tukey FFT]({{ "math/FFT/Cooley-Tukey-FFT" | relative_url }})
 
 # 幾何
 
@@ -82,14 +66,14 @@ last_update : 2018-10-01
 * [Rollback可能なデータ構造とクエリ平方分割（Moの上位互換）]({{ "algorithm/MoEx" | relative_url }})
 * [時空間Mo (三次元Mo，Mo with Update)]({{ "algorithm/Mo3D" | relative_url }})
 * [きたまさ法]({{ "algorithm/Kitamasa" | relative_url }})
-* [Garner's algorithm]({{ "algorithm/Garner" | relative_url }})
+* [Garnerのアルゴリズム]({{ "algorithm/Garner" | relative_url }})
 * [高速ゼータ変換]({{ "algorithm/FastZetaTransform" | relative_url }})
 * [最適二分探索木 (Hu-Tucker)]({{ "algorithm/Hu-Tucker" | relative_url }})
 
 # [文字列]({{ "string" | relative_url }})
 
 * [最長回文半径 (Manacher)]({{ "string/Manacher" | relative_url }})
-* [s\[0,i-1\]の接頭辞と接尾辞が一致する最大の長さ (Prefix Function, KMP法), 最小周期]({{ "string/KMP" | relative_url }})
+* [s\[0,i-1\]の接頭辞と接尾辞が一致する最大の長さ (KMP法), 最小周期]({{ "string/KMP" | relative_url }})
 * [sとs\[i, -1\]の最長共通接頭辞 (z-algorithm)]({{ "string/z-algorithm" | relative_url }})
 * [文字列検索 (Aho-Corasick法)]({{ "string/AhoCorasick" | relative_url }})
 * [接尾辞配列 (Suffix Array) (Manber & Myers)]({{ "string/SA-with-Manber-Myers" | relative_url }})
@@ -120,7 +104,8 @@ last_update : 2018-10-01
 * [kirikaさんの整数論集](https://github.com/kirika-comp/articles){:target="_blank"}<!--_-->
   * seisuuron.tex
 * [E-Maxx Algorithms in English](https://cp-algorithms.com){:target="_blank"}<!--_-->
-  * もともとロシア語のものを英語に翻訳したものらしい
   * いろいろある
 * [競技プログラミング練習問題集 - はまやんはまやんはまやん](https://www.hamayanhamayan.com/entry/2100/01/01/000000){:target="_blank"}<!--_-->
+* [COMPILER EXPLORER](https://godbolt.org/){:target="_blank"}<!--_-->
+  * 最適化されているか，などを確認できる
 

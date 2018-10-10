@@ -22,6 +22,7 @@ bool isPrime(int n) {
 ```
 
 
+
 ```cpp
 // O(N^.5)
 /// --- divisor {{"{{"}}{ ///
@@ -37,6 +38,7 @@ vector< ll > divisor(ll n) {
 }
 /// }}}--- ///
 ```
+
 
 
 ```cpp
@@ -103,18 +105,59 @@ vector< int > phi2(int n) {
 /// --- primes {{"{{"}}{ ///
 vector< ll > primes(ll n) {
   vector< ll > res;
-  for(ll i = 2; i * i <= n; i++) {
+  for(ll i = 2; i <= n; ++i) {
     int isp = 1;
     for(ll p : res) {
       if(p * p > i) break;
-      if(i % p == 0) isp = 0;
+      if(i % p == 0) {
+        isp = 0;
+        break;
+      }
     }
-    if(isp) res.emplace_back(p);
+    if(isp) res.emplace_back(i);
   }
   return res;
 }
 /// }}}--- ///
 ```
+
+
+# 原始根判定
+
+奇素数 $p$ に対し $p-1$ の約数を乗じたときに $1 \mod p$ でなければ原始根であると言えます
+
+このことはフェルマーの小定理などから簡単に導けます
+
+
+```cpp
+/// --- isPrimitive {{"{{"}}{ ///
+bool isPrimitive(int x, int mod) {
+  auto ds = divisor(mod - 1);
+  for(ll d : ds)
+    if(d != mod - 1) {
+      if(modpow(x, d, mod) == 1) return false;
+    }
+  return true;
+}
+/// }}}--- ///
+```
+
+
+---
+
+gcd, lcm, extgcd, modinv, modpow
+
+剰余を使わない高速なgcdもありますが，  
+gcd(a,b)の計算量は $O(\log \max(a, b))$ です
+
+証明は蟻本にありますが，第一引数が2段階の再帰で $1/2$ 以下になることから言えます
+
+extgcd(a, b, x, y)は $ab \not= 0$ のとき $$|x| \leq b, |y| \leq a$$ が言えます  
+帰納法で証明することができます
+
+modinv(a, m)は $a^{-1} \mod m$ を返します  
+$gcd(a, m) = 1$ であれば $m$ が素数でなくとも逆元を返せるようにextgcdを使っています  
+速度もこちらのほうが速い気がします
 
 
 ```cpp
@@ -126,12 +169,13 @@ ll extgcd(ll a, ll b, ll &x, ll &y) {
   return b == 0 ? (x = 1, y = 0, a)
                 : (d = extgcd(b, a % b, y, x), y -= a / b * x, d);
 }
-ll modinv(ll a, ll mod = 1e9 + 7) {
-  ll x = 0, y = 0;
+ll modinv(ll a, ll mod = (ll) 1e9 + 7) {
+  ll x, y;
   extgcd(a, mod, x, y);
-  return (x + mod) % mod;
+  if(x < 0) x += mod;
+  return x;
 }
-ll modpow(ll a, ll b, ll mod = 1e9 + 7) {
+ll modpow(ll a, ll b, ll mod = (ll) 1e9 + 7) {
   ll r = 1;
   a %= mod;
   while(b) {
@@ -143,4 +187,30 @@ ll modpow(ll a, ll b, ll mod = 1e9 + 7) {
 }
 /// }}}--- ///
 ```
+
+
+# 二分累乗で掛け算
+
+二倍しても大丈夫なmodでの掛け算をしたいときに，二分累乗や繰り返し二乗法を使うことでoverflowを防ぐことができます．ちょっと時間がかかります．多倍長整数を使うのもひとつです
+
+
+```cpp
+/// --- modmul {{"{{"}}{ ///
+ll modmul(ll a, ll b, ll mod) {
+  if(b < 0) a *= -1, b *= -1;
+  ll res = 0;
+  while(b) {
+    if(b & 1) res = (res + a) % mod;
+    a = (a + a) % mod;
+    b >>= 1;
+  }
+  return res;
+}
+/// }}}--- ///
+```
+
+
+# 参考
+
+* 蟻本
 
