@@ -40,11 +40,13 @@ NTTを行うmodを $m_1, m_2, \cdots, m_{USE}$ とすると，厳密値 (予めm
 
 基本的にmod上で求めるときと同じように，最大値より大きな値をmodとすればよい
 
-掛け算でoverflowする可能性がある．これを防ぐには，**int128などで掛け算を行うか**，**掛け算を二分累乗で行い，足し算を行うたびにmodを取る** 方法などがある (このような状況はたまにあるだろうが，特別な実装はしていない (ジャッジによるところもあるため) )
+掛け算でoverflowする可能性がある．これを防ぐには，**int128などで掛け算を行うか**，
+[数学>基本]({{ "math/general" | absolute_url }}) にあるmodmulなどがある (このような状況はたまにあるだろうが，特別な実装はしていない (ジャッジによるところもあるかもしれない))
+
 
 ## 求めたい値が厳密な値の時 (64bitに収まらない時)
 
-復元時にint128,in256などのbigint使うしか無い
+復元時にint128, int256など多倍長整数使うしか無い
 
 # 実装
 
@@ -167,9 +169,7 @@ void conv_for(int n, int h, const vector< ll > &a, const vector< ll > &b,
   static const Core< NTT_PRIMES[I][0], NTT_PRIMES[I][1], MAX_H > ntt;
   auto c = ntt._convStrict(a, b, n, h);
   mods[I] = NTT_PRIMES[I][0];
-  if(I >= 1) {
-    conv_for< I - 1 >(n, h, a, b, mods, coeffs, constants);
-  }
+  conv_for< I - 1 >(n, h, a, b, mods, coeffs, constants);
   // garner
   for(size_t i = 0; i < c.size(); ++i) {
     ll v = (c[i] - constants[I][i]) * modinv(coeffs[I], mods[I]) % mods[I];
