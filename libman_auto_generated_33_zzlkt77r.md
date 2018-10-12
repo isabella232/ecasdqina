@@ -189,14 +189,28 @@ ll modpow(ll a, ll b, ll mod = (ll) 1e9 + 7) {
 ```
 
 
-# 二分累乗で掛け算
+# 大きなmodでの掛け算
 
-二倍しても大丈夫なmodでの掛け算をしたいときに，二分累乗や繰り返し二乗法を使うことでoverflowを防ぐことができます．ちょっと時間がかかります．多倍長整数を使うのもひとつです
+二倍しても大丈夫なmodでの掛け算をしたいときに，二分累乗や繰り返し二乗法を使うことでoverflowを防ぐことができますが．ちょっと時間がかかります．多倍長整数を使うのもひとつです
+以下では $O(1)$ でやるために `long double` を使った方法を載せます (参考 : [巨大modでの掛け算の高速化 (Codeforces Round #259 D Little Pony and Elements of Harmony) - kazuma8128’s blog](http://kazuma8128.hatenablog.com/entry/2018/06/04/144254){:target="_blank"}<!--_-->)
 
 
 ```cpp
 /// --- modmul {{"{{"}}{ ///
-ll modmul(ll a, ll b, ll mod) {
+ll modmul(ll x, ll y, ll mod) {
+  ll res = (x * y - (ll)((long double) x * y / mod) * mod) % mod;
+  return res < 0 ? res + mod : res;
+}
+/// }}}--- ///
+```
+
+
+overflowを打ち消しています
+
+繰り返し二乗法で書くと以下のようになります
+
+```cpp
+ll m(ll a, ll b, ll mod) {
   if(b < 0) a *= -1, b *= -1;
   ll res = 0;
   while(b) {
@@ -206,9 +220,7 @@ ll modmul(ll a, ll b, ll mod) {
   }
   return res;
 }
-/// }}}--- ///
 ```
-
 
 # 参考
 

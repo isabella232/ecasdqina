@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-10-11
+last_update : 2018-10-12
 ---
 
 えかライブラリだよ
