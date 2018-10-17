@@ -84,7 +84,7 @@ last_update : 2018-10-17
 * [幾何基本]({{ "geometory/geometory" | relative_url }})
 * [凸包 (Graham Scan, Andrew Scan)]({{ "geometory/ConvexHull" | relative_url }})
 * [3次元幾何基本ライブラリ]({{ "geometory/geometory3D" | relative_url }})
-* [三次元凸包]({{ "geometory/ConvexHull3D" | relative_url }})
+* [3次元凸包]({{ "geometory/ConvexHull3D" | relative_url }})
 
 # アルゴリズム
 
