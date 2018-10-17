@@ -63,7 +63,6 @@ idに対応する頂点取得
 struct ConvexHull3D {
   vector< valarray< Scalar > > points;
   vector< int > used; // point is used as convex?
-  int vsz;
   vector< array< int, 3 > > polygons;
   vector< valarray< Scalar > > polygonOuterNormalVectors;
   void insert(Scalar a, Scalar b, Scalar c) { points.push_back({a, b, c}); }
@@ -75,6 +74,7 @@ private:
   vector< valarray< Scalar > > prePolygonOuterNormalVectors;
   vector< int > insides;
   map< pair< int, int >, vector< int > > edgeToFace;
+  int vsz;
 
 public:
   void build() {
@@ -179,12 +179,13 @@ public:
     for(int i = 0; i < vnum; i++)
       if(used[i]) vsz++;
   }
-  int vertexSize() { return vsz; }
-  int edgeSize() { return prePolygons.size() / 2 * 3; }
-  int faceSize() { return polygons.size(); }
+  int vertexSize() const { return vsz; }
+  int edgeSize() const { return prePolygons.size() / 2 * 3; }
+  int faceSize() const { return polygons.size(); }
   // O(N)
-  vector< int > getVertexIds() {
+  vector< int > getVertexIds() const {
     vector< int > ids;
+    ids.reserve(vsz);
     for(size_t i = 0; i < points.size(); i++)
       if(used[i]) ids.emplace_back(i);
     return ids;

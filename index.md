@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-10-17
+last_update : 2018-10-18
 ---
 
 えかライブラリだよ
@@ -118,10 +118,18 @@ last_update : 2018-10-17
 * [階乗の事前計算]({{ "misc/Factorial" | relative_url }})
 * [XorShift]({{ "misc/XorShift" | relative_url }})
 
+# テクニック
+
+* [巨大な累乗・階乗計算の誤差をlogで抑える]({{ "trick/log-exp" | relative_url }})
+
 # ハマりポイント
 
 * [C++における左辺と右辺の評価順序]({{ "trap/eval-order" | relative_url }})
 * [不適切な評価関数をsortなどに使っている]({{ "trap/improper-comparison" | relative_url }})
+
+# 関連話題
+
+* [誤差]({{ "topic/error" | relative_url }})
 
 # リンク集
 
