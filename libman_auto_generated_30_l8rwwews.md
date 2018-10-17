@@ -27,7 +27,7 @@ TODO : LCTで高速化できるらしく，やってみたく思っている．
 
 
 ```cpp
-/// --- Dinic Libary {{"{{"}}{ ///
+/// --- Dinic Library {{"{{"}}{ ///
 // solve max flow
 
 struct Dinic {

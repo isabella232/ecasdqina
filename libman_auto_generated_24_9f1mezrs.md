@@ -16,7 +16,7 @@ lowlinkで橋だとわかったところを使わずにグラフを走査する�
 // Biedge(built-lowlink)
 // Biedge(graph)
 // NOTE : Biedge.tree, .comp
-/// --- Biedge Component Decomposition Libary {{"{{"}}{ ///
+/// --- Biedge Component Decomposition Library {{"{{"}}{ ///
 
 struct Biedge {
   Lowlink lowlink;
