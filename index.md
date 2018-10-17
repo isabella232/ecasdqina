@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-10-12
+last_update : 2018-10-17
 ---
 
 えかライブラリだよ
@@ -81,8 +81,10 @@ last_update : 2018-10-12
 
 # 幾何
 
-* [基本]({{ "geometory/geometory" | relative_url }})
-* [凸包 (Graham Scan, Andrew Scan)]({{ "geometory/grahamscan-polar" | relative_url }})
+* [幾何基本]({{ "geometory/geometory" | relative_url }})
+* [凸包 (Graham Scan, Andrew Scan)]({{ "geometory/ConvexHull" | relative_url }})
+* [3次元幾何基本ライブラリ]({{ "geometory/geometory3D" | relative_url }})
+* [三次元凸包]({{ "geometory/ConvexHull3D" | relative_url }})
 
 # アルゴリズム
 
@@ -110,10 +112,11 @@ last_update : 2018-10-12
 
 * [Convex Hull Trick (動的も)]({{ "misc/ConvexHullTrick" | relative_url }})
 * [Modulo Integer]({{ "misc/ModuloInteger" | relative_url }})
+* [有理数ライブラリ]({{ "misc/Rational" | relative_url }})
+* [多倍長整数, 任意精度演算]({{ "misc/BigInteger" | relative_url }})
 * [ビット操作ユーティリティ]({{ "misc/bit-utility" | relative_url }})
 * [階乗の事前計算]({{ "misc/Factorial" | relative_url }})
 * [XorShift]({{ "misc/XorShift" | relative_url }})
-* [BigInteger]({{ "misc/bigint" | relative_url }})
 
 # ハマりポイント
 
