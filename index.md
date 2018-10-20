@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-10-18
+last_update : 2018-10-20
 ---
 
 えかライブラリだよ
@@ -53,7 +53,7 @@ last_update : 2018-10-18
 
 ## フロー
 
-* [二部マッチング]({{ "graph/flow/bipartiteMatching" | relative_url }})
+* [二部マッチング]({{ "graph/flow/BipartiteMatching" | relative_url }})
 * [最大フロー (Dinic)]({{ "graph/flow/Dinic" | relative_url }})
 * [最大フロー (Ford-Fulkerson)]({{ "graph/flow/FordFulkerson" | relative_url }})
 * [最小費用流]({{ "graph/flow/MinCostFlow" | relative_url }})
