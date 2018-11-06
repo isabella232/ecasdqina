@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-10-23
+last_update : 2018-11-06
 ---
 
 えかライブラリだよ
@@ -50,6 +50,8 @@ last_update : 2018-10-23
 * [ユーティリティ]({{ "graph/utility" | relative_url }})
 * [木の同型判定]({{ "graph/is-same-tree" | relative_url }})
 * [最小全域木 (TODO)]({{ "graph/MST" | relative_url }})
+* [二頂点対最短路問題 (A*)]({{ "graph/A-star" | relative_url }})
+* [IDA*]({{ "graph/IDA-star" | relative_url }})
 
 ## フロー
 
@@ -129,6 +131,7 @@ last_update : 2018-10-23
 
 # 関連話題
 
+* [ゲーム問題まとめ]({{ "topic/game" | relative_url }})
 * [誤差]({{ "topic/error" | relative_url }})
 
 # リンク集
