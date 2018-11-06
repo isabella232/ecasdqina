@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-11-06
+last_update : 2018-11-07
 ---
 
 えかライブラリだよ
@@ -80,6 +80,10 @@ last_update : 2018-11-06
 * [基本的なFFT]({{ "math/FFT/standard" | relative_url }})
 * [数論変換 (Number Theoretic Transform; NTT)]({{ "math/FFT/NTT" | relative_url }})
 * [Cooley-Tukey FFT]({{ "math/FFT/Cooley-Tukey-FFT" | relative_url }})
+
+## 線形代数
+
+* [隣接行列のランクと森の最大マッチングの関係]({{ "math/linear-algebra/rank-and-forest-maximum-matching" | relative_url }})
 
 # 幾何
 
