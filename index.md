@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-11-07
+last_update : 2018-11-09
 ---
 
 えかライブラリだよ
@@ -116,10 +116,10 @@ last_update : 2018-11-07
 
 # いろいろ
 
-* [Convex Hull Trick (動的も)]({{ "misc/ConvexHullTrick" | relative_url }})
+* [Convex Hull Trick; CHT]({{ "misc/ConvexHullTrick" | relative_url }})
 * [Modulo Integer]({{ "misc/ModuloInteger" | relative_url }})
-* [有理数ライブラリ]({{ "misc/Rational" | relative_url }})
-* [多倍長整数, 任意精度演算]({{ "misc/BigInteger" | relative_url }})
+* [有理数ライブラリ (Rational)]({{ "misc/Rational" | relative_url }})
+* [多倍長整数 (BigInteger)]({{ "misc/BigInteger" | relative_url }})
 * [ビット操作ユーティリティ]({{ "misc/bit-utility" | relative_url }})
 * [階乗の事前計算]({{ "misc/Factorial" | relative_url }})
 * [XorShift]({{ "misc/XorShift" | relative_url }})

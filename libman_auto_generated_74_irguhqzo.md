@@ -1,6 +1,6 @@
 ---
 layout: lib
-title: 有理数ライブラリ
+title: 有理数ライブラリ (Rational)
 permalink: misc/Rational
 
 ---
