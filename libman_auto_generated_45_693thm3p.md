@@ -1,7 +1,7 @@
 ---
 layout: lib
 title: 行列の積と累乗
-permalink: math/matrix
+permalink: math/linear-algebra/matrix
 
 ---
 

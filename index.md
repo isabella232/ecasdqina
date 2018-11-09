@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-11-09
+last_update : 2018-11-10
 ---
 
 えかライブラリだよ
@@ -48,7 +48,7 @@ last_update : 2018-11-09
 * [二辺連結成分分解]({{ "graph/BiedgeConnectedComponent" | relative_url }})
 * [全方位木DP (るま式)]({{ "graph/DP-all-subtree" | relative_url }})
 * [ユーティリティ]({{ "graph/utility" | relative_url }})
-* [木の同型判定]({{ "graph/is-same-tree" | relative_url }})
+* [木の同型判定 (TODO)]({{ "graph/is-same-tree" | relative_url }})
 * [最小全域木 (TODO)]({{ "graph/MST" | relative_url }})
 * [二頂点対最短路問題 (A*)]({{ "graph/A-star" | relative_url }})
 * [IDA*]({{ "graph/IDA-star" | relative_url }})
@@ -63,16 +63,25 @@ last_update : 2018-11-09
 # 数学
 
 * [基本]({{ "math/general" | relative_url }})
-* [連立一次方程式 (Gauss-Jordan)]({{ "math/GaussJordan" | relative_url }})
-* [連立一次方程式 (Givens)]({{ "math/Givens" | relative_url }})
-* [行列の積と累乗]({{ "math/matrix" | relative_url }})
-* [メビウス関数]({{ "math/moebius" | relative_url }})
-* [オイラーのトーシェント関数（ファイ関数）の性質]({{ "math/EulerTotient" | relative_url }})
 * [包除原理]({{ "math/PIE" | relative_url }})
-* [中国剰余定理 (CRT)]({{ "math/CRT" | relative_url }})
 * [モンゴメリ乗算]({{ "math/Montgomery" | relative_url }})
 * [モノイド，モノイド作用]({{ "math/Monoid" | relative_url }})
 * [ラグランジュ緩和問題 (永遠に未完成)]({{ "math/LagrangianRelaxation" | relative_url }})
+
+## 整数論
+
+* [中国剰余定理 (CRT)]({{ "math/number-theory/CRT" | relative_url }})
+* [Garnerのアルゴリズム]({{ "math/number-theory/Garner" | relative_url }})
+* [オイラーのトーシェント関数（ファイ関数）の性質]({{ "math/number-theory/EulerTotient" | relative_url }})
+* [メビウス関数]({{ "math/number-theory/moebius" | relative_url }})
+* [√a mod p (Tonelli-Shanks algorithm)]({{ "math/number-theory/Tonelli-Shanks" | relative_url }})
+
+## 線形代数
+
+* [行列の積と累乗]({{ "math/linear-algebra/matrix" | relative_url }})
+* [連立一次方程式 (ガウスの消去法)]({{ "math/linear-algebra/GaussJordan" | relative_url }})
+* [連立一次方程式 (Givens)]({{ "math/linear-algebra/Givens" | relative_url }})
+* [隣接行列のランクと森の最大マッチングの関係]({{ "math/linear-algebra/rank-and-forest-maximum-matching" | relative_url }})
 
 ## FFT
 
@@ -80,10 +89,6 @@ last_update : 2018-11-09
 * [基本的なFFT]({{ "math/FFT/standard" | relative_url }})
 * [数論変換 (Number Theoretic Transform; NTT)]({{ "math/FFT/NTT" | relative_url }})
 * [Cooley-Tukey FFT]({{ "math/FFT/Cooley-Tukey-FFT" | relative_url }})
-
-## 線形代数
-
-* [隣接行列のランクと森の最大マッチングの関係]({{ "math/linear-algebra/rank-and-forest-maximum-matching" | relative_url }})
 
 # 幾何
 
@@ -98,7 +103,6 @@ last_update : 2018-11-09
 * [Rollback可能なデータ構造とクエリ平方分割（Moの上位互換）]({{ "algorithm/MoEx" | relative_url }})
 * [時空間Mo (三次元Mo，Mo with Update)]({{ "algorithm/Mo3D" | relative_url }})
 * [きたまさ法]({{ "algorithm/Kitamasa" | relative_url }})
-* [Garnerのアルゴリズム]({{ "algorithm/Garner" | relative_url }})
 * [高速ゼータ変換]({{ "algorithm/FastZetaTransform" | relative_url }})
 * [最適二分探索木 (Hu-Tucker)]({{ "algorithm/Hu-Tucker" | relative_url }})
 

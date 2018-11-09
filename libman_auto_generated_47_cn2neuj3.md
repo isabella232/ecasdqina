@@ -1,7 +1,7 @@
 ---
 layout: lib
 title: 連立一次方程式 (Givens)
-permalink: math/Givens
+permalink: math/linear-algebra/Givens
 
 ---
 

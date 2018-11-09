@@ -274,7 +274,7 @@ Comp DynamicCHT< T, Comp >::comp; // only for less and greater
 
 インターフェースは通常と同じ
 
-* `add` : $O(\log N)$
+* `add` : ならし $O(\log N)$
 * `get` : $O(\log N)$
 
 ## 検証
