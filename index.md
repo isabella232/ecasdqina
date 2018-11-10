@@ -74,6 +74,7 @@ last_update : 2018-11-10
 * [Garnerのアルゴリズム]({{ "math/number-theory/Garner" | relative_url }})
 * [オイラーのトーシェント関数（ファイ関数）の性質]({{ "math/number-theory/EulerTotient" | relative_url }})
 * [メビウス関数]({{ "math/number-theory/moebius" | relative_url }})
+* [log_a b mod p (Baby-Step Gian-Step algortihm)]({{ "math/number-theory/Baby-Step-Giant-Step" | relative_url }})
 * [√a mod p (Tonelli-Shanks algorithm)]({{ "math/number-theory/Tonelli-Shanks" | relative_url }})
 
 ## 線形代数
