@@ -40,7 +40,7 @@ using ll = int128_t;
 
 # bigintライブラリ
 
-* [BigInt for C++ (Arpaさん) - Codeforcesの記事](https://codeforces.com/blog/entry/22566){:target="_blank"}<!--_-->
+* [BigInt for C++ (Arpaさん) - codeforcesの記事](https://codeforces.com/blog/entry/22566){:target="_blank"}<!--_-->
   * [ArpaさんのBigInt.cpp](https://gist.github.com/ar-pa/957297fb3f88996ead11){:target="_blank"}<!--_-->
 
 無限精度です

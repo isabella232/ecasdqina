@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-11-10
+last_update : 2018-11-11
 ---
 
 えかライブラリだよ
@@ -110,7 +110,7 @@ last_update : 2018-11-10
 # [文字列]({{ "string" | relative_url }})
 
 * [最長回文半径 (Manacher)]({{ "string/Manacher" | relative_url }})
-* [s\[0,i-1\]の接頭辞と接尾辞が一致する最大の長さ (KMP法), 最小周期]({{ "string/KMP" | relative_url }})
+* [s\[0,i-1\]の接頭辞と接尾辞が一致する最大の長さ (最長ボーダー, KMP法)]({{ "string/KMP" | relative_url }})
 * [sとs\[i, -1\]の最長共通接頭辞 (z-algorithm)]({{ "string/z-algorithm" | relative_url }})
 * [文字列検索 (Aho-Corasick法)]({{ "string/AhoCorasick" | relative_url }})
 * [接尾辞配列 (Suffix Array) (Manber & Myers)]({{ "string/SA-with-Manber-Myers" | relative_url }})
