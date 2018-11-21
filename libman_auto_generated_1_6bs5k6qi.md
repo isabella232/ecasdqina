@@ -9,10 +9,13 @@ permalink: data-structure/SegmentTree/SegmentTree
 
 ```cpp
 // NOTE : query in range!
-/// --- SegmentTree Library {{"{{"}}{ ///
+/// --- SegmentTree {{"{{"}}{ ///
+
+#include <iostream>
+#include <vector>
 
 template < class Monoid >
-struct SegTree {
+struct SegmentTree {
 private:
   using T = typename Monoid::T;
   int n;
@@ -21,15 +24,16 @@ private:
   void prop(int i) { data[i] = Monoid::op(data[2 * i], data[2 * i + 1]); }
 
 public:
-  SegTree() : n(0) {}
-  SegTree(int n, T initial = Monoid::identity()) : n(n) {
+  SegmentTree() : n(0) {}
+  SegmentTree(int n, T initial = Monoid::identity()) : n(n) {
     data.resize(n * 2, initial);
     for(int i = n - 1; i > 0; i--)
       data[i] = Monoid::op(data[i * 2], data[i * 2 + 1]);
   }
   template < class InputIter,
              class = typename iterator_traits< InputIter >::value_type >
-  SegTree(InputIter first, InputIter last) : SegTree(distance(first, last)) {
+  SegmentTree(InputIter first, InputIter last)
+      : SegmentTree(distance(first, last)) {
     copy(first, last, begin(data) + n);
     // fill from deep
     for(int i = n - 1; i > 0; i--) prop(i);
@@ -61,11 +65,16 @@ public:
 
 /// --- Monoid examples {{"{{"}}{ ///
 
+#include <algorithm>
+#include <limits>
+
+constexpr long long inf = 1e18 + 100;
+
 struct Nothing {
   using T = char;
-  using M = char;
-  static constexpr T op(const T &, const T &) { return 0; }
-  static constexpr T identity() { return 0; }
+  using M = T;
+  static constexpr T op(const T &, const T &) { return T(); }
+  static constexpr T identity() { return T(); }
   template < class X >
   static constexpr X actInto(const M &, ll, ll, const X &x) {
     return x;
@@ -75,13 +84,13 @@ struct Nothing {
 struct RangeMin {
   using T = ll;
   static T op(const T &a, const T &b) { return min(a, b); }
-  static constexpr T identity() { return numeric_limits< T >::max(); }
+  static constexpr T identity() { return inf; }
 };
 
 struct RangeMax {
   using T = ll;
   static T op(const T &a, const T &b) { return max(a, b); }
-  static constexpr T identity() { return numeric_limits< T >::min(); }
+  static constexpr T identity() { return -inf; }
 };
 
 struct RangeSum {
@@ -92,9 +101,15 @@ struct RangeSum {
 
 /// }}}--- ///
 
-using Seg = SegTree< RangeMin >;
+using Seg = SegmentTree< RangeMin >;
 Seg seg(N);
 ```
 
+
+# 関連
+
+[Li-Chao Tree]({{ "dynamic-programming/convex-hull-trick/LiChaoTree" | absolute_url }}) はセグメントツリーを利用したCHTです
+
+# 参考
 
 * [データ構造と代数(前編)](https://tomcatowl.github.io/post/ds-and-alg-1/){:target="_blank"}

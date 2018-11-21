@@ -6,13 +6,13 @@ permalink: data-structure/SegmentTree/DynamicSegmentTree
 ---
 
 
+
 ```cpp
 // Note : to get faster, use map by yourself
-// .entity : number of materialized leaves
-/// --- DynamicSegTree {{"{{"}}{ ///
+/// --- Dynamic SegmentTree {{"{{"}}{ ///
 
 template < class Monoid >
-struct DynamicSegTree {
+struct DynamicSegmentTree {
   using T = typename Monoid::T;
   struct Node {
     T value;
@@ -21,8 +21,8 @@ struct DynamicSegTree {
   };
   Node *top = new Node;
   int n;
-  DynamicSegTree() {}
-  DynamicSegTree(int t) {
+  DynamicSegmentTree() {}
+  DynamicSegmentTree(int t) {
     n = 1;
     while(t > n) n <<= 1;
   }
@@ -65,11 +65,16 @@ private:
 
 /// --- Monoid examples {{"{{"}}{ ///
 
+#include <algorithm>
+#include <limits>
+
+constexpr long long inf = 1e18 + 100;
+
 struct Nothing {
   using T = char;
-  using M = char;
-  static constexpr T op(const T &, const T &) { return 0; }
-  static constexpr T identity() { return 0; }
+  using M = T;
+  static constexpr T op(const T &, const T &) { return T(); }
+  static constexpr T identity() { return T(); }
   template < class X >
   static constexpr X actInto(const M &, ll, ll, const X &x) {
     return x;
@@ -79,13 +84,13 @@ struct Nothing {
 struct RangeMin {
   using T = ll;
   static T op(const T &a, const T &b) { return min(a, b); }
-  static constexpr T identity() { return numeric_limits< T >::max(); }
+  static constexpr T identity() { return inf; }
 };
 
 struct RangeMax {
   using T = ll;
   static T op(const T &a, const T &b) { return max(a, b); }
-  static constexpr T identity() { return numeric_limits< T >::min(); }
+  static constexpr T identity() { return -inf; }
 };
 
 struct RangeSum {
@@ -96,7 +101,7 @@ struct RangeSum {
 
 /// }}}--- ///
 
-using Seg = DynamicSegTree< RangeMin >;
+using Seg = DynamicSegmentTree< RangeMin >;
 ```
 
 

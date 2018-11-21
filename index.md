@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-11-11
+last_update : 2018-11-21
 ---
 
 えかライブラリだよ
@@ -32,8 +32,9 @@ last_update : 2018-11-11
 * [併合可能Heap (SkewHeap)]({{ "data-structure/Heap/SkewHeap" | relative_url }})
 * [RadixHeap]({{ "data-structure/Heap/RadixHeap" | relative_url }})
 
-## [平衡二部探索木(Balanced Binary Search Tree; BBST)]({{ "data-structure/BBST" | relative_url }})
+## [平衡二部探索木 (Balanced Binary Search Tree; BBST)]({{ "data-structure/BBST" | relative_url }})
 
+* [赤黒木 (Red-Black Tree; RBT)]({{ "data-structure/BBST/Red-Black-Tree" | relative_url }})
 * [RBST]({{ "data-structure/BBST/RBST" | relative_url }})
 * [Treap]({{ "data-structure/BBST/Treap" | relative_url }})
 
@@ -43,6 +44,7 @@ last_update : 2018-11-11
 * [強連結成分分解 (Kosaraju's algorithm)]({{ "graph/StronglyConnectedComponent" | relative_url }})
 * [木のダブリング]({{ "graph/DoublingTree" | relative_url }})
 * [HL分解]({{ "graph/HL-Decomposition" | relative_url }})
+* [木の重心 (Centroid)]({{ "graph/Centroid" | relative_url }})
 * [LowLink]({{ "graph/lowlink" | relative_url }})
 * [二重連結成分分解]({{ "graph/BiconnectedComponent" | relative_url }})
 * [二辺連結成分分解]({{ "graph/BiedgeConnectedComponent" | relative_url }})
@@ -60,10 +62,24 @@ last_update : 2018-11-11
 * [最大フロー (Ford-Fulkerson)]({{ "graph/flow/FordFulkerson" | relative_url }})
 * [最小費用流]({{ "graph/flow/MinCostFlow" | relative_url }})
 
+# 動的計画法
+
+* [戻すDP]({{ "dynamic-programming/rollback-dp" | relative_url }})
+
+## ConvexHullTrick; CHT
+
+* [通常のCHT]({{ "dynamic-programming/convex-hull-trick/CHT" | relative_url }})
+* [直線追加任意順序のCHT]({{ "dynamic-programming/convex-hull-trick/CHT-Ex" | relative_url }})
+* [Li-Chao Tree (線分など)]({{ "dynamic-programming/convex-hull-trick/LiChaoTree" | relative_url }})
+* [動的 Li-Chao Tree]({{ "dynamic-programming/convex-hull-trick/DynamicLiChaoTree" | relative_url }})
+* [永続動的 Li-Chao Tree]({{ "dynamic-programming/convex-hull-trick/DynamicPersistentLiChaoTree" | relative_url }})
+* [削除可能なCHT (実装なし)]({{ "dynamic-programming/convex-hull-trick/RemovableCHT" | relative_url }})
+
 # 数学
 
 * [基本]({{ "math/general" | relative_url }})
 * [包除原理]({{ "math/PIE" | relative_url }})
+* [DAGの最小パス被覆と最大反鎖 (dilworthの定理)]({{ "math/dilworth-theorem" | relative_url }})
 * [モンゴメリ乗算]({{ "math/Montgomery" | relative_url }})
 * [モノイド，モノイド作用]({{ "math/Monoid" | relative_url }})
 * [ラグランジュ緩和問題 (永遠に未完成)]({{ "math/LagrangianRelaxation" | relative_url }})
@@ -116,12 +132,12 @@ last_update : 2018-11-11
 * [接尾辞配列 (Suffix Array) (Manber & Myers)]({{ "string/SA-with-Manber-Myers" | relative_url }})
 * [接尾辞配列 (Suffix Array) (SA-IS)]({{ "string/SA-IS" | relative_url }})
 * [LCP配列 (Kasai's algorithm)]({{ "string/LCP-Array" | relative_url }})
+* [ローリングハッシュ法 (Rabin-Karp法)]({{ "string/Rolling-Hash" | relative_url }})
 * [木を文字列に変換する]({{ "string/tree-to-string" | relative_url }})
 * [文字列ユーティリティ]({{ "string/string-utility" | relative_url }})
 
 # いろいろ
 
-* [Convex Hull Trick; CHT]({{ "misc/ConvexHullTrick" | relative_url }})
 * [Modulo Integer]({{ "misc/ModuloInteger" | relative_url }})
 * [有理数ライブラリ (Rational)]({{ "misc/Rational" | relative_url }})
 * [多倍長整数 (BigInteger)]({{ "misc/BigInteger" | relative_url }})

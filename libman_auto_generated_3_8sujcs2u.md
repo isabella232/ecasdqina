@@ -9,15 +9,18 @@ permalink: data-structure/SegmentTree/SegmentTree2D
 ```cpp
 // constructor(int sizex, int sizey, T identity, func merge)
 // WARN : query in range by yourself!
-/// --- 2D SegmentTree Library {{"{{"}}{ ///
+/// --- 2D SegmentTree {{"{{"}}{ ///
+
+#include <functional>
+#include <vector>
 
 template < class T >
-struct SegTree2D {
+struct SegmentTree2D {
   vector< T > dat;
   int sizex, sizey;
   T identity;
   function< T(T, T) > merge;
-  SegTree2D(int tx, int ty, T identity, function< T(T, T) > merge)
+  SegmentTree2D(int tx, int ty, T identity, function< T(T, T) > merge)
       : identity(identity), merge(merge) {
     sizex = sizey = 1;
     while(tx > sizex) sizex <<= 1;

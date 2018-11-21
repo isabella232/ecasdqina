@@ -15,13 +15,15 @@ permalink: data-structure/SegmentTree/FractionalCascadingSegmentTree
 // query(yl, yr, xl, xr)
 // === --- ===
 // only offline
-/// --- Fractional Cascading SegmentTree Library {{"{{"}}{ ///
+/// --- Fractional Cascading SegmentTree {{"{{"}}{ ///
 
 #include <algorithm>
+#include <cassert>
 #include <functional>
 #include <vector>
+
 template < class T, class U, class Index = ll >
-struct FractionalCascadingSegTree {
+struct FractionalCascadingSegmentTree {
   int h;
   vector< T > dat;
   vector< vector< Index > > indices;
@@ -31,8 +33,8 @@ struct FractionalCascadingSegTree {
   function< void(T &, vector< Index > &) > initX;
   function< U(T &, int x1, int x2) > queryX;
   function< U(const U &, const U &) > mergeY;
-  FractionalCascadingSegTree() {}
-  FractionalCascadingSegTree(
+  FractionalCascadingSegmentTree() {}
+  FractionalCascadingSegmentTree(
       int tempH, //
       function< void(T &, int, const U &) > const &setX,
       function< void(T &, vector< Index > &) > const &initX,
@@ -125,7 +127,7 @@ using Under = SparseTable< RMQSL >;
 using Value = RMQSL;
 using Data = Value::T;
 
-FractionalCascadingSegTree< Under, Data > ecas(
+FractionalCascadingSegmentTree< Under, Data > ecas(
     N + 1,
     // set x
     [](Under &dat, int x, const Data &val) -> void {

@@ -36,13 +36,17 @@ vector< int > Zalgorithm(string s) {
 ```
 
 
-# 参考
-
-* [文字列の頭良い感じの線形アルゴリズムたち３ \| あなたは嘘つきですかと聞かれたら「YES」と答えるブログ](http://snuke.hatenablog.com/entry/2014/12/03/214243){:target="_blank"}
-
 # 検証
 
-* [F - 最良表現 - AtCoder](https://beta.atcoder.jp/contests/arc060/submissions/2213612){:target="_blank"}
-  * 解説を書き写しただけでよく理解していない解法
-  * そのうち証明と合わせて読みたい一品
+* [F - 最良表現 - AtCoder](https://beta.atcoder.jp/contests/arc060/submissions/2213612){:target="_blank"}<!--_-->
+  * 検証のために解説を書き写しただけでよく理解していない解法
   * KMPで解けるからいいんだよ！
+
+# 練習問題
+
+* [ECR - E Vasya and Big Integers - codeforces](https://codeforces.com/contest/1051/problem/E){:target="_blank"}<!--_-->
+
+# 参考
+
+* [文字列の頭良い感じの線形アルゴリズムたち３ - あなたは嘘つきですかと聞かれたら「YES」と答えるブログ](http://snuke.hatenablog.com/entry/2014/12/03/214243){:target="_blank"}<!--_-->
+
