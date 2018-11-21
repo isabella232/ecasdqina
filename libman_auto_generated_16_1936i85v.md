@@ -19,7 +19,7 @@ permalink: data-structure/BBST/Red-Black-Tree
 constexpr int FREE_TYPE = 0; // 0 : nothing, 1 : free, 2 : destroy
 constexpr int POOL_SIZE = 1.1e7;
 
-// <BBST Basic Funcs> (node [, ...] )
+// <BBST Basic Funcs> ( node [, ...] )
 // build ( node, first, last )
 // Node::rebuildCheck ( <nodes>, threshold = 1e4 )
 // mfree( node )
@@ -461,7 +461,6 @@ using PersistentRBTSeq =
 /// --- Monoid examples {{"{{"}}{ ///
 
 #include <algorithm>
-#include <limits>
 
 constexpr long long inf = 1e18 + 100;
 
@@ -500,8 +499,6 @@ struct RangeSum {
 // MinSet m
 // SumAdd m * n + x
 // SumSet m * n
-
-#include <limits>
 
 struct RangeMinAdd {
   using M = ll;
