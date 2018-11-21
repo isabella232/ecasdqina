@@ -20,7 +20,7 @@ permalink: dynamic-programming/convex-hull-trick/CHT-Ex
 
 
 ```cpp
-// DynamicCHT<T, Comp>()
+// CHTEx<T, Comp>()
 // - maximize : let Comp = greater<T>
 // === --- ===
 // N = no. of f(x)
