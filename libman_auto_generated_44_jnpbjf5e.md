@@ -8,6 +8,7 @@ permalink: math/general
 
 
 ```cpp
+// O(N^.5)
 /// --- isPrime {{"{{"}}{ ///
 
 bool isPrime(ll n) {
@@ -26,6 +27,7 @@ bool isPrime(ll n) {
 ```cpp
 // O(N^.5)
 /// --- divisor {{"{{"}}{ ///
+#include <vector>
 vector< ll > divisor(ll n) {
   vector< ll > res;
   for(ll i = 1; i * i <= n; i++) {
@@ -44,6 +46,7 @@ vector< ll > divisor(ll n) {
 ```cpp
 // O(N^.5)
 /// --- primeFactors {{"{{"}}{ ///
+#include <map>
 map< ll, int > primeFactors(ll n) {
   map< ll, int > res;
   for(ll i = 2; i * i <= n; i++) {
@@ -83,6 +86,7 @@ ll phi(ll n) {
 ```cpp
 // O(N log log N)
 /// --- phi2 {{"{{"}}{ ///
+#include <vector>
 vector< int > phi2(int n) {
   n++;
   vector< int > euler(n);
@@ -102,7 +106,9 @@ vector< int > phi2(int n) {
 
 
 ```cpp
+// O(N log log N)
 /// --- primes {{"{{"}}{ ///
+#include <vector>
 vector< int > primes(int n) {
   vector< int > res;
   for(int i = 2; i <= n; ++i) {
@@ -130,12 +136,13 @@ vector< int > primes(int n) {
 
 
 ```cpp
+// O(log p)
 /// --- isPrimitive {{"{{"}}{ ///
-bool isPrimitive(ll x, ll mod) {
-  auto ds = divisor(mod - 1);
+bool isPrimitive(ll x, ll p) {
+  auto ds = divisor(p - 1);
   for(ll d : ds)
-    if(d != mod - 1) {
-      if(modpow(x, d, mod) == 1) return false;
+    if(d != p - 1) {
+      if(modpow(x, d, p) == 1) return false;
     }
   return true;
 }

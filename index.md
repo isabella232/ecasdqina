@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-11-21
+last_update : 2018-11-23
 ---
 
 えかライブラリだよ
@@ -88,8 +88,8 @@ last_update : 2018-11-21
 
 * [中国剰余定理 (CRT)]({{ "math/number-theory/CRT" | relative_url }})
 * [Garnerのアルゴリズム]({{ "math/number-theory/Garner" | relative_url }})
-* [オイラーのトーシェント関数（ファイ関数）の性質]({{ "math/number-theory/EulerTotient" | relative_url }})
-* [メビウス関数]({{ "math/number-theory/moebius" | relative_url }})
+* [オイラーのトーシェント関数（ファイ関数）の性質]({{ "math/number-theory/euler-totient" | relative_url }})
+* [メビウス関数, メビウスの反転公式]({{ "math/number-theory/mobius-inversion" | relative_url }})
 * [log_a b mod p (Baby-Step Gian-Step algortihm)]({{ "math/number-theory/Baby-Step-Giant-Step" | relative_url }})
 * [√a mod p (Tonelli-Shanks algorithm)]({{ "math/number-theory/Tonelli-Shanks" | relative_url }})
 
@@ -120,7 +120,7 @@ last_update : 2018-11-21
 * [Rollback可能なデータ構造とクエリ平方分割（Moの上位互換）]({{ "algorithm/MoEx" | relative_url }})
 * [時空間Mo (三次元Mo，Mo with Update)]({{ "algorithm/Mo3D" | relative_url }})
 * [きたまさ法]({{ "algorithm/Kitamasa" | relative_url }})
-* [高速ゼータ変換]({{ "algorithm/FastZetaTransform" | relative_url }})
+* [高速ゼータ変換, 高速メビウス変換]({{ "algorithm/FastZetaTransform" | relative_url }})
 * [最適二分探索木 (Hu-Tucker)]({{ "algorithm/Hu-Tucker" | relative_url }})
 
 # [文字列]({{ "string" | relative_url }})
