@@ -5,26 +5,28 @@ permalink: data-structure/misc/LinkCutTree
 
 ---
 
-森(もしくは根付き有向木(Arborescence)の集合)への更新とクエリを順不同で高速に．
 
-根の変更クエリ(evert)には乗せるモノイドに対する要求があり，その条件は平衡二分探索木がreverseで要求するものと同じ([モノイド]({{ "math/Monoid" | absolute_url }})をみて)．
+**森** (もしくは **根付き有向木 (Arborescence) の集合**) への更新とクエリを順不同で高速に
 
-動的木の一種．
+根の変更クエリ(evert)には乗せるモノイドに対する要求があり，その条件は平衡二分探索木がreverseで要求するものと同じ([モノイド]({{ "math/Monoid" | absolute_url }})を参照)
 
-IOIで常勝できることはあまりにも有名．
+IOIで常勝できることはあまりにも有名
 
-参考になるものを準備しています…
+参考になるものを準備しています
 
-TODO : 区間に対する更新に対し，leftを求めるの，ちょっとどうすればいいかわからないけど，  
-やっている人がいるのでそのうち見てみようと思います．
+TODO : 区間に対する更新に対し，leftを求めるの，ちょっとどうすればいいかわからないけど，やっている人がいるのでそのうち見てみようと思います
 
 
 ```cpp
-// when link(p, c) , c is root.
-// cut(c), c is not root
-// use make(int index, Monoid::T x)
+// do make(int index, Monoid::T x)
+// link(p, c) , c is root
+// cut(c) , c is not root
+// same(a, b)
+// node->id
 // lc[index] to access nodes
 /// --- LinkCutTree Library {{"{{"}}{ ///
+
+#include <cstdlib>
 
 template < class Monoid, class M_act >
 struct LinkCutTree {
@@ -33,6 +35,7 @@ struct LinkCutTree {
 
   // Splay sequence {{"{{"}}{
   struct Splay {
+    int id;
     Splay *ch[2] = {nullptr, nullptr}, *p = nullptr;
     X val, accum;
     M lazy = M_act::identity(); ///////
@@ -63,22 +66,21 @@ struct LinkCutTree {
       for(; !t->isRoot(); t = t->p) b2t.emplace_back(t);
       t->eval();
       while(b2t.size()) b2t.back()->eval(), b2t.pop_back();
-      // vector< Splay * >().swap(b2t);
     }
     X accumulated(Splay *a) { return !a ? Monoid::identity() : a->accum; }
     int size(Splay *a) { return !a ? 0 : a->sz; }
     // call after touch
     void prop() {
-      if(ch[0]) ch[0]->eval(); ////
-      if(ch[1]) ch[1]->eval(); ////
+      if(ch[0]) ch[0]->eval();
+      if(ch[1]) ch[1]->eval();
       sz = size(ch[0]) + 1 + size(ch[1]);
       accum = Monoid::op(Monoid::op(accumulated(ch[0]), val), accumulated(ch[1]));
     }
-    Splay(const X &val) : val(val), accum(val) {}
+    Splay(const X &val, int id) : id(id), val(val), accum(val) {}
     Splay *rotate(bool R) {
       Splay *t = ch[!R];
       if((ch[!R] = t->ch[R])) ch[!R]->p = this;
-      t->ch[R] = this; ////
+      t->ch[R] = this;
       if((t->p = p)) {
         if(t->p->ch[0] == this) t->p->ch[0] = t;
         if(t->p->ch[1] == this) t->p->ch[1] = t;
@@ -101,17 +103,20 @@ struct LinkCutTree {
             r->rotate(V);
           else
             q->rotate(!V);
-          p->rotate(V); ///////
+          p->rotate(V);
         }
       }
     }
   };
   // }}}
 
-  vector< Splay * > data;
-  LinkCutTree(int n) : data(n) {}
-  Splay *operator[](int i) { return data[i]; }
-  Splay *make(int i, const X &x = Monoid::identity()) { return data[i] = new Splay(x); }
+  Splay *pool;
+  LinkCutTree(int n) { pool = (Splay *) malloc(sizeof(Splay) * n); }
+  ~LinkCutTree() { free(pool); }
+  Splay *operator[](int i) const { return pool + i; }
+  Splay *make(int i, const X &x = Monoid::identity()) {
+    return new(pool + i) Splay(x, i);
+  }
   const X &get(Splay *x) {
     x->evalDown();
     return x->val;
@@ -128,7 +133,7 @@ struct LinkCutTree {
       now->ch[1] = prv;
       now->prop();
     }
-    x->splay(); /////
+    x->splay();
     return prv;
   }
   void cut(Splay *c) {
@@ -163,7 +168,7 @@ struct LinkCutTree {
   }
   Splay *lca(Splay *a, Splay *b) {
 #ifdef DEBUG
-    static const struct CannotLCAAnotherNode {} ex;
+    static const struct CannotLCADifferentNode {} ex;
     if(!same(a, b)) throw ex;
 #endif
     expose(a), a = expose(b);
@@ -264,19 +269,19 @@ struct RangeSumSet {
 
 /// }}}--- ///
 
-// LinkCutTree< RangeSum, RangeSumSet > lc(N);
+LinkCutTree< RangeSum, RangeSumAdd > lc(N);
 ```
 
 
 # 検証
 
-* RMQとRUQ - [AOJのなんか](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/DSL_2_F/judge/3092002/C++14){:target="_blank"}
+* RMQとRUQ - [AOJのなんか](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/DSL_2_F/judge/3092002/C++14){:target="_blank"}<!--_-->
   * 遅延セグ木でできることがevert付きでできる
-* LCA - [AOJのなんか](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/GRL_5_C/judge/3092319/C++14){:target="_blank"}
-* HL-Decomp(TLE) [E. The Number Games \| CF](https://codeforces.com/contest/980/submission/41594330){:target="_blank"}
-* HL-Decomp [PCKの問題 \| AOJ]( https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/0367/judge/3093506/C++14)
+* LCA - [AOJのなんか](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/GRL_5_C/judge/3092319/C++14){:target="_blank"}<!--_-->
+* HL-Decomp(TLE) [E. The Number Games - CF](https://codeforces.com/contest/980/submission/41594330){:target="_blank"}<!--_-->
+* HL-Decomp [PCKの問題 - AOJ](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/0367/judge/3093506/C++14){:target="_blank"}<!--_-->
 * 部分木サイズ，link/cut，部分木root [E - Black Cats Deployment - AtCoder](https://beta.atcoder.jp/contests/cf17-tournament-round3-open/submissions/3128272){:target="_blank"}<!--_-->
-  * なんかいい感じのLCT向け問題を見つけてしまった(想定解ではない)
+  * なんかいい感じのLCT向け問題を見つけてしまった (想定解ではない)
   * cutができて，サイズが分かるUnionFind的な扱いをする
   * evertがないとき，部分木のサイズを計算できる
   * (cutの後にlinkがあるとかは，部分木のサイズは対応が難しいかも)
@@ -284,11 +289,12 @@ struct RangeSumSet {
 
 # 練習
 
+* [JOI春13-day4 - 3 - 宇宙船 (Spaceships) - AtCoder](https://beta.atcoder.jp/contests/joisc2013-day4/tasks/joisc2013_spaceships){:target="_blank"}<!--_-->
 * [E - Black Cats Deployment - AtCoder](https://beta.atcoder.jp/contests/cf17-tournament-round3-open/tasks/asaporo2_e){:target="_blank"}<!--_-->
-  * ぜひやってみてください
 
 # 参照
 
+* [プログラミングコンテストでのデータ構造 2 ～動的木編～ - SlideShare](https://www.slideshare.net/iwiwi/2-12188845){:target="_blank"}<!--_-->
 * [Spaceships 解説 - SlideShare](https://www.slideshare.net/qnighy/2013-spaceships2){:target="_blank"}<!--_-->
   * SplayやLCTのポテンシャルを用いた計算量の評価と証明が書かれています
 

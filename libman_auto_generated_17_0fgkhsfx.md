@@ -20,10 +20,13 @@ TODO : actIntoにleftをわたしていない
 ```cpp
 /// --- RBST Sequence Library {{"{{"}}{ ///
 
+#include <cstdint>
+#include <utility>
+
 template < class Monoid, class M_act >
 struct RBSTSeq {
 private:
-  using u32 = uint32_t;
+  using u32 = uint_fast32_t;
   using X = typename Monoid::T;
   using M = typename M_act::M;
   RBSTSeq *l = nullptr, *r = nullptr;
@@ -58,22 +61,26 @@ private:
   friend X Accumulated(RBSTSeq *a) {
     return a == nullptr ? Monoid::identity() : (eval(a), a->accum);
   }
-  /// --- XorShift128 {{"{{"}}{ ///
-  struct XorShift128 {
-    using u32 = uint32_t;
-    u32 x = 123456789, y = 362436069, z = 521288629, w = 88675123;
-    XorShift128(u32 seed = 0) { z ^= seed; }
-    u32 operator()() {
-      u32 t = x ^ (x << 11);
+  /// --- XorShift128 Embeddable {{"{{"}}{ ///
+
+  struct XorShift128Embeddable {
+    using result_type = uint_fast32_t;
+    static constexpr result_type min() { return 0; }
+    static constexpr result_type max() { return 0xFFFFFFFF; }
+    result_type x = 123456789, y = 362436069, z = 521288629, w = 88675123;
+    XorShift128Embeddable(result_type seed = 0) { z ^= seed; }
+    result_type operator()() {
+      result_type t = x ^ (x << 11);
       x = y, y = z, z = w;
       return w = (w ^ (w >> 19)) ^ (t ^ (t >> 8));
     }
   };
+
   /// }}}--- ///
 public:
   RBSTSeq(X val = Monoid::identity()) : val(val) {}
   friend RBSTSeq *merge(RBSTSeq *a, RBSTSeq *b) {
-    static XorShift128 xs(__LINE__ * 3 + 5);
+    static XorShift128Embeddable xs(__LINE__ * 1333 + 57);
     if(a == nullptr) return b;
     if(b == nullptr) return a;
     eval(a);
@@ -255,36 +262,43 @@ RBSTSeq< RangeMin, RangeMinAdd > *seq = nullptr;
 ```cpp
 /// --- RBST Multiset Library {{"{{"}}{ ///
 
+#include <cstdint>
+#include <utility>
+
 template < class Key >
 struct RBSTMultiset {
 public:
   const Key key;
 
 private:
-  using u32 = uint32_t;
-  using PNN = pair< RBSTMultiset*, RBSTMultiset* >;
+  using u32 = uint_fast32_t;
+  using PNN = pair< RBSTMultiset *, RBSTMultiset * >;
   RBSTMultiset *l = nullptr, *r = nullptr;
   int sz = 1;
-  friend RBSTMultiset* prop(RBSTMultiset* a) {
+  friend RBSTMultiset *prop(RBSTMultiset *a) {
     a->sz = size(a->l) + 1 + size(a->r);
     return a;
   }
-  /// --- XorShift128 {{"{{"}}{ ///
-  struct XorShift128 {
-    using u32 = uint32_t;
-    u32 x = 123456789, y = 362436069, z = 521288629, w = 88675123;
-    XorShift128(u32 seed = 0) { z ^= seed; }
-    u32 operator()() {
-      u32 t = x ^ (x << 11);
+  /// --- XorShift128 Embeddable {{"{{"}}{ ///
+
+  struct XorShift128Embeddable {
+    using result_type = uint_fast32_t;
+    static constexpr result_type min() { return 0; }
+    static constexpr result_type max() { return 0xFFFFFFFF; }
+    result_type x = 123456789, y = 362436069, z = 521288629, w = 88675123;
+    XorShift128Embeddable(result_type seed = 0) { z ^= seed; }
+    result_type operator()() {
+      result_type t = x ^ (x << 11);
       x = y, y = z, z = w;
       return w = (w ^ (w >> 19)) ^ (t ^ (t >> 8));
     }
   };
+
   /// }}}--- ///
 public:
   RBSTMultiset(Key key) : key(key) {}
-  friend RBSTMultiset* merge(RBSTMultiset* a, RBSTMultiset* b) {
-    static XorShift128 xs(__LINE__ * 3 + 5);
+  friend RBSTMultiset *merge(RBSTMultiset *a, RBSTMultiset *b) {
+    static XorShift128Embeddable xs(__LINE__ * 3 + 5);
     if(a == nullptr) return b;
     if(b == nullptr) return a;
     if(xs() % (size(a) + size(b)) < (u32) size(a)) {
@@ -297,7 +311,7 @@ public:
   }
   // lower (-inf, key), [key, inf)
   // upper (-inf, key], (key, inf)
-  friend PNN split(RBSTMultiset* a, Key key, bool upper) {
+  friend PNN split(RBSTMultiset *a, Key key, bool upper) {
     if(a == nullptr) return PNN(nullptr, nullptr);
     RBSTMultiset *sl, *sr;
     if(upper ? key < a->key : !(a->key < key)) {
@@ -310,27 +324,27 @@ public:
       return PNN(prop(a), sr);
     }
   }
-  friend PNN lower_split(RBSTMultiset* a, const Key& key) { return split(a, key, false); }
-  friend PNN upper_split(RBSTMultiset* a, const Key& key) { return split(a, key, true); }
-  friend int size(RBSTMultiset* a) { return a == nullptr ? 0 : a->sz; }
-  friend void insert(RBSTMultiset*& a, Key key) {
+  friend PNN lower_split(RBSTMultiset *a, const Key &key) { return split(a, key, false); }
+  friend PNN upper_split(RBSTMultiset *a, const Key &key) { return split(a, key, true); }
+  friend int size(RBSTMultiset *a) { return a == nullptr ? 0 : a->sz; }
+  friend void insert(RBSTMultiset *&a, Key key) {
     RBSTMultiset *sl, *sr;
     tie(sl, sr) = lower_split(a, key);
     a = merge(sl, merge(new RBSTMultiset(key), sr));
   }
-  friend void erase(RBSTMultiset*& a, Key key) {
+  friend void erase(RBSTMultiset *&a, Key key) {
     RBSTMultiset *sl, *sr, *tl, *tr;
     tie(sl, sr) = upper_split(a, key);
     tie(tl, tr) = lower_split(sl, key);
     a = merge(tl, sr);
   }
-  friend void erase(RBSTMultiset*& a, Key keyL, Key keyR, bool inclusive = false) {
+  friend void erase(RBSTMultiset *&a, Key keyL, Key keyR, bool inclusive = false) {
     RBSTMultiset *sl, *sr, *tl, *tr;
     tie(sl, sr) = split(a, keyR, inclusive);
     tie(tl, tr) = lower_split(sl, keyL);
     a = merge(tl, sr);
   }
-  friend void erase1(RBSTMultiset*& a, Key key) {
+  friend void erase1(RBSTMultiset *&a, Key key) {
     if(a == nullptr) return;
     if(key < a->key) {
       erase1(a->l, key);
@@ -343,7 +357,7 @@ public:
     }
     prop(a);
   }
-  friend Key getKth(RBSTMultiset*& a, int k) {
+  friend Key getKth(RBSTMultiset *&a, int k) {
     static const struct CannotGetKthOfNullptr {} ex;
     if(a == nullptr) throw ex;
     if(k <= size(a->l)) {
@@ -353,7 +367,7 @@ public:
       return getKth(a->r, k - size(a->l) - 1);
     }
   }
-  friend int count(RBSTMultiset*& a, Key key) {
+  friend int count(RBSTMultiset *&a, Key key) {
     RBSTMultiset *sl, *sr, *tl, *tr;
     tie(sl, sr) = upper_split(a, key);
     tie(tl, tr) = lower_split(sl, key);
@@ -361,7 +375,7 @@ public:
     a = merge(merge(tl, tr), sr);
     return cnt;
   }
-  friend int count(RBSTMultiset*& a, Key keyL, Key keyR, bool inclusive = false) {
+  friend int count(RBSTMultiset *&a, Key keyL, Key keyR, bool inclusive = false) {
     RBSTMultiset *sl, *sr, *tl, *tr;
     tie(sl, sr) = split(a, keyR, inclusive);
     tie(tl, tr) = lower_split(sl, keyL);
@@ -373,7 +387,7 @@ public:
 
 /// }}}--- ///
 
-RBSTMultiset< ll >* ms = nullptr;
+RBSTMultiset< ll > *ms = nullptr;
 ```
 
 
