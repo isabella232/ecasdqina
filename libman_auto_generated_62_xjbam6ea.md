@@ -36,106 +36,35 @@ mod 1e9+7 といったような任意modについては [中国剰余定理 (CRT
 
 NTTを行うmodを $m_1, m_2, \cdots, m_{USE}$ とすると，厳密値 (予めmodを取った場合はそれを厳密値とする) の最大値 (mod $m$に復元したいとした時，$m^2\min(N, M)$ ぐらい) を $m_1m_2\cdots m_{USE}$ が超えるように取らなければならない
 
-## 求めたい値が厳密な値のとき (64bitにおさまるとき)
+<!--_-->
+
+## 求めたい値が厳密な値のとき (64bitに収まるとき)
 
 基本的にmod上で求めるときと同じように，最大値より大きな値をmodとすればよい
 
-掛け算でoverflowする可能性がある．これを防ぐには，**int128などで掛け算を行うか**，
-[数学>基本]({{ "math/general" | absolute_url }}) にあるmodmulなどがある (このような状況はたまにあるだろうが，特別な実装はしていない (ジャッジによるところもあるかもしれない))
+[Garnerのアルゴリズム]({{ "math/number-theory/Garner" | absolute_url }}) に基づいているため，その [特殊ケース]({{ "math/number-theory/Garner#特殊ケース" | absolute_url }}) が成り立つような，`USE=2` の場合などは特に気にしなくていい
 
+それ以外のパターンでoverflowしそうなら，**int128などで掛け算を行うか**， [数学>基本]({{ "math/general" | absolute_url }}) にあるmodmulに置き換えるといった対策をする
 
-## 求めたい値が厳密な値の時 (64bitに収まらない時)
+## 求めたい値が厳密な値の時 (64bitに収まらないとき)
 
-復元時にint128, int256など多倍長整数使うしか無い
+復元時にint128, int256など多倍長整数使う
 
 # 実装
 
 
 ```cpp
-constexpr int MAX_H = 18;
-
 // MAX_N is max size of OUTPUT, DOUBLED INPUT
 // MAX_RES_VALUE = MAX_VALUE^2 * MAX_N
 // if MAX_N > 2^20, comment out primes!
-/// --- NTT Library {{"{{"}}{ ///
-namespace NTT {
-ll extgcd(ll a, ll b, ll &x, ll &y) {
-  ll d;
-  return b == 0 ? (x = 1, y = 0, a) : (d = extgcd(b, a % b, y, x), y -= a / b * x, d);
-}
-ll modinv(ll a, ll mod) {
-  ll x, y;
-  extgcd(a, mod, x, y);
-  x %= mod;
-  return x < 0 ? x + mod : x;
-}
-ll modpow(ll a, ll b, ll mod) {
-  ll r = 1;
-  a %= mod;
-  while(b) {
-    if(b & 1) r = r * a % mod;
-    a = a * a % mod;
-    b >>= 1;
-  }
-  return r;
-}
-template < ll mod, ll primitive, int MAX_H >
-struct Core {
-  static_assert((mod & ((1 << MAX_H) - 1)) == 1, "mod is too small; comment out");
-  using uint = uint_fast32_t;
-  // ord zetaList[i] = 2^(i + 1)
-  ll zetaList[MAX_H], zetaInvList[MAX_H];
-  // constexpr
-  Core() {
-    zetaList[MAX_H - 1] = modpow(primitive, (mod - 1) / (1 << MAX_H), mod);
-    zetaInvList[MAX_H - 1] = modinv(zetaList[MAX_H - 1], mod);
-    for(int ih = MAX_H - 2; ih >= 0; --ih) {
-      zetaList[ih] = zetaList[ih + 1] * zetaList[ih + 1] % mod;
-      zetaInvList[ih] = zetaInvList[ih + 1] * zetaInvList[ih + 1] % mod;
-    }
-  }
-  void fft(vector< ll > &a, uint n, uint h, bool inv) const {
-    static vector< ll > tmp;
-    tmp.resize(n);
-    uint mask = n - 1;
-    for(uint i = n >> 1, ih = h - 1; i >= 1; i >>= 1, --ih) {
-      ll zeta = inv ? zetaInvList[h - 1 - ih] : zetaList[h - 1 - ih];
-      ll powZeta = 1;
-      for(uint j = 0; j < n; j += i) {
-        for(uint k = 0; k < i; ++k) {
-          tmp[j + k] =
-              (a[((j << 1) & mask) + k] + powZeta * a[(((j << 1) + i) & mask) + k]) % mod;
-        }
-        powZeta = powZeta * zeta % mod;
-      }
-      swap(a, tmp);
-    }
-    if(inv) {
-      ll invN = modinv(n, mod);
-      for(uint i = 0; i < n; ++i) a[i] = a[i] * invN % mod;
-    }
-  }
-  vector< ll > conv(const vector< ll > &a, const vector< ll > &b) const {
-    assert(a.size() + b.size() - 1 <= (1 << MAX_H));
+// NTT {{"{{"}}{
+#include <cassert>
+#include <cstdint>
+#include <vector>
 
-    if(a.size() == 0) return {};
-    if(b.size() == 0) return {};
-    return _conv(a, b);
-  }
-  vector< ll > _conv(vector< ll > a, vector< ll > b) const {
-    uint deg = a.size() + b.size() - 1;
-    uint h = 0, n = 1;
-    while(n < deg) n <<= 1, ++h;
-    a.resize(n), b.resize(n);
-    return _convStrict(a, b, n, h);
-  }
-  vector< ll > _convStrict(vector< ll > a, vector< ll > b, uint n, uint h) const {
-    fft(a, n, h, 0), fft(b, n, h, 0);
-    for(uint i = 0; i < n; ++i) a[i] = a[i] * b[i] % mod;
-    fft(a, n, h, 1);
-    return a;
-  }
-};
+namespace NTT {
+using uint = uint_fast32_t;
+
 // NTT_PRIMES {{"{{"}}{
 constexpr ll NTT_PRIMES[][2] = {
     {1224736769, 3}, // 2^24 * 73 + 1,
@@ -158,57 +87,173 @@ constexpr ll NTT_PRIMES[][2] = {
     {167772161, 3},  // 2^25 * 5 + 1
 };
 // }}}
-template < int I >
-void conv_for(int n, int h, const vector< ll > &a, const vector< ll > &b,
-              vector< ll > &mods, vector< ll > &coeffs,
-              vector< vector< ll > > &constants) {
-  static const Core< NTT_PRIMES[I][0], NTT_PRIMES[I][1], MAX_H > ntt;
-  auto c = ntt._convStrict(a, b, n, h);
-  mods[I] = NTT_PRIMES[I][0];
-  conv_for< I - 1 >(n, h, a, b, mods, coeffs, constants);
-  // garner
-  for(size_t i = 0; i < c.size(); ++i) {
-    ll v = (c[i] - constants[I][i]) * modinv(coeffs[I], mods[I]) % mods[I];
-    if(v < 0) v += mods[i];
-    for(size_t j = I + 1; j < mods.size(); ++j) {
-      constants[j][i] = (constants[j][i] + coeffs[j] * v) % mods[j];
+
+// general math {{"{{"}}{
+ll extgcd(ll a, ll b, ll &x, ll &y) {
+  ll d;
+  return b == 0 ? (x = 1, y = 0, a) : (d = extgcd(b, a % b, y, x), y -= a / b * x, d);
+}
+ll modinv(ll a, ll mod) {
+  ll x, y;
+  extgcd(a, mod, x, y);
+  x %= mod;
+  return x < 0 ? x + mod : x;
+}
+ll modpow(ll a, ll b, ll mod) {
+  ll r = 1;
+  a %= mod;
+  while(b) {
+    if(b & 1) r = r * a % mod;
+    a = a * a % mod;
+    b >>= 1;
+  }
+  return r;
+}
+// }}}
+
+// NTT Core {{"{{"}}{
+template < int MAX_H >
+struct Pool {
+  static ll *tmp, *A, *B;
+};
+template < int MAX_H >
+ll *Pool< MAX_H >::tmp = new ll[1 << MAX_H];
+template < int MAX_H >
+ll *Pool< MAX_H >::A = new ll[1 << MAX_H];
+template < int MAX_H >
+ll *Pool< MAX_H >::B = new ll[1 << MAX_H];
+
+template < int MAX_H, ll mod, ll primitive >
+class Core {
+public:
+  static_assert((mod & ((1 << MAX_H) - 1)) == 1, "mod is too small; comment out");
+  // ord zetaList[i] = 2^(i + 1)
+  ll zetaList[MAX_H], zetaInvList[MAX_H];
+  // constexpr
+  Core() {
+    zetaList[MAX_H - 1] = modpow(primitive, (mod - 1) / (1 << MAX_H), mod);
+    zetaInvList[MAX_H - 1] = modinv(zetaList[MAX_H - 1], mod);
+    for(int ih = MAX_H - 2; ih >= 0; --ih) {
+      zetaList[ih] = zetaList[ih + 1] * zetaList[ih + 1] % mod;
+      zetaInvList[ih] = zetaInvList[ih + 1] * zetaInvList[ih + 1] % mod;
     }
   }
-  for(size_t j = I + 1; j < mods.size(); ++j) {
-    coeffs[j] = (coeffs[j] * mods[I]) % mods[j];
+  void fft(ll *a, uint n, uint nh, bool inverse) const {
+    ll *tmp = Pool< MAX_H >::tmp;
+    uint mask = n - 1;
+    for(uint i = n >> 1, ih = nh - 1; i >= 1; i >>= 1, --ih) {
+      ll zeta = inverse ? zetaInvList[nh - 1 - ih] : zetaList[nh - 1 - ih];
+      ll powZeta = 1;
+      for(uint j = 0; j < n; j += i) {
+        for(uint k = 0; k < i; ++k) {
+          tmp[j | k] =
+              (a[((j << 1) & mask) | k] + powZeta * a[(((j << 1) | i) & mask) | k]) % mod;
+        }
+        powZeta = powZeta * zeta % mod;
+      }
+      swap(a, tmp);
+    }
+    if(nh & 1) {
+      swap(a, tmp);
+      for(uint i = 0; i < n; ++i) a[i] = tmp[i];
+    }
+    if(inverse) {
+      ll invN = modinv(n, mod);
+      for(uint i = 0; i < n; ++i) a[i] = a[i] * invN % mod;
+    }
   }
-}
+  vector< ll > conv(const vector< ll > &a, const vector< ll > &b) const {
+    uint t = a.size() + b.size() - 1;
+    uint n = 1, nh = 0;
+    while(n < t) n <<= 1, ++nh;
+    return convStrict(a, b, n, nh);
+  }
+  vector< ll > convStrict(const vector< ll > &a, const vector< ll > &b, uint n,
+                          uint nh) const {
+    ll *A = Pool< MAX_H >::A, *B = Pool< MAX_H >::B;
+    for(uint i = 0; i < n; ++i) A[i] = B[i] = 0;
+    copy(a.begin(), a.end(), A);
+    copy(b.begin(), b.end(), B);
+    fft(A, n, nh, 0), fft(B, n, nh, 0);
+    for(uint i = 0; i < n; ++i) A[i] = A[i] * B[i] % mod;
+    fft(A, n, nh, 1);
+    return vector< ll >(A, A + n);
+  }
+};
+// }}}
 
-template <>
-void conv_for< -1 >(int, int, const vector< ll > &, const vector< ll > &, vector< ll > &,
-                    vector< ll > &, vector< vector< ll > > &) {}
+// Convolution With Garner {{"{{"}}{
+template < int MAX_H, int I >
+class ConvolutionWithGarnerCore {
+public:
+  static void conv_for(uint n, uint nh, const vector< ll > &a, const vector< ll > &b,
+                       vector< ll > &mods, vector< ll > &coeffs,
+                       vector< vector< ll > > &constants) {
+    static const Core< MAX_H, NTT_PRIMES[I][0], NTT_PRIMES[I][1] > ntt;
+    auto c = ntt.convStrict(a, b, n, nh);
+    mods[I] = NTT_PRIMES[I][0];
+    ConvolutionWithGarnerCore< MAX_H, I - 1 >::conv_for(
+        n, nh, a, b, mods, coeffs, constants);
+    // garner
+    for(size_t i = 0; i < c.size(); ++i) {
+      ll v = (c[i] - constants[I][i]) * modinv(coeffs[I], mods[I]) % mods[I];
+      if(v < 0) v += mods[I];
+      for(size_t j = I + 1; j < mods.size(); ++j) {
+        constants[j][i] = (constants[j][i] + coeffs[j] * v) % mods[j];
+      }
+    }
+    for(size_t j = I + 1; j < mods.size(); ++j) {
+      coeffs[j] = (coeffs[j] * mods[I]) % mods[j];
+    }
+  }
+};
 
-template < int USE >
-vector< ll > conv(vector< ll > a, vector< ll > b, ll mod) {
-  static_assert(USE >= 1, "USE must be positive");
-  static_assert(USE <= sizeof(NTT_PRIMES) / sizeof(*NTT_PRIMES), "USE is too big");
-  int deg = a.size() + b.size() - 1;
-  int n = 1, h = 0;
-  while(n < deg) n <<= 1, ++h;
-  a.resize(n), b.resize(n);
-  vector< ll > coeffs(USE + 1, 1);
-  vector< vector< ll > > constants(USE + 1, vector< ll >(n, 0));
-  vector< ll > mods(USE + 1, mod);
-  conv_for< USE - 1 >(n, h, a, b, mods, coeffs, constants);
-  return constants.back();
-}
+template < int MAX_H >
+class ConvolutionWithGarnerCore< MAX_H, -1 > {
+public:
+  static void conv_for(uint, uint, const vector< ll > &, const vector< ll > &,
+                       vector< ll > &, vector< ll > &, vector< vector< ll > > &) {}
+};
+
+template < int MAX_H >
+class ConvolutionWithGarner {
+public:
+  template < int USE >
+  static vector< ll > conv(const vector< ll > &a, const vector< ll > &b, ll mod) {
+    static_assert(USE >= 1, "USE must be positive");
+    static_assert(USE <= sizeof(NTT_PRIMES) / sizeof(*NTT_PRIMES), "USE is too big");
+    uint nt = a.size() + b.size() - 1;
+    uint n = 1, nh = 0;
+    while(n < nt) n <<= 1, ++nh;
+    vector< ll > coeffs(USE + 1, 1);
+    vector< vector< ll > > constants(USE + 1, vector< ll >(n));
+    vector< ll > mods(USE + 1, mod);
+    ConvolutionWithGarnerCore< MAX_H, USE - 1 >::conv_for(
+        n, nh, a, b, mods, coeffs, constants);
+    return constants.back();
+  }
+};
+
+// }}}
+
 } // namespace NTT
-/// }}}--- ///
+// }}}
 
-NTT::Core< NTT::NTT_PRIMES[0][0], NTT::NTT_PRIMES[0][1], MAX_H > nttBig;
-NTT::Core< 924844033, 5, MAX_H > ntt;
-// NTT::conv< USE >(a, b, mod)
+// 1st param is MAX_H
+NTT::Core< 18, NTT::NTT_PRIMES[0][0], NTT::NTT_PRIMES[0][1] > nttBig;
+NTT::Core< 18, 924844033, 5 > ntt;
+using nttconv = NTT::ConvolutionWithGarner< 18 >;
+// nttconv::conv< USE >(a, b, mod)
 ```
 
 
 コード中の `NTT_PRIMES` が素数であること，原始根が正しいことを確認した
 
-原始根判定については [数学関係のライブラリ全般]({{ "math/general" | absolute_url }}) の中においてある
+素数，原始根判定，素因数分解については [数学関係のライブラリ全般]({{ "math/general" | absolute_url }}) の中においてある
+
+# 2次元NTT
+
+[2次元FFT]({{ "math/FFT/FFT2" | absolute_url }}) とアイデアは変わりません．実装もそっちにおいてあります
 
 # 検証
 

@@ -1,11 +1,11 @@
 ---
 layout: home
-last_update : 2018-11-27
+last_update : 2018-11-30
 ---
 
-えかライブラリだよ
+えかえか
 
-(工事中，完成はだいぶ先になりそう)
+質問, 感想, 誤字・脱字など，些細なことでもよかったらコメントしていってください! 歓迎します!
 
 # データ構造
 
@@ -105,6 +105,7 @@ last_update : 2018-11-27
 * [FFT導入]({{ "math/FFT/introduction" | relative_url }})
 * [基本的なFFT]({{ "math/FFT/standard" | relative_url }})
 * [数論変換 (Number Theoretic Transform; NTT)]({{ "math/FFT/NTT" | relative_url }})
+* [2次元FFT]({{ "math/FFT/FFT2" | relative_url }})
 * [Cooley-Tukey FFT]({{ "math/FFT/Cooley-Tukey-FFT" | relative_url }})
 
 # 幾何
@@ -162,13 +163,14 @@ last_update : 2018-11-27
 # リンク集
 
 * [ei1333's page (うしさんのすごいやつ)](https://ei1333.github.io){:target="_blank"}<!--_-->
-  * アルゴリズムのリンク集が便利だよ
 * [DEGwerさんの数え上げテクニック集](http://d.hatena.ne.jp/DEGwer/20171220){:target="_blank"}<!--_-->
 * [kirikaさんの整数論集](https://github.com/kirika-comp/articles){:target="_blank"}<!--_-->
   * seisuuron.tex
 * [E-Maxx Algorithms in English](https://cp-algorithms.com){:target="_blank"}<!--_-->
-  * いろいろある
 * [競技プログラミング練習問題集 - はまやんはまやんはまやん](https://www.hamayanhamayan.com/entry/2100/01/01/000000){:target="_blank"}<!--_-->
 * [COMPILER EXPLORER](https://godbolt.org/){:target="_blank"}<!--_-->
-  * 最適化されているか，などを確認できる
+  * 最適化されているか, などを確認できる
+* [IOIシラバス](https://www.ioi-jp.org/ioi/ioi-syllabus_jp.html){:target="_blank"}<!--_-->
+  * 競プロerの間で話題になることがある
+  * カテゴライズやアルゴリズムのリストとしても優秀
 
