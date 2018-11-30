@@ -34,6 +34,7 @@ $\displaystyle b\_j = \sum\_{i \in j} a\_i$
 
 
 ```cpp
+// fzt {{"{{"}}{
 #include <vector>
 
 // to upper : b[j] = sum(i: j in i, a[i])
@@ -52,6 +53,7 @@ vector< T > fzt(vector< T > a, bool toUpper) {
       }
   return a;
 }
+// }}}
 ```
 
 
@@ -79,8 +81,8 @@ $\displaystyle b\_j = \sum\_{i \subset j} (-1)^{\|A \setminus S\|} a\_i$
 
 
 ```cpp
+// fmt {{"{{"}}{
 #include <vector>
-
 // to upper : b[j] = sum(i: j in i, (-1)^|i\j| * a[i])
 // n is power of 2
 template < class T >
@@ -97,6 +99,7 @@ vector< T > fmt(vector< T > a, bool toUpper) {
       }
   return a;
 }
+// }}}
 ```
 
 
