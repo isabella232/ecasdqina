@@ -199,8 +199,6 @@ ll modpow(ll a, ll b, ll mod) {
 
 二倍しても大丈夫なmodでの掛け算をしたいときに，二分累乗や繰り返し二乗法を使うことでoverflowを防ぐことができますが，ちょっと時間がかかります．[多倍長整数]({{ "misc/BigInteger" | absolute_url }})を使うのもありです
 
-以下では $O(1)$ でやるためにいくつかの方法を紹介します
-
 ### long doubleを使った方法
 
 参考 : [巨大modでの掛け算の高速化 (Codeforces Round #259 D Little Pony and Elements of Harmony) - kazuma8128’s blog](http://kazuma8128.hatenablog.com/entry/2018/06/04/144254){:target="_blank"}<!--_-->
@@ -217,20 +215,6 @@ ll modmul(ll x, ll y, ll mod) {
 
 
 overflowを打ち消しています
-
-### 分解する方法
-
-$$
-a = a_0 + 2^{32}a_1
-\\
-b = b_0 + 2^{32}b_1
-\\
-ab = a_0b_0 + 2^{32}(a_0b_1 + a_1b_0) + 2^{64}a_1b_1
-$$
-
-これはいい方法だと思うんですが，unsignedじゃないとめんどくさそうなので実装は今度にします
-
-TODO : 速度検証も含めて実装する
 
 ### 繰り返し二乗法
 
