@@ -377,7 +377,7 @@ public:
 // }}}
 
 NTT::Core2< 18, 1 << 22, NTT::NTT_PRIMES[0][0], NTT::NTT_PRIMES[0][1] > ntt2Big;
-NTT::Core2< 18, 1 << 22, 924844033, 5 > ntt2;
+NTT::Core2< 18, 1 << 22, 998244353, 5 > ntt2;
 using nttconv2 = NTT::Convolution2WithGarner< 11, 1 << 22 >;
 // nttconv2::conv2< USE >(a, b, mod)
 ```

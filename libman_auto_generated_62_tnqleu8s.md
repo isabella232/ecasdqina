@@ -241,7 +241,7 @@ public:
 
 // 1st param is MAX_H
 NTT::Core< 18, NTT::NTT_PRIMES[0][0], NTT::NTT_PRIMES[0][1] > nttBig;
-NTT::Core< 18, 924844033, 5 > ntt;
+NTT::Core< 18, 998244353, 5 > ntt;
 using nttconv = NTT::ConvolutionWithGarner< 18 >;
 // nttconv::conv< USE >(a, b, mod)
 ```
