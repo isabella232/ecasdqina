@@ -278,8 +278,6 @@ TreapSeq< RangeMin, RangeMinSet > *seq = nullptr;
 
 # Multisetタイプ
 
-こいつにだけにできることが思いつかない
-
 
 ```cpp
 /// --- Treap Multiset Library {{"{{"}}{ ///
@@ -425,4 +423,8 @@ TreapMultiset< ll > *ms = nullptr;
 ## 検証
 
 * getKth [C - データ構造 - AtCoder](https://beta.atcoder.jp/contests/arc033/submissions/2978660){:target="_blank"}
+
+## 練習問題
+
+[C - Lexicographic constraints](https://beta.atcoder.jp/contests/agc029/submissions/3805351){:target="_blank"}<!--_-->
 
