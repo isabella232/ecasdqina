@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-12-17
+last_update : 2018-12-19
 ---
 
 えかえか
@@ -64,6 +64,7 @@ last_update : 2018-12-17
 
 # 動的計画法
 
+* [部分集合に対するbitDP]({{ "dynamic-programming/bitdp-to-subsets" | relative_url }})
 * [戻すDP]({{ "dynamic-programming/rollback-dp" | relative_url }})
 
 ## ConvexHullTrick; CHT
@@ -83,6 +84,11 @@ last_update : 2018-12-17
 * [モンゴメリ乗算]({{ "math/Montgomery" | relative_url }})
 * [モノイド，モノイド作用]({{ "math/Monoid" | relative_url }})
 * [ラグランジュ緩和問題 (永遠に未完成)]({{ "math/LagrangianRelaxation" | relative_url }})
+
+## 組み合せ数学
+
+* [二項係数の式変形]({{ "math/combinatorics/binomial-coefficients" | relative_url }})
+* [Hallの結婚定理]({{ "math/combinatorics/Halls-marriage-theorem" | relative_url }})
 
 ## 整数論
 
