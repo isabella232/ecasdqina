@@ -8,7 +8,9 @@ permalink: graph/flow/BipartiteMatching
 
 **二部グラフ**に対する最大マッチングを最大流問題を用いて解く
 
-$O(VE)$ だが実際はそれなりに速い (1000頂点1000000辺とかでふつうに200msとか)．頂点はなるべく (漸近的に) 少ないほうがいいと思うけど思っているだけなので確証はない
+$O(VE)$ だが実際はそれなりに速い (1000頂点250000辺とかでふつうに200msとか)．速くなる詳しい条件がちょっとわかっていない
+
+[Dinic]({{ "graph/flow/Dinic" | absolute_url }}) を用いると $O(\sqrt V E)$ になる
 
 # 実装
 
@@ -29,7 +31,9 @@ $O(VE)$ だが実際はそれなりに速い (1000頂点1000000辺とかでふ�
 // O(V + E)
 // isolated cannot be covered
 // match2[i] = 1 or 0
-/// --- BipartiteMatching Library {{"{{"}}{ ///
+/// --- BipartiteMatching {{"{{"}}{ ///
+#include <queue>
+#include <vector>
 struct BipartiteMatching {
   int n;
   vector< vector< int > > g;

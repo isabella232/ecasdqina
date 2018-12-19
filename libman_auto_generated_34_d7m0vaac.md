@@ -20,21 +20,25 @@ $O(EV^2)$
 なんでかとかはわかってない  
 ちゃんと考えるとできるのかもしれない  
 
-実用上はとても速いが最悪ケースが知られているため，任意のグラフが与えられるような問題は向いていない．グラフに帰着できる問題などは意図的にグラフを操作しにくいのであれば，Dinic法が有効，ということがある (参考 : [ここ](http://topcoder.g.hatena.ne.jp/Mi_Sawa/20140311){:target="_blank"}<!--_-->の「結論」)
+実用上はとても速いが最悪ケースが知られているため，任意のグラフが与えられるような問題は向いていない．**グラフに帰着できる問題**などは**意図的にグラフを操作しにくい**のであれば，Dinic法が有効，ということがある (参考 : [ここ](http://topcoder.g.hatena.ne.jp/Mi_Sawa/20140311){:target="_blank"}<!--_-->の「結論」)
 
 # 実装
 
 
 ```cpp
 // constructor(n, inf?) // be careful !
-// addEdge(from, to, capacity, isDirected? = false) returns edgeID
+// addEdge(from, to, capacity, isDirected? = false)
+//  - returns edgeID
 // === build(s, t) - returns max flow (or inf) ===
+// .edges[edgeID]
 // === restoreMinCut(s) ===
 // .isCut[edgeID]
 // === --- ===
 // inf * 2 < LL_MAX
-/// --- Max Flow with Dinic Library {{"{{"}}{ ///
-
+/// --- Max Flow with Dinic {{"{{"}}{ ///
+#include <algorithm>
+#include <queue>
+#include <vector>
 struct Dinic {
   struct Edge {
     int from, to;
@@ -55,14 +59,18 @@ struct Dinic {
     g[b].emplace_back(edges.size() - 1);
     return edges.size() - 1;
   }
+  vector< int > level;
+  vector< size_t > itr;
   ll build(int s, int t) {
-    vector< int > level(n);
-    ll flow = 0;
-    while(bfs(s, level), level[t] > 0) {
-      ll newflow = dfs(s, t, inf, level);
-      if(newflow == 0) break;
-      flow += newflow;
-      if(flow >= inf) return inf;
+    level.resize(n);
+    itr.resize(n);
+    ll flow = 0, newflow;
+    while(bfs(s), level[t] >= 0) {
+      itr.assign(n, 0);
+      while((newflow = dfs(s, t, inf)) > 0) {
+        flow += newflow;
+        if(flow >= inf) return inf;
+      }
     }
     return flow;
   }
@@ -91,7 +99,7 @@ struct Dinic {
   }
 
 private:
-  void bfs(int s, vector< int >& level) {
+  void bfs(int s) {
     fill(begin(level), end(level), -1);
     queue< int > q;
     q.emplace(s);
@@ -101,7 +109,7 @@ private:
       q.pop();
       for(int idx : g[i]) {
         Edge edge = edges[idx];
-        if(level[edge.To(i)] == -1 && edge.Cap(i) > 0) {
+        if(level[edge.To(i)] < 0 && edge.Cap(i) > 0) {
           level[edge.To(i)] = level[i] + 1;
           q.emplace(edge.To(i));
         }
@@ -109,22 +117,21 @@ private:
     }
   }
 
-  ll dfs(int i, int t, ll flow, vector< int > const& level) {
-    if(i == t) return flow;
-    for(int idx : g[i]) {
-      Edge& edge = edges[idx];
-      if(edge.Cap(i) > 0 && level[edge.To(i)] > level[i]) {
-        ll newflow = dfs(edge.To(i), t, min(flow, edge.Cap(i)), level);
+  ll dfs(int v, int t, ll flow) {
+    if(v == t) return flow;
+    for(size_t& i = itr[v]; i < g[v].size(); ++i) {
+      Edge& edge = edges[g[v][i]];
+      if(edge.Cap(v) > 0 && level[edge.To(v)] > level[v]) {
+        ll newflow = dfs(edge.To(v), t, min(flow, edge.Cap(v)));
         if(newflow == 0) continue;
-        edge.Cap(i) -= newflow;
-        edge.Rev(i) += newflow;
+        edge.Cap(v) -= newflow;
+        edge.Rev(v) += newflow;
         return newflow;
       }
     }
     return 0;
   }
 };
-
 /// }}}--- ///
 
 const int N = 2e6;
@@ -135,7 +142,12 @@ Dinic flow(N, inf);
 
 # 検証
 
-* [F - Lotus Leaves - AtCoder](https://beta.atcoder.jp/contests/arc074/submissions/2141547){:target="_blank"}<!--_-->
+* [AGC029F - Construction of a tree - AtCoder](https://atcoder.jp/contests/agc029/submissions/3823160){:target="_blank"}<!--_-->
+
+# 練習問題
+
+* [ARC074F - Lotus Leaves (800) - AtCoder](https://atcoder.jp/contests/arc074/tasks/arc074_d){:target="_blank"}<!--_-->
+* [AGC029F - Construction of a tree (2200) - AtCoder](https://atcoder.jp/contests/agc029/tasks/agc029_f){:target="_blank"}<!--_-->
 
 # 参考
 
