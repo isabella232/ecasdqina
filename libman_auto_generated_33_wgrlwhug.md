@@ -21,7 +21,7 @@ $O(VE)$ だが実際はそれなりに速い (1000頂点250000辺とかでふつ
 // constructor(n)
 // addEdge(a, b) // bipartite graph (undirected)
 // === build() returns max flow ===
-// O(VE) but very fast (treat as O(V min{V, E})
+// O(VE) but very fast (like O(min{V, E}V))
 // match[i] = some or -1
 // === restoreMinVertexCover() ===
 // O(V + E)
@@ -33,7 +33,7 @@ $O(VE)$ だが実際はそれなりに速い (1000頂点250000辺とかでふつ
 // O(V + E)
 // isolated cannot be covered
 // match2[i] = 1 or 0
-/// --- BipartiteMatching Library {{"{{"}}{ ///
+/// --- BipartiteMatching {{"{{"}}{ ///
 #include <queue>
 #include <vector>
 struct BipartiteMatching {
