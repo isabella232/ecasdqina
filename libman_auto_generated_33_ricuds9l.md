@@ -8,9 +8,11 @@ permalink: graph/flow/BipartiteMatching
 
 **二部グラフ**に対する最大マッチングを最大流問題を用いて解く
 
-$O(VE)$ だが実際はそれなりに速い (1000頂点250000辺とかでふつうに200msとか)．速くなる詳しい条件がちょっとわかっていない
+$O(VE)$ だが実際はそれなりに速い (1000頂点250000辺とかでふつうに200msとか)
 
-[Dinic]({{ "graph/flow/Dinic" | absolute_url }}) を用いると $O(\sqrt V E)$ になる
+体感としては $$O(\min\{V, E\}V)$$ というのが的確だと思う
+
+[Dinic法]({{ "graph/flow/Dinic" | absolute_url }}) を用いると $O(\sqrt V E)$ になる
 
 # 実装
 
@@ -19,7 +21,7 @@ $O(VE)$ だが実際はそれなりに速い (1000頂点250000辺とかでふつ
 // constructor(n)
 // addEdge(a, b) // bipartite graph (undirected)
 // === build() returns max flow ===
-// O(VE) but very fast
+// O(VE) but very fast (treat as O(V min{V, E})
 // match[i] = some or -1
 // === restoreMinVertexCover() ===
 // O(V + E)
@@ -31,7 +33,7 @@ $O(VE)$ だが実際はそれなりに速い (1000頂点250000辺とかでふつ
 // O(V + E)
 // isolated cannot be covered
 // match2[i] = 1 or 0
-/// --- BipartiteMatching {{"{{"}}{ ///
+/// --- BipartiteMatching Library {{"{{"}}{ ///
 #include <queue>
 #include <vector>
 struct BipartiteMatching {
@@ -46,14 +48,16 @@ struct BipartiteMatching {
 
 private:
   vector< int > used;
+  int color = 1;
 
 public:
   int build() {
-    match = vector< int >(n, -1);
+    match.resize(n), match.assign(n, -1);
+    used.resize(n);
     int flow = 0;
     for(int i = 0; i < n; i++) {
-      if(match[i] < 0) {            ///
-        used = vector< int >(n, 0); ///
+      if(match[i] < 0) {
+        color++;
         if(dfs(i)) flow++;
       }
     }
@@ -121,8 +125,8 @@ public:
 
 private:
   bool dfs(int v) {
-    if(used[v]) return false; ///
-    used[v] = 1;
+    if(used[v] == color) return false; ///
+    used[v] = color;
     for(int u : g[v])
       if(match[u] < 0 || dfs(match[u])) {
         match[v] = u;

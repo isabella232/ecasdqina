@@ -12,8 +12,8 @@ permalink: graph/flow/Dinic
 
 $O(EV^2)$
 
-* コスト1のみのとき， $O(\min\{V^{2/3}, E^{1/2}\}E)$
-* 二部マッチングで使うときは $O(\sqrt{V}E)$
+* コスト1のみのとき， $$O(\min\{V^{2/3}, E^{1/2}\}E)$$
+* 二部マッチングで使うときは $O(\sqrt V E)$
 
 動的なもの（あとで辺の重みや辺自体が減ったり増えたり）ができなかった  
 [FordFulkerson]({{ "graph/flow/FordFulkerson" | absolute_url }})ならできる  
