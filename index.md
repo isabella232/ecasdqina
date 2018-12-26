@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-12-22
+last_update : 2018-12-27
 ---
 
 えかえか
@@ -127,7 +127,7 @@ last_update : 2018-12-22
 * [Rollback可能なデータ構造とクエリ平方分割（Moの上位互換）]({{ "algorithm/MoEx" | relative_url }})
 * [時空間Mo (三次元Mo，Mo with Update)]({{ "algorithm/Mo3D" | relative_url }})
 * [きたまさ法]({{ "algorithm/Kitamasa" | relative_url }})
-* [高速ゼータ変換, 高速メビウス変換]({{ "algorithm/FastZetaTransform" | relative_url }})
+* [高速ゼータ変換, 高速メビウス変換, 添字ANDで畳み込み, 添字ORで畳み込み]({{ "algorithm/FastZetaTransform" | relative_url }})
 * [最適二分探索木 (Hu-Tucker)]({{ "algorithm/Hu-Tucker" | relative_url }})
 
 # [文字列]({{ "string" | relative_url }})
