@@ -8,12 +8,14 @@ permalink: data-structure/SegmentTree/SegmentTree
 
 
 ```cpp
-// NOTE : query in range!
+// SegmentTree( size [, initial] )
+// SegmentTree( <data> )
 /// --- SegmentTree {{"{{"}}{ ///
-
+#include <cassert>
+#include <initializer_list>
 #include <iostream>
+#include <iterator>
 #include <vector>
-
 template < class Monoid >
 struct SegmentTree {
 private:
@@ -35,12 +37,21 @@ public:
     // fill from deep
     for(int i = n - 1; i > 0; i--) prop(i);
   }
-  void set(int i, const T &v) {
+  SegmentTree(vector< T > v) : SegmentTree(v.begin(), v.end()) {}
+  SegmentTree(initializer_list< T > v) : SegmentTree(v.begin(), v.end()) {}
+  void set(size_t i, const T &v) {
+    assert(i < n);
     data[i += n] = v;
     while(i >>= 1) prop(i); // propUp
   }
-  T get(int i) { return data[i + n]; }
+  T get(size_t i) {
+    assert(i < n);
+    return data[i + n];
+  }
   T query(int l, int r) {
+    if(l < 0) l = 0;
+    if(l >= r) return Monoid::identity();
+    if(r > n) r = n;
     T tmpL = Monoid::identity(), tmpR = Monoid::identity();
     for(l += n, r += n; l < r; l >>= 1, r >>= 1) {
       if(l & 1) tmpL = Monoid::op(tmpL, data[l++]);
@@ -57,7 +68,6 @@ public:
 #endif
   }
 };
-
 /// }}}--- ///
 
 /// --- Monoid examples {{"{{"}}{ ///

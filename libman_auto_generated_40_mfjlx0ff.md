@@ -23,23 +23,30 @@ DPにも使える (ページ下部の参考も参照してください)
 ```cpp
 // CHT<T, x-increasing?, Comp>
 // - maximize : let Comp = greater<T>
-// .add(a, b) : f(x) = ax + b
+// .add(a, b, id?) : f(x) = ax + b
 // - minimize : (a) desc
 // - maximize : (a) asc
+// .query(x)
+// .get(x) : line
+// line.id
+// line.calc(x)
 /// --- Convex Hull Trick Library {{"{{"}}{ ///
-
 #include <cassert>
 #include <functional>
 #include <utility>
 #include <vector>
-
-template < class T = long long, bool xIncreasing = false, class Comp = less< T > >
+template < class T = long long, bool xIncreasing = false, class Comp = less< T >,
+           class D = T >
 struct CHT {
   static T EPS;
   static Comp comp;
 
 private:
-  using Line = pair< T, T >;
+  struct Line : pair< T, T > {
+    int id;
+    Line(T a, T b, int id = 0) : pair< T, T >(a, b), id(id) {}
+    T calc(const T &x) { return x * pair< T, T >::first + pair< T, T >::second; }
+  };
 
 public:
   vector< Line > lines;
@@ -47,26 +54,32 @@ public:
   bool check(Line l1, Line l2, Line l3) {
     if(l2.first == l3.first) return 1;
     // cp(l2, l3).x <= cp(l2, l1).x
-    return (l2.first - l1.first) * (l3.second - l2.second) + EPS >=
-           (l3.first - l2.first) * (l2.second - l1.second);
+    return (D)(l2.first - l1.first) * (l3.second - l2.second) + EPS >=
+           (D)(l3.first - l2.first) * (l2.second - l1.second);
   }
   T f(int i, const T &x) { return lines[i].first * x + lines[i].second; }
-  void add(const T &a, const T &b) {
-    assert("add monotonic" && (lines.empty() || !comp(lines.back().first, a)));
+  void add(const T &a, const T &b, int id = 0) {
+    assert("add monotonically" && (lines.empty() || !comp(lines.back().first, a)));
     if(lines.size() && lines.back().first == a && !comp(b, lines.back().second)) return;
-    while((int) lines.size() >= 2 &&
-          check(lines[lines.size() - 2], lines.back(), Line(a, b)))
+    Line line(a, b, id);
+    while((int) lines.size() >= 2 && check(lines[lines.size() - 2], lines.back(), line))
       lines.pop_back();
-    lines.emplace_back(a, b);
+    lines.push_back(line);
   }
-  T query(const T &x) {
-    Line p = get(x);
-    return p.first * x + p.second;
-  }
-  pair< T, T > get(const T &x) {
+  T query(const T &x) { return get(x).calc(x); }
+
+private:
+  size_t head = 0;
+  bool used = false;
+  T last;
+
+public:
+  Line get(const T &x) {
     assert(lines.size());
     if(xIncreasing) {
-      static size_t head = 0;
+      assert("query increasingly!" && (!used || last <= x));
+      used = true;
+      last = x;
       if(head >= lines.size()) head = lines.size() - 1;
       while(head + 1 < lines.size() && comp(f(head + 1, x), f(head, x))) head++;
       return lines[head];
@@ -82,13 +95,18 @@ public:
       return lines[ok];
     }
   }
+  void clear() {
+    head = 0;
+    used = false;
+    lines.clear();
+  }
 };
 
-template < class T, bool xIncreasing, class Comp >
-T CHT< T, xIncreasing, Comp >::EPS = 1e-19;
+template < class T, bool xIncreasing, class Comp, class D >
+T CHT< T, xIncreasing, Comp, D >::EPS = 1e-19;
 
-template < class T, bool xIncreasing, class Comp >
-Comp CHT< T, xIncreasing, Comp >::comp;
+template < class T, bool xIncreasing, class Comp, class D >
+Comp CHT< T, xIncreasing, Comp, D >::comp;
 
 /// }}}--- ///
 ```
@@ -109,12 +127,6 @@ Comp CHT< T, xIncreasing, Comp >::comp;
 * `query(x)` : getと同様の計算量
   * `x` での最小 (最大) 値
 
-# 検証
-
-* [C - スペースエクスプローラー高橋君 - AtCoder](https://beta.atcoder.jp/contests/colopl2018-final-open/submissions/2171456){:target="_blank"}<!--_-->
-  * このときの実装は少々バグがあります
-* [D - Computer Game - codeforces](https://codeforces.com/contest/1067/submission/45446448){:target="_blank"}<!--_-->
-
 # メモ
 
 直線が不必要な条件
@@ -131,6 +143,19 @@ $(b_3-b_2)(a_2-a_1) \geq (b_2-b_1)(a_3-a_2)$ へ一意に変形できる
 `(aの正の最小値)(bの正の最小値)` より小さな正の値を採用するといい
 
 たとえばデフォルトでは `1e-19` になっているが，これは両方が小数9桁ずつを想定している
+
+# overflow対策
+
+TLに余裕がある場合は [多倍長整数]({{ "misc/BigInteger" | absolute_url }})，  
+TLが厳しい場合はテンプレートの `D` に `double` などの浮動小数点数を入れて掛け算するときだけ `double` で計算するというものです
+
+# 検証
+
+* [C - スペースエクスプローラー高橋君 - AtCoder](https://beta.atcoder.jp/contests/colopl2018-final-open/submissions/2171456){:target="_blank"}<!--_-->
+  * このときの実装は少々バグがあります
+* [D - Computer Game - codeforces](https://codeforces.com/contest/1067/submission/45446448){:target="_blank"}<!--_-->
+* [C - Kalila and Dimna in the Logging Industry - codeforces](https://codeforces.com/contest/319/submission/48890326){:target="_blank"}<!--_-->
+  * overflow対策で `D = double` としています
 
 # 参考
 

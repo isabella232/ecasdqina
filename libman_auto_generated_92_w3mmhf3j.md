@@ -16,7 +16,8 @@ struct ModInt {
   // math {{"{{"}}{
   static inline ll extgcd(ll a, ll b, ll &x, ll &y) {
     ll d;
-    return b == 0 ? (x = 1, y = 0, a) : (d = extgcd(b, a % b, y, x), y -= a / b * x, d);
+    return b == 0 ? (x = a < 0 ? -1 : 1, y = 0, a < 0 ? -a : a)
+                  : (d = extgcd(b, a % b, y, x), y -= a / b * x, d);
   }
   static inline ll modinv(ll a) {
     ll x = 0, y = 0;
@@ -143,7 +144,7 @@ public:
   }
   template < typename T >
   ModInt &operator/=(T const &rhs) {
-    val = val * modinv(rhs, mod) % mod;
+    val = val * modinv(rhs) % mod;
     return *this;
   }
   // }}}
@@ -153,6 +154,12 @@ public:
     os << mv.val;
     return os;
   }
+  // equality operator {{"{{"}}{
+  ModInt operator==(const ModInt &a) const { return val == a.val; }
+  ModInt operator!=(const ModInt &a) const { return val != a.val; }
+  ModInt operator==(const ll &a) const { return val == ModInt(a); }
+  ModInt operator!=(const ll &a) const { return val != ModInt(a); }
+  // }}}
   // T <arithmetic-operator> ModInt {{"{{"}}{
   friend constexpr ModInt operator+(ll a, ModInt const &mv) {
     return ModInt(a % mod + mv.val);
@@ -178,6 +185,6 @@ public:
 };
 /// }}}--- ///
 
-using mint = ModInt<>;
+using modint = ModInt<>;
 ```
 

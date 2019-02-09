@@ -11,8 +11,14 @@ permalink: data-structure/misc/SparseTable
 
 ```cpp
 // NOTE : query in range!
-/// --- Sparse Table Library {{"{{"}}{ ///
 
+// SparseTable( <data> , identity ? )
+// .query(l, r) : [l, r)
+/// --- Sparse Table {{"{{"}}{ ///
+#include <cassert>
+#include <initializer_list>
+#include <iterator>
+#include <vector>
 template < class SemiLattice >
 struct SparseTable {
   using T = typename SemiLattice::T;
@@ -31,8 +37,18 @@ struct SparseTable {
     copy(first, last, begin(t[0]));
     build();
   }
-  void set(size_t i, T val) { t[0][i] = val; }
-  T get(size_t i) { return t[0][i]; }
+  SparseTable(vector< T > v, T identity = T())
+      : SparseTable(v.begin(), v.end(), identity) {}
+  SparseTable(initializer_list< T > v, T identity = T())
+      : SparseTable(v.begin(), v.end(), identity) {}
+  void set(size_t i, T val) {
+    assert(i < n);
+    t[0][i] = val;
+  }
+  T get(size_t i) {
+    assert(i < n);
+    return t[0][i];
+  }
   void build() {
     for(size_t j = 0; j < log2[n]; j++) {
       size_t w = 1 << j;
@@ -41,22 +57,20 @@ struct SparseTable {
       }
     }
   }
-  T query(size_t l, size_t r) {
+  T query(int l, int r) {
     if(r - l < 1) return identity;
-    size_t j = log2[r - l];
+    assert(r <= n);
+    int j = log2[r - l];
     return SemiLattice::op(t[j][l], t[j][r - (1 << j)]);
   }
 };
-
 /// }}}--- ///
 
 // SemiLattice examples {{"{{"}}{
-
 struct RMQSL {
-  using T = int;
+  using T = ll;
   static T op(T const &a, T const &b) { return a < b ? a : b; }
 };
-
 // }}}
 
 SparseTable< RMQSL > rmq(N, inf);
@@ -65,4 +79,5 @@ SparseTable< RMQSL > rmq(N, inf);
 
 # 参考
 
+* 蟻本p.158,159
 * [https://tomcatowl.github.io/post/ds-and-alg-2/](https://tomcatowl.github.io/post/ds-and-alg-2/){:target="_blank"}

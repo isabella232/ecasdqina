@@ -69,7 +69,8 @@ for(int i = (1 << S) - 2; i >= 0; i--) {
 
 # 練習問題
 
-* [F - XOR Tree (1000) - AtCoder](https://atcoder.jp/contests/apc001/tasks/apc001_f){:target="_blank"}<!--_-->
+* [APC001 F - XOR Tree (1000) - AtCoder](https://atcoder.jp/contests/apc001/tasks/apc001_f){:target="_blank"}<!--_-->
+* [ARC078 F - Mole and Abandoned Mine (900) - AtCoder](https://atcoder.jp/contests/arc078/tasks/arc078_d){:target="_blank"}<!--_-->
 
 # 参考
 

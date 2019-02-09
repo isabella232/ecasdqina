@@ -154,7 +154,6 @@ bool isPrimitive(ll x, ll p) {
 
 gcd, lcm, extgcd, modinv, modpow
 
-剰余を使わない高速なgcdもありますが，  
 gcd(a,b)の計算量は $O(\log \max(a, b))$ です
 
 証明は蟻本にありますが，第一引数が2段階の再帰で $1/2$ 以下になることから言えます
@@ -173,7 +172,8 @@ ll gcd(ll a, ll b) { return b == 0 ? a : gcd(b, a % b); }
 ll lcm(ll a, ll b) { return a / gcd(a, b) * b; }
 ll extgcd(ll a, ll b, ll &x, ll &y) {
   ll d;
-  return b == 0 ? (x = 1, y = 0, a) : (d = extgcd(b, a % b, y, x), y -= a / b * x, d);
+  return b == 0 ? (x = a < 0 ? -1 : 1, y = 0, a < 0 ? -a : a)
+                : (d = extgcd(b, a % b, y, x), y -= a / b * x, d);
 }
 ll modinv(ll a, ll mod) {
   ll x, y;
@@ -194,6 +194,27 @@ ll modpow(ll a, ll b, ll mod) {
 /// }}}--- ///
 ```
 
+
+# 剰余を使わないgcd
+
+`%2` などは `&1` と読み替えてください
+
+```cpp
+Integer gcd(Integer a, Integer b) {
+  if(a < 0) a = -a;
+  if(b < 0) b = -b;
+  Integer res = 1;
+  while(a != b) {
+    if(a < b) swap(a, b);
+    if(b == 0) break;
+    if(!(a % 2) && !(b % 2)) res *= 2, a /= 2, b /= 2;
+    else if(!(a % 2)) a /= 2;
+    else if(!(b % 2)) b /= 2;
+    else a = (a - b) / 2;
+  }
+  return res * a;
+}
+```
 
 # 大きなmodでの掛け算
 
@@ -236,5 +257,5 @@ ll modmul_slow(ll a, ll b, ll mod) {
 # 参考
 
 * 蟻本
+* アルゴリズムイントロダクション
 * [巨大modでの掛け算の高速化 (Codeforces Round #259 D Little Pony and Elements of Harmony) - kazuma8128’s blog](http://kazuma8128.hatenablog.com/entry/2018/06/04/144254){:target="_blank"}<!--_-->
-

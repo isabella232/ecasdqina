@@ -54,14 +54,12 @@ using ll = mp::int128_t;
 
 ```cpp
 /// bigint {{"{{"}}{
-
 #include <cassert>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
 #include <string>
 #include <vector>
-
 // forked https://gist.github.com/ar-pa/957297fb3f88996ead11
 struct BigInteger {
 private:
@@ -75,7 +73,6 @@ public:
   int sign;
   BigInteger() : sign(1) {}
   BigInteger(ll v) { *this = v; }
-  explicit BigInteger(double v) { *this = v; }
   BigInteger(const string &s) { read(s); }
 
 private:
@@ -129,16 +126,17 @@ public:
     return *this;
   }
 
-  BigInteger &operator=(double v) {
-    sign = 1;
-    a.clear();
-    if(v < 0) sign = -1, v = -v;
+  static BigInteger fromDouble(double v) {
+    BigInteger res;
+    res.sign = 1;
+    res.a.clear();
+    if(v < 0) res.sign = -1, v = -v;
     v = floor(v);
     while(v >= 1) {
-      a.push_back((int) fmod(v, base));
+      res.a.push_back((int) fmod(v, base));
       v = floor(v / base);
     }
-    return *this;
+    return res;
   }
 
   BigInteger operator+(const BigInteger &v) const {
@@ -490,8 +488,9 @@ const BigInteger BigInteger::infinity(0, 2);
 
 #include <limits>
 
+namespace std {
 template <>
-class std::numeric_limits< BigInteger > {
+class numeric_limits< BigInteger > {
 public:
   static constexpr bool has_infinity = true;
   static constexpr bool is_signed = true;
@@ -502,8 +501,9 @@ public:
   static BigInteger min() { return BigInteger(); }
   static BigInteger round_error() { return BigInteger(); }
 };
+} // namespace std
 
-typedef BigInteger bigint;
+using bigint = BigInteger;
 
 /// }}}
 ```

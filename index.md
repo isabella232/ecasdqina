@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2018-12-27
+last_update : 2019-02-09
 ---
 
 えかえか
@@ -52,6 +52,7 @@ last_update : 2018-12-27
 * [ユーティリティ]({{ "graph/utility" | relative_url }})
 * [木の同型判定 (TODO)]({{ "graph/is-same-tree" | relative_url }})
 * [最小全域木 (TODO)]({{ "graph/MST" | relative_url }})
+* [最小全域木 (borůvka法)]({{ "graph/boruvka" | relative_url }})
 * [二頂点対最短路問題 (A*)]({{ "graph/A-star" | relative_url }})
 * [IDA*]({{ "graph/IDA-star" | relative_url }})
 
@@ -83,6 +84,7 @@ last_update : 2018-12-27
 * [DAGの最小パス被覆と最大反鎖 (dilworthの定理)]({{ "math/dilworth-theorem" | relative_url }})
 * [モンゴメリ乗算]({{ "math/Montgomery" | relative_url }})
 * [モノイド，モノイド作用]({{ "math/Monoid" | relative_url }})
+* [Mongeなどについて]({{ "math/Monge" | relative_url }})
 * [ラグランジュ緩和問題 (永遠に未完成)]({{ "math/LagrangianRelaxation" | relative_url }})
 
 ## 組み合せ数学
@@ -98,11 +100,12 @@ last_update : 2018-12-27
 * [メビウス関数, メビウスの反転公式]({{ "math/number-theory/mobius-inversion" | relative_url }})
 * [log_a b mod p (Baby-Step Gian-Step algortihm)]({{ "math/number-theory/Baby-Step-Giant-Step" | relative_url }})
 * [√a mod p (Tonelli-Shanks algorithm)]({{ "math/number-theory/Tonelli-Shanks" | relative_url }})
+* [x^a=b mod pなるxを求める]({{ "math/number-theory/discrete-root" | relative_url }})
 
 ## 線形代数
 
 * [行列の積と累乗]({{ "math/linear-algebra/matrix" | relative_url }})
-* [連立一次方程式 (ガウスの消去法)]({{ "math/linear-algebra/GaussJordan" | relative_url }})
+* [連立一次方程式, 行列式, 行列のランク (ガウスの消去法 (Gaussian Elimination) )]({{ "math/linear-algebra/GaussianElimination" | relative_url }})
 * [連立一次方程式 (Givens)]({{ "math/linear-algebra/Givens" | relative_url }})
 * [隣接行列のランクと森の最大マッチングの関係]({{ "math/linear-algebra/rank-and-forest-maximum-matching" | relative_url }})
 

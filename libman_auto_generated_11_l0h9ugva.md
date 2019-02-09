@@ -50,8 +50,8 @@ Union by sizeとPath compressionを用いています
 
 
 ```cpp
-/// --- Union Find Library {{"{{"}}{ ///
-
+/// --- Union Find {{"{{"}}{ ///
+#include <vector>
 struct UF {
   int n;
   vector< int > par;
@@ -67,8 +67,8 @@ struct UF {
     par[b] += par[a];
     par[a] = b;
   }
+  void clear() { par.assign(n, -1); }
 };
-
 /// }}}--- ///
 ```
 

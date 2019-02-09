@@ -79,8 +79,8 @@ aとpが互いに素でなくてもよい．解が存在する場合は非負の
 ```cpp
 // require math library
 // modlog(a, b, p) = log_a b
-// gcd(a, p) = 1
-// modlog {{"{{"}}{
+// gcd(a, p) is arbitrary
+// modlog(a, b, p) {{"{{"}}{
 
 // Baby-Step Giant-Step algorithm
 ll modlog(ll a, ll b, ll p) {
