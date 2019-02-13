@@ -244,6 +244,12 @@ pair< Float, State > calc(const InputType< State, Float > &D, State i) {}
   * [CSAcademy (statement)](https://csacademy.com/contest/romanian-ioi-2017-selection-2/task/popcorn/statement/){:target="_blank"}<!--_-->
   * [CSAcademy (code)](https://csacademy.com/code/J8qmEbff/){:target="_blank"}<!--_--> ([mirror](https://gist.github.com/LumaKernel/e8c771f3ccc1c865112a157835915284#file-romanian-ioi-2017-selection-2-popcorn-cpp){:target="_blank"}<!--_-->)
 
+# 練習問題
+
+* [#56 Or Problem - CSAcademy](https://csacademy.com/contest/round-56/task/or-problem/){:target="_blank"}<!--_-->
+* [#351 C - Levels and Regions - codeforces](https://codeforces.com/contest/674/problem/C){:target="_blank"}<!--_-->
+* [#381 div1 E - Gosha is hunting - codeforces](https://codeforces.com/contest/739/problem/E){:target="_blank"}<!--_-->
+  * 下の参考にも書いたが，この問題がAlienDPを適用できる条件を満たしていることの証明がない
 
 # 参考
 

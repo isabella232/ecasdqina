@@ -27,12 +27,11 @@ permalink: dynamic-programming/convex-hull-trick/CHT-Ex
 // .add(a, b, id?) : f(x) = ax + b : amortized O(log N)
 // .query(x) : returns f(x), when f minimize f(x) : O(log N)
 // .get(x) : line : O(log N)
-// line.id
+// line.a, line.b, line.id
 // line.calc(x)
 // === --- ===
 // f can duplicate
-/// --- Convex Hull Trick Extended Library {{"{{"}}{ ///
-
+/// --- Convex Hull Trick Extended {{"{{"}}{ ///
 #include <functional>
 #include <iostream>
 #include <limits>
@@ -54,6 +53,10 @@ private:
       return a != rhs.a ? comp(rhs.a, a) : comp(b, rhs.b);
     }
     T calc(const T &x) { return a * x + b; }
+    friend ostream &operator<<(ostream &os, const Line &line) {
+      os << "(" << line.a << ", " << line.b;
+      return os;
+    }
   };
   struct CP {
     T numer, denom; // x-coordinate; denom is non-negative for comparison
@@ -128,11 +131,9 @@ public:
     cps.insert(CP(Line(INF, 0), Line(-INF, 0)));
   }
   friend ostream &operator<<(ostream &os, const CHTEx &a) {
-    os << "\n";
-    os << "lines : " << a.lines.size() << "\n";
-    for(auto &p : a.lines)
-      os << "(" << p.a << ", " << p.b << ")"
-         << "\n";
+    os << "CHT-Ex\n";
+    os << a.lines.size() << "lines\n";
+    for(auto &p : a.lines) os << p << "\n";
     os << "cross points : " << a.cps.size() << "\n";
     for(auto &p : a.cps)
       os << "(x = " << p.numer << "/" << p.denom << "; " << p.p.a << ", " << p.p.b << ")"
@@ -164,8 +165,7 @@ T CHTEx< T, Comp, D >::EPS = 1e-19;
 
 template < class T, class Comp, class D >
 Comp CHTEx< T, Comp, D >::comp; // only for less or greater
-
-/// }}}--- ///
+                                /// }}}--- ///
 ```
 
 
