@@ -107,7 +107,7 @@ $i$ 番目を $c_i$ 個選ぶとする
 > 各価値について，それが袋1で実行可能なら，残りの重さの余裕がなくなるまで添字が小さい順に袋2から採用する．採用できなくなったらもしその後ろに採用できるものがあったとしてもやめて良い  
 > その最大値が最適解となる
 
-あまりを $r_i \coloneqq z_i - c_i$ 個，袋1に入れた数を $$s_i \coloneqq \min \{Y - 1, c_i\}$$ 個とします
+あまりを $r_i \coloneqq z_i - c_i$ 個，袋1に入れた数を $$s_i \coloneqq \min \{Y - 1, z_i\}$$ 個とします
 
 アルゴリズムAは一体どんな解を与えるのでしょうか．例を考えてみます
 
@@ -196,7 +196,6 @@ vector< ll > knapsack1(const vector< unsigned long long >& x, const vector< ll >
           //  = max{a[i][j] + -j * y[i], a[i][j + 1] + -(j + 1) * y[i], ...}
           //      + (j + k) * y[i]
           size_t u = (W - r) / x[i];
-          // window sliding technique
           deque< pair< ll, size_t > > deq;
           for(size_t j = 0; j <= u; j++) {
             ll nval = dp0[j * x[i] + r] - j * y[i];
@@ -240,7 +239,6 @@ vector< ll > knapsack2(const vector< ll >& x, const vector< unsigned >& y,
         //  = min{a[i][j] + -j * x[i], a[i][j + 1] + -(j + 1) * x[i], ...}
         //      + (j + k) * x[i]
         size_t u = (value_max - r) / y[i];
-        // window sliding technique
         deque< pair< ll, size_t > > deq;
         for(size_t j = 0; j <= u; j++) {
           if((ull) dp0[j * y[i] + r] <= W) {
