@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2019-02-13
+last_update : 2019-02-16
 ---
 
 えかえか
@@ -65,6 +65,7 @@ last_update : 2019-02-13
 
 # 動的計画法
 
+* [ナップサック問題]({{ "dynamic-programming/knapsack" | relative_url }})
 * [部分集合に対するbitDP]({{ "dynamic-programming/bitdp-to-subsets" | relative_url }})
 * [戻すDP]({{ "dynamic-programming/rollback-dp" | relative_url }})
 
