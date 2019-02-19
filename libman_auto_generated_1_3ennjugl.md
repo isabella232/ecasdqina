@@ -138,7 +138,7 @@ struct RangeAnd< bitset< N > > {
 
 /// }}}--- ///
 
-using Seg = SegmentTree< RangeMin >;
+using Seg = SegmentTree< RangeMin<> >;
 Seg seg(N);
 ```
 
