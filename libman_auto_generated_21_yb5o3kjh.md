@@ -16,21 +16,29 @@ $O(\log N)$ で1クエリを処理でき，[HL分解]({{ "graph/HL-Decomposition
 
 ```cpp
 // DoublingTree ( <graph> , initial? )
-// set (i, val) or assign ( <data> )
-// WARN : build(root = 0) !!!
-//     or dfs(roots) & init() !!
+// .addEdge(a, b)
+// .set(i, val) or .assign( <data> )
+// === initiation ===
+// when single tree : .build(root = 0)
+// when forest      : .dfs(roots) & .init()
+// === query ===
 // .lca(a, b)
-// .query(hi, a, hi_inclusive?)
+// .query(hi, a, hi_inclusive = true)
 // .climb(from, steps)
 // .descend(from, to, steps)
-/// --- Doubilng Tree Library {{"{{"}}{ ///
+// === --- ===
+// .depth[a]
+// .par[i][a] // climb 2^i times from [a]
+// .dat[i][a] // apply to 2^i edges from [a] to ancestor
+/// --- Doubilng Tree {{"{{"}}{ ///
 #include <cassert>
 #include <iterator>
 #include <vector>
 template < class Monoid >
 struct DoublingTree {
   using T = typename Monoid::T;
-  int n, logn;
+  size_t n;
+  int logn;
   vector< vector< int > > tree;
   vector< int > depth; // 0-indexed
   // [logn][n]
@@ -41,7 +49,7 @@ struct DoublingTree {
     while((1 << h) < n) h++;
     return h;
   }
-  DoublingTree(int n, const T &initial = Monoid::identity())
+  DoublingTree(size_t n, const T &initial = Monoid::identity())
       : n(n),
         logn(log(n)),
         tree(n),
@@ -55,14 +63,23 @@ struct DoublingTree {
   }
   DoublingTree(const vector< vector< int > > &tree, const T &initial = Monoid::identity())
       : DoublingTree(begin(tree), end(tree), initial) {}
-  void set(int i, const T &val) { dat[0][i] = val; }
+  void addEdge(size_t a, size_t b) {
+    assert(a < n && b < n);
+    tree[a].push_back(b);
+    tree[b].push_back(a);
+  }
+  void set(size_t i, const T &val) {
+    assert(i < n);
+    dat[0][i] = val;
+  }
   template < class InputIter, class = typename iterator_traits< InputIter >::value_type >
   void assign(InputIter first, InputIter last) {
     assert(distance(first, last) <= n);
     copy(first, last, begin(dat[0]));
   }
-  void build(const vector< int > &roots) {
-    for(int root : roots) dfs(root);
+  template < class T >
+  void build(const vector< T > &roots) {
+    for(T &root : roots) dfs(root);
     init();
   }
   void build(size_t root = 0) {
@@ -72,7 +89,7 @@ struct DoublingTree {
   }
   void init() {
     for(int k = 1; k < logn; k++) {
-      for(int i = 0; i < n; i++) {
+      for(size_t i = 0; i < n; i++) {
         int p = par[k - 1][i];
         if(p == -1) {
           par[k][i] = -1;
@@ -135,11 +152,12 @@ struct DoublingTree {
     if(inclusive) res = Monoid::op(dat[0][hi], res);
     return res;
   }
+  int size() { return n; }
 };
 /// }}}--- ///
 
 /// --- Monoid examples {{"{{"}}{ ///
-constexpr long long inf = 1e18 + 100;
+constexpr long long inf_monoid = 1e18 + 100;
 #include <algorithm>
 struct Nothing {
   using T = char;
@@ -157,14 +175,14 @@ template < class U = long long >
 struct RangeMin {
   using T = U;
   static T op(const T &a, const T &b) { return min(a, b); }
-  static constexpr T identity() { return T(inf); }
+  static constexpr T identity() { return T(inf_monoid); }
 };
 
 template < class U = long long >
 struct RangeMax {
   using T = U;
   static T op(const T &a, const T &b) { return max(a, b); }
-  static constexpr T identity() { return -T(inf); }
+  static constexpr T identity() { return -T(inf_monoid); }
 };
 
 template < class U = long long >
@@ -206,7 +224,7 @@ struct RangeAnd< bitset< N > > {
 
 /// }}}--- ///
 
-DoublingTree< RangeSum<> > eca(N);
+using DBL = DoublingTree< RangeSum<> >;
 ```
 
 

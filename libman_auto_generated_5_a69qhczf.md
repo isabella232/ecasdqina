@@ -167,6 +167,7 @@ private:
 /// }}}--- ///
 
 // never forget to init SparseTable by yourself
+// WARNING : DO DOUBLE-CHECK !
 // FC-SegmentTree Example {{"{{"}}{
 
 using Under = SparseTable< RMQSL >;
