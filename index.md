@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2019-02-22
+last_update : 2019-02-23
 ---
 
 えかえか
@@ -43,8 +43,9 @@ last_update : 2019-02-22
 * [基本]({{ "graph/general" | relative_url }})
 * [強連結成分分解 (Kosaraju's algorithm)]({{ "graph/StronglyConnectedComponent" | relative_url }})
 * [木のダブリング]({{ "graph/DoublingTree" | relative_url }})
-* [HL分解]({{ "graph/HL-Decomposition" | relative_url }})
 * [木の重心 (Centroid)]({{ "graph/Centroid" | relative_url }})
+* [重心分解 (Centroid Decomposition)]({{ "graph/CentroidDecomposition" | relative_url }})
+* [HL分解]({{ "graph/HL-Decomposition" | relative_url }})
 * [LowLink]({{ "graph/lowlink" | relative_url }})
 * [二重連結成分分解]({{ "graph/BiconnectedComponent" | relative_url }})
 * [二辺連結成分分解]({{ "graph/BiedgeConnectedComponent" | relative_url }})
@@ -78,7 +79,7 @@ last_update : 2019-02-22
 
 ## ConvexHullTrick; CHT
 
-* [通常のCHT]({{ "dynamic-programming/convex-hull-trick/CHT" | relative_url }})
+* [単調なクエリに対するCHT]({{ "dynamic-programming/convex-hull-trick/CHT" | relative_url }})
 * [直線追加任意順序のCHT]({{ "dynamic-programming/convex-hull-trick/CHT-Ex" | relative_url }})
 * [Li-Chao Tree (線分など)]({{ "dynamic-programming/convex-hull-trick/LiChaoTree" | relative_url }})
 * [動的 Li-Chao Tree]({{ "dynamic-programming/convex-hull-trick/DynamicLiChaoTree" | relative_url }})

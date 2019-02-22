@@ -1,6 +1,6 @@
 ---
 layout: lib
-title: 通常のCHT
+title: 単調なクエリに対するCHT
 permalink: dynamic-programming/convex-hull-trick/CHT
 
 ---
