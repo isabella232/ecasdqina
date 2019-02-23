@@ -6,10 +6,15 @@ permalink: graph/CentroidDecomposition
 ---
 
 
+木を重心分解する
+
 # キーワード
+
+基本的にパスに関する質問
 
 * ある点を始点とするパスのなかで 最適なものを答えよ / 条件をみたすものを数え上げよ
 * ある条件を満たすパスを数え上げよ
+* ある点を通る条件を満たすパスを数え上げよ
 
 # メモ
 
@@ -45,13 +50,13 @@ DFSすればよい
 
 
 ```cpp
-// CentroidDecomposition( <tree> [, process_in [, process_out] ] )
-// .setProcessIn (func)
-// .setProcessOut(func)
-// === .build() ===
+// CentroidDecomposition( <tree> [, process ] )
+// .setProcess(func)
+// === .build() : returns root id ===
 // info about reformed graph (depth is O(log N))
 // .par[i] : int
 // .child[i] : vector<int>
+// .sz[i] : int : subtree size
 /// --- Centroid Decomposition {{"{{"}}{ ///
 #include <cassert>
 #include <functional>
@@ -61,18 +66,16 @@ struct CentroidDecomposition {
   using process_type = function< void(int centroid, const vector< bool > &) >;
   size_t n;
   graph_type tree;
-  process_type process_in, process_out;
+  process_type process;
   CentroidDecomposition() : n(0) {}
-  CentroidDecomposition(
-      size_t n,
-      const process_type process_in = [&](int, const vector< bool > &) -> void {},
-      const process_type process_out = [&](int, const vector< bool > &) -> void {})
-      : n(n), tree(n), process_in(process_in), process_out(process_out) {}
+  CentroidDecomposition(size_t n,
+                        const process_type process =
+                            [&](int, const vector< bool > &) -> void {})
+      : n(n), tree(n), process(process) {}
   CentroidDecomposition(const graph_type &tree) : CentroidDecomposition(tree.size()) {
     this->tree = tree;
   }
-  void setProcessIn(const process_type &process_in) { this->process_in = process_in; };
-  void setProcessOut(const process_type &process_out) { this->process_out = process_out; }
+  void setProcess(const process_type &process) { this->process = process; }
   void addEdge(size_t a, size_t b) {
     assert(a < n && b < n);
     tree[a].push_back(b);
@@ -85,29 +88,32 @@ private:
   bool built = 0;
 
 public:
+  int root = -1;
   vector< int > par;
+  vector< int > sz;
   vector< vector< int > > child;
-  void build() {
+  int build() {
     assert(!built);
     built = 1;
     processing.resize(n);
     sub.resize(n);
     par.resize(n);
+    sz.resize(n);
     child.resize(n);
-    decomposite(0, -1);
+    return root = decomposite(0, -1);
   }
 
 private:
   int decomposite(int start, int p) {
     dfs(start, -1);
     int centroid = search_centroid(start, -1, sub[start] / 2);
+    sz[centroid] = sub[start];
     par[centroid] = p;
-    process_in(centroid, processing);
     processing[centroid] = 1;
     for(auto &j : tree[centroid])
       if(!processing[j]) child[centroid].push_back(decomposite(j, centroid));
     processing[centroid] = 0;
-    process_out(centroid, processing);
+    process(centroid, processing);
     return centroid;
   }
   void dfs(int i, int p) {
@@ -129,22 +135,31 @@ private:
 /// }}}--- ///
 
 // do NOT go to vertex v when u[v] is true !!!!
-// void processIn(int c, const vector< bool > &u) {}
-// void processOut(int c, const vector< bool > &u) {}
+// void process(int c, const vector< bool > &u) {}
 ```
 
 
 # 検証
 
-すべて bottom-up に書いている
+bottom-up で書いた
 
 * [#199 div2 E - Xenia and Tree - codefroces](https://codeforces.com/contest/342/submission/50313110){:target="_blank"}<!--_-->
 * [みんプロ2018 決勝 C - 木の問題 (1200) - AtCoder](https://atcoder.jp/contests/yahoo-procon2018-final-open/submissions/4349163){:target="_blank"}<!--_-->
+
+top-down で書いた
+
+* [Path Inversions - CSAcademy](https://csacademy.com/submission/2164172/){:target="_blank"}<!--_-->
+
+inline のみですませた
+
+* [#458 E - Palindromes in a Tree - codeforces](https://codeforces.com/contest/914/submission/50353783){:target="_blank"}<!--_-->
 
 # 練習問題
 
 * [#199 div2 E - Xenia and Tree - codefroces](https://codeforces.com/contest/342/problem/E){:target="_blank"}<!--_-->
 * [#190 div1 C - Ciel the Commander - codeforces](https://codeforces.com/problemset/problem/321/C){:target="_blank"}<!--_-->
+* [Path Inversions - CSAcademy](https://csacademy.com/contest/archive/task/path-inversions/statement/){:target="_blank"}<!--_-->
+* [#458 E - Palindromes in a Tree - codeforces](https://codeforces.com/contest/914/problem/E){:target="_blank"}<!--_-->
 * [NIKKEI 2019本選 G - Greatest Journey (1200) - AtCoder](https://atcoder.jp/contests/nikkei2019-final/tasks/nikkei2019_final_g){:target="_blank"}<!--_-->
 * [みんプロ2018 決勝 C - 木の問題 (1200) - AtCoder](https://atcoder.jp/contests/yahoo-procon2018-final-open/tasks/yahoo_procon2018_final_c){:target="_blank"}<!--_-->
 
