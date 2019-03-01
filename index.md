@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2019-02-23
+last_update : 2019-03-02
 ---
 
 えかえか
@@ -45,7 +45,7 @@ last_update : 2019-02-23
 * [木のダブリング]({{ "graph/DoublingTree" | relative_url }})
 * [木の重心 (Centroid)]({{ "graph/Centroid" | relative_url }})
 * [重心分解 (Centroid Decomposition)]({{ "graph/CentroidDecomposition" | relative_url }})
-* [HL分解]({{ "graph/HL-Decomposition" | relative_url }})
+* [HL分解 (Heavy-Light Decomposition)]({{ "graph/HL-Decomposition" | relative_url }})
 * [LowLink]({{ "graph/lowlink" | relative_url }})
 * [二重連結成分分解]({{ "graph/BiconnectedComponent" | relative_url }})
 * [二辺連結成分分解]({{ "graph/BiedgeConnectedComponent" | relative_url }})
@@ -141,6 +141,7 @@ last_update : 2019-02-23
 * [きたまさ法]({{ "algorithm/Kitamasa" | relative_url }})
 * [高速ゼータ変換, 高速メビウス変換, 添字ANDで畳み込み, 添字ORで畳み込み]({{ "algorithm/FastZetaTransform" | relative_url }})
 * [最適二分探索木 (Hu-Tucker)]({{ "algorithm/Hu-Tucker" | relative_url }})
+* [分枝限定法]({{ "algorithm/branch-and-bound" | relative_url }})
 
 # [文字列]({{ "string" | relative_url }})
 

@@ -85,12 +85,12 @@ private:
 
 public:
   static Allocator< Node > alc;
-
-private:
-  Node *c[2];
   using Monoid = typename M_act::Monoid;
   using X = typename Monoid::T;
   using M = typename M_act::M;
+
+private:
+  Node *c[2];
   X accum = Monoid::identity();
   M lazy = M_act::identity();
   uint_fast8_t rev = false;
@@ -130,7 +130,7 @@ private:
   // call before use val, accum
   friend Node *eval(Node *a) {
     if(a->lazy != M_act::identity()) {
-      a->accum = M_act::actInto(a->lazy, -1, a->sz, a->accum);
+      a->accum = M_act::actInto(a->lazy, a->sz, a->accum);
       for(int i = 0; i < 2; i++)
         if(a->c[i]) {
           a->c[i] = copy(a->c[i]);
@@ -218,7 +218,7 @@ public:
   }
   friend X getValue(const Node *a) {
     assert(isLeaf(a));
-    return a ? a->lazy != M_act::identity() ? M_act::actInto(a->accum, -1, 1, a->lazy)
+    return a ? a->lazy != M_act::identity() ? M_act::actInto(a->accum, 1, a->lazy)
                                             : a->accum
              : Monoid::identity();
   }
@@ -393,7 +393,7 @@ private:
   static void getdfs(const Node *a, M m, typename vector< X >::iterator &ite) {
     if(a->lazy != M_act::identity()) m = M_act::op(m, a->lazy);
     if(isLeaf(a)) {
-      *ite++ = m != M_act::identity() ? M_act::actInto(a->accum, -1, 1, m) : a->accum;
+      *ite++ = m != M_act::identity() ? M_act::actInto(a->accum, 1, m) : a->accum;
     } else {
       getdfs(a->c[0], m, ite);
       getdfs(a->c[1], m, ite);
@@ -529,7 +529,7 @@ struct RangeMinAdd {
   using Monoid = RangeMin< U >;
   static M op(const M &a, const M &b) { return a + b; }
   static constexpr M identity() { return 0; }
-  static X actInto(const M &m, ll, ll, const X &x) { return m + x; }
+  static X actInto(const M &m, ll, const X &x) { return m + x; }
 };
 
 template < class U = long long, class V = U >
@@ -539,7 +539,7 @@ struct RangeMaxAdd {
   using Monoid = RangeMax< U >;
   static M op(const M &a, const M &b) { return a + b; }
   static constexpr M identity() { return 0; }
-  static X actInto(const M &m, ll, ll, const X &x) { return m + x; }
+  static X actInto(const M &m, ll, const X &x) { return m + x; }
 };
 
 template < class U = long long, class V = U >
@@ -549,7 +549,7 @@ struct RangeMinSet {
   using X = typename Monoid::T;
   static M op(const M &a, const M &) { return a; }
   static constexpr M identity() { return -M(inf_monoid); }
-  static X actInto(const M &m, ll, ll, const X &) { return m; }
+  static X actInto(const M &m, ll, const X &) { return m; }
 };
 
 template < class U = long long, class V = U >
@@ -559,7 +559,7 @@ struct RangeMaxSet {
   using X = typename Monoid::T;
   static M op(const M &a, const M &) { return a; }
   static constexpr M identity() { return -M(inf_monoid); }
-  static X actInto(const M &m, ll, ll, const X &) { return m; }
+  static X actInto(const M &m, ll, const X &) { return m; }
 };
 
 template < class U = long long, class V = U >
@@ -569,7 +569,7 @@ struct RangeSumAdd {
   using Monoid = RangeSum< U >;
   static M op(const M &a, const M &b) { return a + b; }
   static constexpr M identity() { return 0; }
-  static X actInto(const M &m, ll, ll n, const X &x) { return m * n + x; }
+  static X actInto(const M &m, ll n, const X &x) { return m * n + x; }
 };
 
 template < class U = long long, class V = U >
@@ -579,7 +579,7 @@ struct RangeSumSet {
   using Monoid = RangeSum< U >;
   static M op(const M &a, const M &) { return a; }
   static constexpr M identity() { return -M(inf_monoid); }
-  static X actInto(const M &m, ll, ll n, const X &) { return m * n; }
+  static X actInto(const M &m, ll n, const X &) { return m * n; }
 };
 
 template < class U, class V = U >
@@ -598,7 +598,7 @@ struct RangeProdMul {
   }
   static M op(const M &a, const M &b) { return a * b; }
   static constexpr M identity() { return M(1); }
-  static X actInto(const M &m, ll, ll n, const X &x) { return x * mpow(m, n); }
+  static X actInto(const M &m, ll n, const X &x) { return x * mpow(m, n); }
 };
 
 template < class U, class V = U >
@@ -608,7 +608,7 @@ struct RangeProdSet {
   using Monoid = RangeProd< U >;
   static M op(const M &a, const M &) { return a; }
   static constexpr M identity() { return V::unused; }
-  static X actInto(const M &m, ll, ll n, const X &) {
+  static X actInto(const M &m, ll n, const X &) {
     return RangeProdMul< U, V >::mpow(m, n);
   }
 };
@@ -620,7 +620,7 @@ struct RangeOr2 {
   using Monoid = RangeOr< U >;
   static M op(const M &a, const M &b) { return a | b; }
   static constexpr M identity() { return M(0); }
-  static X actInto(const M &m, ll, ll, const X &x) { return m | x; }
+  static X actInto(const M &m, ll, const X &x) { return m | x; }
 };
 
 template < class U = long long, class V = U >
@@ -630,7 +630,7 @@ struct RangeAnd2 {
   using Monoid = RangeAnd< U >;
   static M op(const M &a, const M &b) { return a & b; }
   static constexpr M identity() { return M(-1); }
-  static X actInto(const M &m, ll, ll, const X &x) { return m & x; }
+  static X actInto(const M &m, ll, const X &x) { return m & x; }
 };
 
 template < class U, size_t N >
@@ -640,7 +640,7 @@ struct RangeAnd2< U, bitset< N > > {
   using Monoid = RangeAnd< U >;
   static M op(const M &a, const M &b) { return a & b; }
   static constexpr M identity() { return bitset< N >().set(); }
-  static X actInto(const M &m, ll, ll, const X &x) { return m & x; }
+  static X actInto(const M &m, ll, const X &x) { return m & x; }
 };
 /// }}}--- ///
 
