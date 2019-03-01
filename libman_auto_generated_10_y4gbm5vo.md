@@ -19,9 +19,10 @@ TODO : 区間に対する更新に対し，leftを求めるの，ちょっとど
 
 ```cpp
 // do make(index, Monoid::T value)
-// link(p, c) : c is root
-// cut(c) : c is not root
-// same(a, b)
+// .link(p, c) : [c] is root
+// .cut(c) : [c] is not root
+// .same(a, b)
+// .query(a) : from root to [a]
 // node->id
 // lc[index] to access nodes
 /// --- LinkCutTree {{"{{"}}{ ///
@@ -175,7 +176,7 @@ struct LinkCutTree {
     return !a ? b : a;
   }
   void act(Splay *a, const M &m) { expose(a), a->lazy = m; }
-  X query(Splay *a) {
+  X fold(Splay *a) {
     expose(a);
     return a->accum;
   }

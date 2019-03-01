@@ -240,11 +240,11 @@ public:
     if(y) y->lazy = M_act::op(m, y->lazy);
     a = merge(merge(x, y), z);
   }
-  friend X query(Node *a) { return a ? (eval(a), a->accum) : Monoid::identity(); }
-  friend X query(Node *&a, int l, int r) {
+  friend X fold(Node *a) { return a ? (eval(a), a->accum) : Monoid::identity(); }
+  friend X fold(Node *&a, int l, int r) {
     Node *x, *y, *z;
     tie(x, y, z) = split(a, l, r);
-    X res = query(y);
+    X res = fold(y);
     a = merge(merge(x, y), z);
     return res;
   }

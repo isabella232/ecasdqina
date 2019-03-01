@@ -6,13 +6,14 @@ permalink: data-structure/misc/BIT2D
 ---
 
 
-$ H \times W$ がメモリに乗るならこれ，乗らないならセグ木にBITを乗せる．
+$ H \times W$ がメモリに乗るならこれ，乗らないならセグ木にBITを乗せる
 
 
 ```cpp
 // NOTE : query in range and x1 <= x2, y is same
-/// --- 2D BIT Library {{"{{"}}{ ///
-
+/// --- 2D BIT {{"{{"}}{ ///
+#include <functional>
+#include <vector>
 template < class T = ll, class V = function< T(T, T) > >
 struct BIT2D {
   int h, w;
@@ -52,7 +53,6 @@ private:
     return r;
   }
 };
-
 /// }}}--- ///
 ```
 

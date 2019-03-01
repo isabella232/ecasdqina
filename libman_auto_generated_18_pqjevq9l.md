@@ -1,48 +1,57 @@
 ---
 layout: lib
-title: RBST
-permalink: data-structure/BBST/RBST
+title: Treap
+permalink: data-structure/BBST/Treap
 
 ---
 
 
-Randomized BST
-[https://www.slideshare.net/iwiwi/2-12188757/46](https://www.slideshare.net/iwiwi/2-12188757/46){:target="_blank"}にすべて
+[iwiさんの最強解説](https://www.slideshare.net/iwiwi/2-12188757){:target="_blank"}
 
-[Treap]({{ "data-structure/BBST/Treap" | absolute_url }})のほうがはやかった
-
+以下はすべてmerge-splitベース
 
 # Sequenceタイプ
+
+まずlazy-segにできることができる．  
+条件付きで範囲の要素をreverseできる．
+
+条件は[モノイド，モノイド作用]({{ "math/Monoid" | absolute_url }})
+
+minやmax, sumなどは恒等写像でいい．  
+この性質を使う問題が出たらわかるだろうということで，  
+とりあえずこの性質についてはでたらその場で実装，という感じにした．
 
 TODO : actIntoにleftをわたしていない
 
 
 ```cpp
-/// --- RBST Sequence Library {{"{{"}}{ ///
+/// --- Treap Sequence Library {{"{{"}}{ ///
 #include <cstdint>
 #include <utility>
+
 template < class M_act >
-struct RBSTSeq {
+struct TreapSeq {
 private:
   using u32 = uint_fast32_t;
   using Monoid = typename M_act::Monoid;
   using X = typename Monoid::T;
   using M = typename M_act::M;
-  RBSTSeq *l = nullptr, *r = nullptr;
+  TreapSeq *l = nullptr, *r = nullptr;
   X val;
   X accum = Monoid::identity();
   M lazy = M_act::identity();
   bool rev = false;
   int sz = 1;
+  u32 pri;
   // call after touch its child
   // a is not nullptr and is evaled, its child is proped
-  friend RBSTSeq *prop(RBSTSeq *a) {
+  friend TreapSeq *prop(TreapSeq *a) {
     a->sz = size(a->l) + 1 + size(a->r);
     a->accum = Monoid::op(Monoid::op(Accumulated(a->l), a->val), Accumulated(a->r));
     return a;
   }
   // call before use val, accum
-  friend void eval(RBSTSeq *a) {
+  friend void eval(TreapSeq *a) {
     if(a->lazy != M_act::identity()) {
       a->val = M_act::actInto(a->lazy, 1, a->val);
       a->accum = M_act::actInto(a->lazy, a->sz, a->accum);
@@ -57,7 +66,7 @@ private:
       a->rev = false;
     }
   }
-  friend X Accumulated(RBSTSeq *a) {
+  friend X Accumulated(TreapSeq *a) {
     return a == nullptr ? Monoid::identity() : (eval(a), a->accum);
   }
   /// --- XorShift128 Embeddable {{"{{"}}{ ///
@@ -76,15 +85,20 @@ private:
   };
 
   /// }}}--- ///
-public:
-  RBSTSeq(X val = Monoid::identity()) : val(val) {}
-  friend RBSTSeq *merge(RBSTSeq *a, RBSTSeq *b) {
+  u32 nextPriority() {
     static XorShift128Embeddable xs(__LINE__ * 1333 + 57);
+    return xs();
+  }
+
+public:
+  TreapSeq(X val, u32 pri) : val(val), pri(pri) {}
+  TreapSeq(X val = Monoid::identity()) : TreapSeq(val, nextPriority()) {}
+  friend TreapSeq *merge(TreapSeq *a, TreapSeq *b) {
     if(a == nullptr) return b;
     if(b == nullptr) return a;
     eval(a);
     eval(b);
-    if(xs() % (size(a) + size(b)) < (u32) size(a)) {
+    if(a->pri > b->pri) {
       a->r = merge(a->r, b);
       return prop(a);
     } else {
@@ -92,14 +106,14 @@ public:
       return prop(b);
     }
   }
-  friend int size(RBSTSeq *a) { return a == nullptr ? 0 : a->sz; }
-  using PNN = pair< RBSTSeq *, RBSTSeq * >;
+  friend int size(TreapSeq *a) { return a == nullptr ? 0 : a->sz; }
+  using PNN = pair< TreapSeq *, TreapSeq * >;
   // [0, k), [k, n)
   // 左のグループにk個いれる
-  friend PNN split(RBSTSeq *a, int k) {
+  friend PNN split(TreapSeq *a, int k) {
     if(a == nullptr) return PNN(nullptr, nullptr);
     eval(a);
-    RBSTSeq *sl, *sr;
+    TreapSeq *sl, *sr;
     if(k <= size(a->l)) {
       tie(sl, sr) = split(a->l, k);
       a->l = sr;
@@ -110,60 +124,60 @@ public:
       return PNN(prop(a), sr);
     }
   }
-  friend void insert(RBSTSeq *&a, int k, const X &x) {
-    RBSTSeq *sl, *sr;
+  friend void insert(TreapSeq *&a, int k, const X &x) {
+    TreapSeq *sl, *sr;
     tie(sl, sr) = split(a, k);
-    a = merge(sl, merge(new RBSTSeq(x), sr));
+    a = merge(sl, merge(new TreapSeq(x), sr));
   }
-  friend X erase(RBSTSeq *&a, int k) {
-    RBSTSeq *sl, *sr, *tl, *tr;
+  friend X erase(TreapSeq *&a, int k) {
+    TreapSeq *sl, *sr, *tl, *tr;
     tie(sl, sr) = split(a, k + 1);
     tie(tl, tr) = split(sl, k);
     a = merge(tl, sr);
     return tr->val;
   }
-  friend void erase(RBSTSeq *&a, int l, int r) {
-    RBSTSeq *sl, *sr, *tl, *tr;
+  friend void erase(TreapSeq *&a, int l, int r) {
+    TreapSeq *sl, *sr, *tl, *tr;
     tie(sl, sr) = split(a, r);
     tie(tl, tr) = split(sl, l);
     a = merge(tl, sr);
   }
-  friend void set1(RBSTSeq *&a, int k, X const &x) {
-    RBSTSeq *sl, *sr, *tl, *tr;
+  friend void set1(TreapSeq *a, int k, X const &x) {
+    TreapSeq *sl, *sr, *tl, *tr;
     tie(sl, sr) = split(a, k + 1);
     tie(tl, tr) = split(sl, k);
     if(tr != nullptr) tr->val = tr->accum = x;
-    a = merge(merge(tl, tr), sr);
+    merge(merge(tl, tr), sr);
   }
-  friend X get(RBSTSeq *&a, int k) {
-    RBSTSeq *sl, *sr, *tl, *tr;
+  friend X get(TreapSeq *a, int k) {
+    TreapSeq *sl, *sr, *tl, *tr;
     tie(sl, sr) = split(a, k + 1);
     tie(tl, tr) = split(sl, k);
     X res = tr == nullptr ? Monoid::identity() : tr->val;
-    a = merge(merge(tl, tr), sr);
+    merge(merge(tl, tr), sr);
     return res;
   }
-  friend void act(RBSTSeq *&a, int l, int r, M const &m) {
-    RBSTSeq *sl, *sr, *tl, *tr;
+  friend void act(TreapSeq *a, int l, int r, M const &m) {
+    TreapSeq *sl, *sr, *tl, *tr;
     tie(sl, sr) = split(a, r);
     tie(tl, tr) = split(sl, l);
     if(tr != nullptr) tr->lazy = M_act::op(m, tr->lazy);
-    a = merge(merge(tl, tr), sr);
+    merge(merge(tl, tr), sr);
   }
-  friend X query(RBSTSeq *&a, int l, int r) {
-    RBSTSeq *sl, *sr, *tl, *tr;
+  friend X fold(TreapSeq *a, int l, int r) {
+    TreapSeq *sl, *sr, *tl, *tr;
     tie(sl, sr) = split(a, r);
     tie(tl, tr) = split(sl, l);
     X res = tr == nullptr ? Monoid::identity() : tr->accum;
-    a = merge(merge(tl, tr), sr);
+    merge(merge(tl, tr), sr);
     return res;
   }
-  friend void reverse(RBSTSeq *&a, int l, int r) {
-    RBSTSeq *sl, *sr, *tl, *tr;
+  friend void reverse(TreapSeq *a, int l, int r) {
+    TreapSeq *sl, *sr, *tl, *tr;
     tie(sl, sr) = split(a, r);
     tie(tl, tr) = split(sl, l);
     if(tr != nullptr) tr->rev ^= 1;
-    a = merge(merge(tl, tr), sr);
+    merge(merge(tl, tr), sr);
   }
 };
 
@@ -360,35 +374,44 @@ struct RangeAnd2< U, bitset< N > > {
 };
 /// }}}--- ///
 
-using Seq = RBSTSeq< RangeMinAdd<> > *;
+using Seq = TreapSeq< RangeMinSet<> > *;
 Seq seq = nullptr;
 ```
 
 
 ## 検証
 
-* RSQとRAQ - [AOJのなんか](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/DSL_2_G/judge/3087089/C++14){:target="_blank"}
+* [AOJのやつ](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/DSL_2_F/judge/3086418/C++14){:target="_blank"}
+* reverse?(無理やり(実質未検証)) - [AOJのやつ](https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/DSL_2_G/judge/3086622/C++14){:target="_blank"}
+* RMQ [AOJのやつ]((https://onlinejudge.u-aizu.ac.jp/status/users/luma/submissions/1/DSL_2_A/judge/3086780/C++14)
+* merge, split [E - Hash Swapping - AtCoder](https://beta.atcoder.jp/contests/soundhound2018-summer-final-open/submissions/3147197){:target="_blank"}<!--_-->
+
+## 練習問題
+
+* merge, split [E - Hash Swapping (800) - AtCoder](https://beta.atcoder.jp/contests/soundhound2018-summer-final-open/tasks/soundhound2018_summer_final_e){:target="_blank"}<!--_-->
 
 # Multisetタイプ
 
 
 ```cpp
-/// --- RBST Multiset Library {{"{{"}}{ ///
+/// --- Treap Multiset Library {{"{{"}}{ ///
 
 #include <cstdint>
 #include <utility>
 
 template < class Key >
-struct RBSTMultiset {
+struct TreapMultiset {
 public:
   const Key key;
 
 private:
   using u32 = uint_fast32_t;
-  using PNN = pair< RBSTMultiset *, RBSTMultiset * >;
-  RBSTMultiset *l = nullptr, *r = nullptr;
+  using PNN = pair< TreapMultiset *, TreapMultiset * >;
+  u32 pri;
+  TreapMultiset *l = nullptr, *r = nullptr;
   int sz = 1;
-  friend RBSTMultiset *prop(RBSTMultiset *a) {
+  // call after touch its child
+  friend TreapMultiset *prop(TreapMultiset *a) {
     a->sz = size(a->l) + 1 + size(a->r);
     return a;
   }
@@ -408,13 +431,18 @@ private:
   };
 
   /// }}}--- ///
-public:
-  RBSTMultiset(Key key) : key(key) {}
-  friend RBSTMultiset *merge(RBSTMultiset *a, RBSTMultiset *b) {
+  u32 nextPriority() {
     static XorShift128Embeddable xs(__LINE__ * 3 + 5);
+    return xs();
+  }
+
+public:
+  TreapMultiset(Key key, u32 pri) : key(key), pri(pri) {}
+  TreapMultiset(Key key) : TreapMultiset(key, nextPriority()) {}
+  friend TreapMultiset *merge(TreapMultiset *a, TreapMultiset *b) {
     if(a == nullptr) return b;
     if(b == nullptr) return a;
-    if(xs() % (size(a) + size(b)) < (u32) size(a)) {
+    if(a->pri > b->pri) {
       a->r = merge(a->r, b);
       return prop(a);
     } else {
@@ -424,9 +452,9 @@ public:
   }
   // lower (-inf, key), [key, inf)
   // upper (-inf, key], (key, inf)
-  friend PNN split(RBSTMultiset *a, Key key, bool upper) {
+  friend PNN split(TreapMultiset *a, Key key, bool upper) {
     if(a == nullptr) return PNN(nullptr, nullptr);
-    RBSTMultiset *sl, *sr;
+    TreapMultiset *sl, *sr;
     if(upper ? key < a->key : !(a->key < key)) {
       tie(sl, sr) = split(a->l, key, upper);
       a->l = sr;
@@ -437,27 +465,29 @@ public:
       return PNN(prop(a), sr);
     }
   }
-  friend PNN lower_split(RBSTMultiset *a, const Key &key) { return split(a, key, false); }
-  friend PNN upper_split(RBSTMultiset *a, const Key &key) { return split(a, key, true); }
-  friend int size(RBSTMultiset *a) { return a == nullptr ? 0 : a->sz; }
-  friend void insert(RBSTMultiset *&a, Key key) {
-    RBSTMultiset *sl, *sr;
-    tie(sl, sr) = lower_split(a, key);
-    a = merge(sl, merge(new RBSTMultiset(key), sr));
+  friend PNN lower_split(TreapMultiset *a, const Key &key) {
+    return split(a, key, false);
   }
-  friend void erase(RBSTMultiset *&a, Key key) {
-    RBSTMultiset *sl, *sr, *tl, *tr;
+  friend PNN upper_split(TreapMultiset *a, const Key &key) { return split(a, key, true); }
+  friend int size(TreapMultiset *a) { return a == nullptr ? 0 : a->sz; }
+  friend void insert(TreapMultiset *&a, Key key) {
+    TreapMultiset *sl, *sr;
+    tie(sl, sr) = lower_split(a, key);
+    a = merge(sl, merge(new TreapMultiset(key), sr));
+  }
+  friend void erase(TreapMultiset *&a, Key key) {
+    TreapMultiset *sl, *sr, *tl, *tr;
     tie(sl, sr) = upper_split(a, key);
     tie(tl, tr) = lower_split(sl, key);
     a = merge(tl, sr);
   }
-  friend void erase(RBSTMultiset *&a, Key keyL, Key keyR, bool inclusive = false) {
-    RBSTMultiset *sl, *sr, *tl, *tr;
+  friend void erase(TreapMultiset *&a, Key keyL, Key keyR, bool inclusive = false) {
+    TreapMultiset *sl, *sr, *tl, *tr;
     tie(sl, sr) = split(a, keyR, inclusive);
     tie(tl, tr) = lower_split(sl, keyL);
     a = merge(tl, sr);
   }
-  friend void erase1(RBSTMultiset *&a, Key key) {
+  friend void erase1(TreapMultiset *&a, Key key) {
     if(a == nullptr) return;
     if(key < a->key) {
       erase1(a->l, key);
@@ -470,7 +500,7 @@ public:
     }
     prop(a);
   }
-  friend Key getKth(RBSTMultiset *&a, int k) {
+  friend Key getKth(TreapMultiset *&a, int k) {
     static const struct CannotGetKthOfNullptr {} ex;
     if(a == nullptr) throw ex;
     if(k <= size(a->l)) {
@@ -480,31 +510,36 @@ public:
       return getKth(a->r, k - size(a->l) - 1);
     }
   }
-  friend int count(RBSTMultiset *&a, Key key) {
-    RBSTMultiset *sl, *sr, *tl, *tr;
+  friend int count(TreapMultiset *a, Key key) {
+    TreapMultiset *sl, *sr, *tl, *tr;
     tie(sl, sr) = upper_split(a, key);
     tie(tl, tr) = lower_split(sl, key);
     int cnt = size(tr);
-    a = merge(merge(tl, tr), sr);
+    merge(merge(tl, tr), sr);
     return cnt;
   }
-  friend int count(RBSTMultiset *&a, Key keyL, Key keyR, bool inclusive = false) {
-    RBSTMultiset *sl, *sr, *tl, *tr;
+  friend int count(TreapMultiset *a, Key keyL, Key keyR, bool inclusive = false) {
+    TreapMultiset *sl, *sr, *tl, *tr;
     tie(sl, sr) = split(a, keyR, inclusive);
     tie(tl, tr) = lower_split(sl, keyL);
     int cnt = size(tr);
-    a = merge(merge(tl, tr), sr);
+    merge(merge(tl, tr), sr);
     return cnt;
   }
 };
 
 /// }}}--- ///
 
-using MS = RBSTMultiset< ll > *;
+using MS = TreapMultiset< ll > *;
 MS ms = nullptr;
 ```
 
 
 ## 検証
 
-* [C - データ構造](https://beta.atcoder.jp/contests/arc033/submissions/2978736){:target="_blank"}
+* getKth [C - データ構造 - AtCoder](https://beta.atcoder.jp/contests/arc033/submissions/2978660){:target="_blank"}
+
+## 練習問題
+
+[C - Lexicographic constraints](https://beta.atcoder.jp/contests/agc029/submissions/3805351){:target="_blank"}<!--_-->
+

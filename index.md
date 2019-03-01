@@ -22,7 +22,7 @@ last_update : 2019-03-02
 
 * [Binary Indexed Tree (Fenwick Tree)]({{ "data-structure/misc/BIT" | relative_url }})
 * [BIT2D]({{ "data-structure/misc/BIT2D" | relative_url }})
-* [Sparse Table]({{ "data-structure/misc/SparseTable" | relative_url }})
+* [SparseTable]({{ "data-structure/misc/SparseTable" | relative_url }})
 * [Link/Cut Tree]({{ "data-structure/misc/LinkCutTree" | relative_url }})
 * [Union Find (DSU)]({{ "data-structure/misc/UnionFind" | relative_url }})
 

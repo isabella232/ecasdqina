@@ -23,7 +23,7 @@ $O(\log N)$ で1クエリを処理でき，[HL分解]({{ "graph/HL-Decomposition
 // when forest      : .dfs(roots) & .init()
 // === query ===
 // .lca(a, b)
-// .query(hi, a, hi_inclusive = true)
+// .fold(hi, a, hi_inclusive = true)
 // .climb(from, steps)
 // .descend(from, to, steps)
 // === --- ===
@@ -152,7 +152,7 @@ struct DoublingTree {
     }
     return par[0][a];
   }
-  T query(size_t hi, size_t a, bool inclusive = true) {
+  T fold(size_t hi, size_t a, bool inclusive = true) {
     assert(initiated);
     assert(hi < n && a < n);
     T res = Monoid::identity();
