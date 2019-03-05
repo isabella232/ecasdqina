@@ -17,6 +17,7 @@ last_update : 2019-03-05
 * [動的セグメントツリー]({{ "data-structure/SegmentTree/DynamicSegmentTree" | relative_url }})
 * [フラクショナルカスケーディング]({{ "data-structure/SegmentTree/FractionalCascadingSegmentTree" | relative_url }})
 * [永続セグメントツリー]({{ "data-structure/SegmentTree/PersistentSegmentTree" | relative_url }})
+* [永続遅延セグメントツリー]({{ "data-structure/SegmentTree/PersistentLazySegmentTree" | relative_url }})
 
 ## いろいろ
 
