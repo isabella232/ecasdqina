@@ -25,7 +25,7 @@ $O(\log N)$ で1クエリを処理でき，[HL分解]({{ "graph/HL-Decomposition
 // .lca(a, b)
 // .fold(hi, a, hi_inclusive = true)
 // .climb(from, steps)
-// .descend(from, to, steps)
+// .descendTo(from, to, steps)
 // === --- ===
 // .depth[a]
 // .par[i][a] // climb 2^i times from [a]
@@ -121,7 +121,7 @@ struct DoublingTree {
     assert(a == -1 || steps == 0);
     return a;
   }
-  int descend(size_t from, size_t to, ll steps = 1) {
+  int descendTo(size_t from, size_t to, ll steps = 1) {
     assert(initiated);
     assert(from < n && to < n);
     assert(depth[to] >= depth[from]);
@@ -179,7 +179,7 @@ struct Nothing {
   static constexpr T op(const T &, const T &) { return T(); }
   static constexpr T identity() { return T(); }
   template < class X >
-  static constexpr X actInto(const M &, ll, ll, const X &x) {
+  static constexpr X actInto(const M &, long long, const X &x) {
     return x;
   }
 };
@@ -229,10 +229,10 @@ struct RangeAnd {
 };
 
 template < size_t N >
-struct RangeAnd< bitset< N > > {
-  using T = bitset< N >;
+struct RangeAnd< std::bitset< N > > {
+  using T = std::bitset< N >;
   static T op(const T &a, const T &b) { return a & b; }
-  static constexpr T identity() { return bitset< N >().set(); }
+  static constexpr T identity() { return std::bitset< N >().set(); }
 };
 
 /// }}}--- ///

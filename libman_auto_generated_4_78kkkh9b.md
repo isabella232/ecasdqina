@@ -69,7 +69,7 @@ struct Nothing {
   static constexpr T op(const T &, const T &) { return T(); }
   static constexpr T identity() { return T(); }
   template < class X >
-  static constexpr X actInto(const M &, ll, ll, const X &x) {
+  static constexpr X actInto(const M &, long long, const X &x) {
     return x;
   }
 };
@@ -119,10 +119,10 @@ struct RangeAnd {
 };
 
 template < size_t N >
-struct RangeAnd< bitset< N > > {
-  using T = bitset< N >;
+struct RangeAnd< std::bitset< N > > {
+  using T = std::bitset< N >;
   static T op(const T &a, const T &b) { return a & b; }
-  static constexpr T identity() { return bitset< N >().set(); }
+  static constexpr T identity() { return std::bitset< N >().set(); }
 };
 
 /// }}}--- ///

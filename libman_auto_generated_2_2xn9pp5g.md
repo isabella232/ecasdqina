@@ -138,7 +138,7 @@ struct Nothing {
   static constexpr T op(const T &, const T &) { return T(); }
   static constexpr T identity() { return T(); }
   template < class X >
-  static constexpr X actInto(const M &, ll, ll, const X &x) {
+  static constexpr X actInto(const M &, long long, const X &x) {
     return x;
   }
 };
@@ -188,10 +188,10 @@ struct RangeAnd {
 };
 
 template < size_t N >
-struct RangeAnd< bitset< N > > {
-  using T = bitset< N >;
+struct RangeAnd< std::bitset< N > > {
+  using T = std::bitset< N >;
   static T op(const T &a, const T &b) { return a & b; }
-  static constexpr T identity() { return bitset< N >().set(); }
+  static constexpr T identity() { return std::bitset< N >().set(); }
 };
 
 /// }}}--- ///
@@ -309,12 +309,12 @@ struct RangeAnd2 {
 };
 
 template < class U, size_t N >
-struct RangeAnd2< U, bitset< N > > {
+struct RangeAnd2< U, std::bitset< N > > {
   using X = U;
-  using M = bitset< N >;
+  using M = std::bitset< N >;
   using Monoid = RangeAnd< U >;
   static M op(const M &a, const M &b) { return a & b; }
-  static constexpr M identity() { return bitset< N >().set(); }
+  static constexpr M identity() { return std::bitset< N >().set(); }
   static X actInto(const M &m, ll, const X &x) { return m & x; }
 };
 /// }}}--- ///

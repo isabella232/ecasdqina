@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2019-03-02
+last_update : 2019-03-05
 ---
 
 えかえか
@@ -23,6 +23,7 @@ last_update : 2019-03-02
 * [Binary Indexed Tree (Fenwick Tree)]({{ "data-structure/misc/BIT" | relative_url }})
 * [BIT2D]({{ "data-structure/misc/BIT2D" | relative_url }})
 * [SparseTable]({{ "data-structure/misc/SparseTable" | relative_url }})
+* [半群も乗る Sparse Table (Disjoint Sparse Table)]({{ "data-structure/misc/DisjointSparseTable" | relative_url }})
 * [Link/Cut Tree]({{ "data-structure/misc/LinkCutTree" | relative_url }})
 * [Union Find (DSU)]({{ "data-structure/misc/UnionFind" | relative_url }})
 
@@ -165,6 +166,7 @@ last_update : 2019-03-02
 * [ビット操作ユーティリティ]({{ "misc/bit-utility" | relative_url }})
 * [階乗の事前計算]({{ "misc/Factorial" | relative_url }})
 * [XorShift]({{ "misc/XorShift" | relative_url }})
+* [メモリプールを使ったアロケータ]({{ "misc/memory-pool-allocator" | relative_url }})
 
 # テクニック
 
