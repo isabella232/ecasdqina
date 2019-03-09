@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2019-03-05
+last_update : 2019-03-09
 ---
 
 えかえか
@@ -21,7 +21,7 @@ last_update : 2019-03-05
 
 ## いろいろ
 
-* [Binary Indexed Tree (Fenwick Tree)]({{ "data-structure/misc/BIT" | relative_url }})
+* [Binary Indexed Tree (Fenwick Tree)]({{ "data-structure/misc/BinaryIndexedTree" | relative_url }})
 * [BIT2D]({{ "data-structure/misc/BIT2D" | relative_url }})
 * [SparseTable]({{ "data-structure/misc/SparseTable" | relative_url }})
 * [半群も乗る Sparse Table (Disjoint Sparse Table)]({{ "data-structure/misc/DisjointSparseTable" | relative_url }})
