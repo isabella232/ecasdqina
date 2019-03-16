@@ -13,21 +13,33 @@ permalink: graph/utility
 
 
 ```cpp
-/// Tree Diametor {{"{{"}}{
-
-int treeDiameter(const vector< vector< int > > &tree) {
-  int far = 0, dep = -1;
-  function< void(int, int, int) > dfs = [&](int i, int p, int d) {
-    if(dep < d) far = i, dep = d;
-    for(int j : tree[i])
-      if(j != p) dfs(j, i, d + 1);
+// tree_diameter( <tree> ) : (size, p1, p2) {{"{{"}}{
+#include <stack>
+#include <tuple>
+#include <vector>
+std::tuple< int, std::size_t, std::size_t > tree_diameter(
+    const std::vector< std::vector< int > > &tree) {
+  using size_type = std::size_t;
+  size_type farthest, a, b, depth;
+  auto dfs = [&](size_type i) {
+    farthest = i;
+    std::stack< std::tuple< size_type, int, size_type > > stk;
+    stk.emplace(i, -1, 0);
+    while(stk.size()) {
+      size_type i, d;
+      int p;
+      std::tie(i, p, d) = stk.top();
+      stk.pop();
+      if(depth < d) farthest = i, depth = d;
+      for(int j : tree[i])
+        if(j != p) stk.emplace(j, i, d + 1);
+    }
   };
-  dfs(0, -1, 0);
-  dep = -1;
-  dfs(far, -1, 0);
-  return dep;
+  dfs(0);
+  dfs(a = farthest);
+  b = farthest;
+  return std::make_tuple(depth, a, b);
 }
-
 // }}}
 ```
 

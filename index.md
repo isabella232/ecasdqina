@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2019-03-09
+last_update : 2019-03-15
 ---
 
 えかえか
@@ -43,7 +43,7 @@ last_update : 2019-03-09
 # グラフ
 
 * [基本]({{ "graph/general" | relative_url }})
-* [強連結成分分解 (Kosaraju's algorithm)]({{ "graph/StronglyConnectedComponent" | relative_url }})
+* [強連結成分分解 (Kosaraju's SCC)]({{ "graph/StronglyConnectedComponent" | relative_url }})
 * [木のダブリング]({{ "graph/DoublingTree" | relative_url }})
 * [木の重心 (Centroid)]({{ "graph/Centroid" | relative_url }})
 * [重心分解 (Centroid Decomposition)]({{ "graph/CentroidDecomposition" | relative_url }})
@@ -55,6 +55,7 @@ last_update : 2019-03-09
 * [全方位木DP (るま式)]({{ "graph/DP-all-subtree" | relative_url }})
 * [最小全域木 (TODO)]({{ "graph/MST" | relative_url }})
 * [最小全域木 (borůvka法)]({{ "graph/boruvka" | relative_url }})
+* [最小全域有向木問題 (Chu-Liu/Edmonds' algorithm)]({{ "graph/MinimumSpanningArborescence" | relative_url }})
 * [木の同型判定 (TODO)]({{ "graph/is-same-tree" | relative_url }})
 * [ユーティリティ]({{ "graph/utility" | relative_url }})
 * [二頂点対最短路問題 (A*)]({{ "graph/A-star" | relative_url }})
