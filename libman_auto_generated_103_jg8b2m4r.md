@@ -11,11 +11,11 @@ permalink: misc/ModuloInteger
 ```cpp
 /// --- Modulo Integer {{"{{"}}{ ///
 #include <ostream>
-template < unsigned long long mod = static_cast< unsigned long long >(1e9 + 7) >
+template < long long mod = static_cast< long long >(1e9 + 7) >
 struct ModuloInteger {
   static_assert(mod > 0, "mod must be positive");
-  static_assert(mod <= 0x100000000, "mod is too big");
-  using integer = unsigned long long;
+  static_assert(mod <= 3037000499, "mod is too big");
+  using integer = long long;
   static ModuloInteger unused;
   // math {{"{{"}}{
   static inline integer extgcd(integer a, integer b, integer &x, integer &y) {
@@ -26,10 +26,13 @@ struct ModuloInteger {
   static inline integer modinv(integer a) {
     integer x = 0, y = 0;
     extgcd(a, mod, x, y);
-    if(x < 0) x += mod;
+    if(x < 0)
+      x += mod;
+    else if(x == mod)
+      x = 0;
     return x;
   }
-  static inline integer modpow(integer a, integer b) {
+  static inline integer modpow(integer a, long long b) {
     if(b < 0) b = -b, a = modinv(a);
     integer r = 1;
     a %= mod;
@@ -58,7 +61,7 @@ public:
   explicit operator T() {
     return T(val);
   }
-  operator bool() { return bool(val); }
+  // operator bool() { return bool(val); }
   // ModuloInteger <arithmetic-operator>[=] ModuloInteger {{"{{"}}{
   ModuloInteger operator+(ModuloInteger const &rhs) const {
     ModuloInteger tmp = *this;
@@ -190,7 +193,7 @@ public:
   }
   // }}}
 };
-template < unsigned long long mod >
+template < long long mod >
 ModuloInteger< mod > ModuloInteger< mod >::unused(mod, 0);
 /// }}}--- ///
 

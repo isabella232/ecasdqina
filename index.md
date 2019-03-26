@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2019-03-15
+last_update : 2019-03-26
 ---
 
 えかえか
@@ -166,7 +166,7 @@ last_update : 2019-03-15
 * [有理数ライブラリ (Rational)]({{ "misc/Rational" | relative_url }})
 * [多倍長整数 (BigInteger)]({{ "misc/BigInteger" | relative_url }})
 * [ビット操作ユーティリティ]({{ "misc/bit-utility" | relative_url }})
-* [階乗の事前計算]({{ "misc/Factorial" | relative_url }})
+* [Factorial]({{ "misc/Factorial" | relative_url }})
 * [XorShift]({{ "misc/XorShift" | relative_url }})
 * [メモリプールを使ったアロケータ]({{ "misc/memory-pool-allocator" | relative_url }})
 

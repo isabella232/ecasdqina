@@ -40,7 +40,9 @@ permalink: data-structure/SegmentTree/DynamicSegmentTree
 // NOTE : one value is recommended rather than O(log SIZE) function
 // NOTE : better to use fixed-range
 /// --- Dynamic SegmentTree {{"{{"}}{ ///
+#include <cassert>
 #include <functional>
+#include <memory>
 template < class Monoid >
 struct DynamicSegmentTreeNode {
 public:
@@ -285,10 +287,11 @@ using Seg = DynamicSegmentTree< RangeMin<> >;
 # 検証
 
 * [みんぷろ2019 決勝 A D - Dangerous Hopscotch (900) - AtCoder](https://atcoder.jp/contests/yahoo-procon2019-final-open/tasks/yahoo_procon2019_final_d){:target="_blank"}<!--_-->
-  * 初期値を与える - [submission](https://atcoder.jp/contests/yahoo-procon2019-final-open/submissions/4586571){:target="_blank"}<!--_-->
-  * 初期値を与える + 範囲指定 - [submission](https://atcoder.jp/contests/yahoo-procon2019-final-open/submissions/4586699){:target="_blank"}<!--_-->
-  * 初期値を得る関数を与える - [submission](https://atcoder.jp/contests/yahoo-procon2019-final-open/submissions/4587351){:target="_blank"}<!--_-->
-  * 初期値を得る関数を与える + 範囲指定 - [submission](https://atcoder.jp/contests/yahoo-procon2019-final-open/submissions/4587361){:target="_blank"}<!--_-->
+  * 初期値を与える - [submission (1843ms)](https://atcoder.jp/contests/yahoo-procon2019-final-open/submissions/4586571){:target="_blank"}<!--_-->
+  * 初期値を与える + 範囲指定 - [submission (1604ms)](https://atcoder.jp/contests/yahoo-procon2019-final-open/submissions/4586699){:target="_blank"}<!--_-->
+  * 初期値を得る関数を与える - [submission (4000ms TLE)](https://atcoder.jp/contests/yahoo-procon2019-final-open/submissions/4587351){:target="_blank"}<!--_-->
+  * 初期値を得る関数を与える + 範囲指定 - [submission (4000ms TLE)](https://atcoder.jp/contests/yahoo-procon2019-final-open/submissions/4587361){:target="_blank"}<!--_-->
+  * TLEの原因は問題特有のところもあると思う
 
 # 練習問題
 
