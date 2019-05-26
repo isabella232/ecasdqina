@@ -190,7 +190,7 @@ FractionalCascadingSegmentTree< Under, Data, 1 > ecas(
     [](Data a, Data b) -> Data { return a + b; }
     // optional identity
     // , identity
-);
+    );
 // }}}
 ```
 

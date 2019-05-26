@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2019-03-26
+last_update : 2019-05-27
 ---
 
 えかえか
@@ -79,7 +79,7 @@ last_update : 2019-03-26
 * [Monotone Minima]({{ "dynamic-programming/speedup/Monotone-Minima" | relative_url }})
 * [Divide and Conquer Optimiziation]({{ "dynamic-programming/speedup/Divide-and-Conquer-Optimization" | relative_url }})
 * [QI性を利用したDP高速化]({{ "dynamic-programming/speedup/QI-Speedup" | relative_url }})
-* [AlienDP (Parametric Binary Search)]({{ "dynamic-programming/speedup/AlienDP" | relative_url }})
+* [AlienDP (PenalizeSpeedup)]({{ "dynamic-programming/speedup/AlienDP" | relative_url }})
 
 ## ConvexHullTrick; CHT
 

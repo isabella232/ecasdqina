@@ -1,0 +1,643 @@
+---
+layout: lib
+title: AlienDP (PenalizeSpeedup)
+permalink: dynamic-programming/speedup/AlienDP
+
+---
+
+
+中国では WQS Binary Search と呼ばれている [^2]
+
+[^2]: [https://codeforces.com/blog/entry/49691?#comment-336672](https://codeforces.com/blog/entry/49691?#comment-336672)
+
+AlienDPという名前は [IOI 2016 Aliens](https://www.ioi-jp.org/ioi/2016/tasks/day2-aliens-ISC.pdf){:target="_blank"}<!--_--> という問題から来ている
+
+---
+
+AlienDPはローカルネーム感が強い気がするので PenalizeSpeedup みたいな名前で個人的には呼んでいます.
+
+この記事では, PenalizeSpeedupというテクニックとして紹介します. そして, Alienを始めとする, AlienDPと呼ばれる特殊な形をしたDPは, PenalizeSpeedupに帰着できる, という扱いをしようと思います. (つまり, PenalizeSpeedupはAlienDPの一般化みたいに扱います)
+
+# PenalizeSpeedupとは?
+
+PenalizeSpeedupの本質はDAG上の**2頂点対(単一パス)k辺最短経路問題**である.
+
+そして多くの場合, このDAGは完全グラフであり, この完全グラフ上の距離について [Monge性]({{ "math/Monge" | absolute_url }}) があるならば PenalizeSpeedup が必ず適用できる, と言える.
+
+一般性を失わず, 頂点 $s$ から 頂点 $t$ へのk辺最短経路問題とする.
+
+# 前提
+
+DAG (Directed Acyclic Graph) とは閉路のない有向グラフのことである.
+
+辺に実数の重みがある DAG $G$ が与えられる. 単純でも連結でもなくてよい. すなわち, 多重辺や孤立点があってもよいということ.
+
+$G$ の頂点数を $N$, 辺の数を $M$ とする.
+
+$dist(v, k)$ を $G$ における頂点 $v$ から頂点 $t$ までのk辺最短路長とする. k辺最短路とは, $v$ から $t$ まで **ちょうど** k本の辺を使って行くような経路のうち, 経路上の辺の重みの和が最小のもののことをいう. (そのようなものがなければ $\infty$ であるとする.)
+
+$dist(s, k)$ を求めるのが PenalizeSpeedup.
+
+$G$の例
+
+![graph]({{ "img/penalize-speedup-graph.png" | absolute_url }})
+
+上図では, $t = 0$ であると考えられる.
+
+
+# 注意点
+
+k辺最短路というが, 問題によってはk本以下最短路問題であったりする.  
+それらのうちいくつかは, k本中何本かを無駄にすることが特別な考察なしに出来たりする.  
+しかし, そうでない場合についても常に問題ない. これについては[後で議論する](#kをある範囲とするとき)) が,  k辺最適化問題が PenalizeSpeedup で解けるとき, 常にk辺以下最短路問題が解けることを示す.
+
+
+# メインアイデア
+
+いくつかの問題では, 直感的には, **より多くの辺を経由したほうが得する**が, **そんなにたくさんの辺を経由できない**, と言える, DAG上のk辺最短路問題に帰着できる. PenalizeSpeedupとは, DAGに帰着したあとの問題を解くテクニックだ.
+
+すべての辺にペナルティを課した (重さをいくらか追加した) グラフでの最短距離を考える.
+
+ペナルティを増やすことで, 辺を多く使うことが難しくなる. **k本使うのが最適であるようにペナルティを調整する**.
+
+**辺の重み**と**最短経路における使う辺の数**に単調性があれば二分探索ができる. そして, 実際に単調性がある.
+
+あとは最短路を求めることを, ペナルティを課したグラフ上で, **辺をいくつ使ったかを気にせず**, ただ, 使った辺の数の記録だけをして, **距離の最小化をする**.
+
+# 問題の整理
+
+各辺の重みが, 実数 $penalty$ だけ増えたグラフを考える. 新しくできたグラフを $G^\prime(penalty)$ と書くことにする. 例えば, $G = G^\prime(0)$ である.
+
+例 : $G^\prime(10)$ の図
+
+![graph-dash1]({{ "img/penalize-speedup-graph-dash1.png" | absolute_url }})
+
+始点となる, ある頂点 $v$ を固定して考える.
+
+$G^\prime(penalty)$ における, 頂点 $v$ から $t$ へのk辺最短経路長を $dist^\prime_{penalty}(v, k)$ とする. すると, $dist^\prime_{penalty}(v, k) = dist(v, k) + k \cdot penalty$ となる.
+
+ここで, $G^\prime(penalty)$ 上で, 辺の数を考慮せず v-t 間最短路を求めたときの, その距離と, 使った辺の数をそれぞれ $d_{penalty}(v)$, $e\_{penalty}(v)$ とする. ($e\_{penalty}(v)$ は一意に定まらないかもしれない. これについては[後で議論する](#あるペナルティにおいて-最小長を取る辺数の候補が複数ある場合).)
+
+$$\displaystyle d(penalty) = \min_k \{dist^\prime_{penalty}(v, k)\}$$ だ. <!--_-->
+
+横軸に $penalty$, 縦軸に $dist^\prime_{penalty}(v, k) = dist(v, k) + k \cdot penalty$ をとったグラフを考える. これらは1次関数の形をしていることに注意してほしい.<!--_-->
+
+以下の図では, `penalty` を `p` と略記していたりする. (上のグラフ例とは対応していない. 傾きは適当. )
+
+![lines-01]({{ "img/penalize-speedup-lines-01.png" | absolute_url }})
+
+$d_{penalty}(v)$ となる部分を, 太線で強調すると以下のようになる.<!--_-->
+
+![lines-02]({{ "img/penalize-speedup-lines-02.png" | absolute_url }})
+
+今求めたい値, $dist(v, k)$ というのは, その $k$ に対応する直線のy切片であることにも注意してほしい.
+
+上図の赤い直線 ($k = 2$) に注目してほしい. このとき, $dist(v, 1)$ や $dist(v, 3)$ は, $d_{penalty}(v)$ から求めることが可能だ. $penalty$ をうまく調整することで求められる (この調整には二分探索を用いる. これについては後で説明する). 例えば, $dist(v, 1)$ を求めたいなら, $e_{penalty}(v) = 1$ になるようなペナルティにすればよい.
+
+### 例 : dist(v, 3) が求めたい
+
+先程の図に少し書き加えます.
+
+![lines-03]({{ "img/penalize-speedup-lines-03.png" | absolute_url }})
+
+具体的に, $e_{-5}(v) = 3, e_{-15}(v) = 3$ であったとする. $penalty = -5$ を考える.
+
+$d_{-5}(v) = 15$ だったとします. そしたら, $dist^\prime_{-5}(v, 3) = 15$ なわけですが, 3本の辺でペナルティを課されたわけですから, 元のグラフでの距離は $3 \cdot penalty$ を引いた数になります. つまり, $dist(v, 3) = dist^\prime_{-5}(v, 3) - 3 \cdot (-5) = 15 + 15 = 30$ となります.
+
+同様に, $penalty = -15$ としたならば, $d_{-15}(v) = -15$ が得られ, 計算すると同じ値が求まります.
+
+
+
+---
+
+一方で, $dist(v, 2)$ は $d_{penalty}(v)$ から求めることは, どのようにペナルティを調整しても, できない.
+
+このアルゴリズムは, ペナルティを固定して, 得られた経路長 $d_{penalty}(v)$ が, $f_k(x) = dist(v, k) + kx$ という直線上に乗っていると捉えて, $dist(v, k)$ を求めるからだ. つまり, 以下のような命題が成り立つ.
+
+> PenalizeSpeedup を適用して $dist(v, k)$ を求めるには以下が成り立つ必要がある.
+>
+> 直線 $f_k(x) = dist(v, k) + kx$ が $d_{x}(v)$ と一致する瞬間 (ペナルティ $x$) がある.
+
+(直線であることがわかりやすいように, 変数に $x$ を用いた)
+
+直感的に言い換えるなら, 目的とする直線が, 下側に**むき出し**になっている必要があるということだ.
+
+以下, 上記の条件を満たすことを, 直線$f_k$ が有効である, と呼ぶことにする.
+
+# 条件のさらなる言い換え
+
+上記の条件を更に言い換える. 言い換えには, [CHT]({{ "dynamic-programming/convex-hull-trick/CHT" | absolute_url }}) で用いられるような方法を用いる.
+
+引き続き, 頂点 $v$ を固定して考える.
+
+v-t 経路につかう辺の数としてあり得る値を $0, 1, 2, \cdots, n$ とします.
+
+(実際には飛び飛びになってしまっても大丈夫かもしれません.
+しかし, [後の項](#任意のv-kに対して条件を課す必要があるか)でも触れますが, 常にこのように連続した値を取りえることを前提としてしまいます.
+)
+
+また, 先程のグラフのように $f_0(x) = dist(v, 0) + 0 \cdot x, f_1(x) = dist(v, 1) + 1 \cdot x, \cdots, f_n(x) = dist(v, n) + nx$ といった直線を考えます.
+
+$f_0$ と $f_n$ はそれぞれ, 十分大きい$x$, 十分小さい$x$ で最小値となるので, 有効です.
+
+---
+
+復習 : 直線 $y = a_1x + b_1$ と $y = a_2x + b_2$ の交点のx座標は $-\frac{b_2-b_1}{a_2-a_1}$.
+
+---
+
+$0 \lt i \lt n$ について, $f_i$ が有効である条件とは, $$f_i, f_{i+1}$$ の交点のx座標, $$f_{i-1}, f_i$$ の交点のx座標がこの順番に登場する (か等しい) 場合です.
+
+つまり, $-\frac{dist(v, i) - dist(v, i + 1)}{i - (i + 1)} \leq -\frac{dist(v, i - 1) - dist(v, i)}{(i - 1) - i}$ です. 整理すると,
+
+$$dist(v, i) - dist(v, i - 1) \leq dist(v, i + 1) - dist(v, i)$$
+
+となります.
+
+---
+
+すべての $0 \lt i \lt n$ において上記が成り立つ条件を考えてみます.
+
+これは, $dist(v, i)$ を $i$ の関数としてみると, この関数に, **凸性を要求している**事がわかります. (下に凸)
+
+(下に凸とは, いいかえれば, "増え方" が増えていく, ということです.)
+
+これが, よく言われる "AlienDPが凸性を要求する" という言葉の意味です.
+
+
+この記事でも, イコール含む不等号で成り立つものを weakly-凸性, イコールなしで成り立つものを凸性 (もしくは strongly-凸性) と呼ぶことにします.
+
+---
+
+一つ注意事項. 凸というと, 図で示した直線の最小値も凸なので, そっちのことだったり, concave/convex Mongeの凸を言っているのかな? となるかもしれません.   
+しかし, 上記で言っている凸性というのは, あくまでも式変形をして出てきた不等式が凸性を言っている, というだけの話であることには注意してください.
+
+
+# PenalizeSpeedupが適用可能な条件のまとめ
+
+任意の $v \in G$, $0 \lt k \lt n$ について, $dist(v, k)$ を $k$ の関数とみたとき, weakly-凸である.
+
+すなわち, $dist(v, i) - dist(v, i - 1) \leq dist(v, i + 1) - dist(v, i)$ であること.
+
+
+以上が十分条件である.
+
+# 任意のv,kに対して条件を課す必要があるか
+
+前項の条件は任意の $v, k$ に対して条件を要求している. 実際には求めたいところだけ満たせばいい.
+
+しかし, 現実的には, この $v, k$ はグラフの形に関係なく与えられることが多いはずだ.
+
+つまり, $dist(v, k)$ は求められる条件を満たすが, それ以外の $dist(v^\prime, k^\prime)$ は求められる条件を満たさない, といったような都合のいいケースは考えにくい.
+
+
+なので, 前項のような十分条件を PenalizeSpeedup の前提と考えることはそんなに悪くないと思う.
+
+
+# 目的のpenaltyを求める
+
+$e_x(v) = k$ となるような $x$ を求められなくてはならない.
+
+ところで, $e_x(v)$ は, $x$ の関数とみると, 単調減少である. (図を見てもらえれば明らかだ)
+
+$e_x(v)$ が一意でない場合は[後の項](#あるペナルティにおいて-最小長を取る辺数の候補が複数ある場合)で議論する.
+
+よって, これは $penalty$ に対して二分探索を行えばよい.
+
+![lines-04]({{ "img/penalize-speedup-lines-04.png" | absolute_url }})
+
+[具体的なアルゴリズム](#グラフの最短距離を求めるアルゴリズム)や, [探索する範囲](#二分探索すべきpenaltyの範囲), [繰り返しの回数](#狙った精度を得るためにひつようなループの回数), [整数か小数どっちを使うべきか](#整数と小数), といったことについては後で議論する. (対応する項へのリンクを張っている)
+
+# グラフの最短距離を求めるアルゴリズム
+
+ある $x$ に対し, $G^\prime(x)$ での最短路を求める. それをするアルゴリズムには, DAGなので, メモ化再帰やBFS (出自数0になったら enqueue する) などがある. 後者はDPとも捉えられる. これは $O(N + M)$ で実行可能だ.
+
+
+また, [ある条件](#完全DAGの場合) を満たす完全DAGというのは, 凸性を満たすことがわかっているのだが, そのようなDAGの場合別のアルゴリズムが使えるかもしれない.
+
+完全DAGとは, トポロジカル順序が一意に定まるDAGのことだ. そのようなDAGは, スライド最小値や, CHTを行うことで高速化ができる (こともある).  
+AlienDPを適用するとき, 主に考察する必要があるのは, <span style="color:red">最短距離をどう求めるか</span> ということである. (これは[実装](#実装)の中では, ,`calc` を実装することに相当する.)
+
+
+これは $O(N)$ や $O(N \log N)$ になることが多い.
+
+
+頂点数5の完全DAGの例 :
+
+![perfect dag]({{ "img/penalize-speedup-perfect-dag.png" | absolute_url }} "完全DAG")
+
+
+
+# あるペナルティにおいて, 最短路長を取る辺数の候補が複数ある場合
+
+この問題は常に発生する. なぜなら, **複数の直線が一点で, 最小値として交わる点**が, 最短路長を取る辺数の候補が複数ある点であり, かつ, ２つの直線が交わる点が必ず存在するからだ.
+
+![lines-05]({{ "img/penalize-speedup-lines-05.png" | absolute_url }})
+
+上記の図のようになっていたとき, $e_x(v)$ の候補は, $0,1,2,3$ となる. これに対して, ２つの解決策を提示する.
+
+## 策1 : 適当に選ぶ
+
+任意の辺数のものを選ぶ. **ほぼこっちになると考えていい.**
+
+メリットとしては, 細かいことを気にしなくてよくなる. \\
+また, 策2を使おうとすると, 複雑になってしまうことがある. 先に述べたように, CHTを使って高速化することがしばしばある. このとき, CHTは実数上でのクエリは得意だが, そこに使った辺の数をもたせるというのは, 簡単なことではないはずだ. おそらく.
+
+デメリットとしては, 整数の探索の際でも小数で探索しなければならず, 少し多めに二分探索が必要な点と, 小数での演算が行われることによる速度低下といった点だ.
+
+整数ではなく小数で探索する必要がある場合というのは, 例えば上の図において, $k = 2$ の直線のy切片 ( = $dist(v, 2)$) を求めたいというときに, $e_x(v) = 1$ となってしまうときだ.
+こうなってしまうと, もっと左の点において, $k = 2$ がはじめて最小値を取ると判定されてしまう. それではいけない.
+
+## 策2 : 最小のものを選ぶ
+
+辺の使用数の最小値も, 少し考えると距離と一緒に保持できることがわかる. 具体的には, $(距離, 辺数)$ というタプルを, 辞書順最小化すればいい.
+
+
+最小化はおもに, 整数で探索する場合に使う.  [# 目的のpenaltyを求める](#目的のpenaltyを求める) の図にあるように, $e_x(v) = k$ であるような最大の点 $x$ が求めたいとする. 直線をあらわすパラメータが整数なら, 交点もすべて整数となるため, $x$ も整数となる. $e_x$ として常に最小の値を採用すれば, 二分探索は整数においても正しく動く.
+
+
+小数については, 精度の保証がある程度必要になるため, その分多くのループが必要となる.
+
+
+# 二分探索すべき penalty の範囲
+
+最大の辺数, 最小の辺数 を試すような $penalty$ の範囲を考える. (大雑把に評価する)  
+辺の重みの最大値から最小値を引いたものを $diff$ とする.
+
+
+最大の辺数にする場合, 一個でも多くの辺を使ったら, それ以外の辺での損を取り戻せる, としなければならないので, $-N \cdot diff$ とすれば十分.
+
+逆も同様で, $N \cdot diff$ とすればいいので, $-N \cdot diff \sim N \cdot diff$ の範囲で二分探索をすれば十分.
+
+問題特有の上限・下限もあると思うので, そういったのを使ってもいい.
+
+# 完全DAGの場合
+
+さて, いよいよ AlienDP とよく言われるものについて説明する.
+
+DPと言われるように, これはある特殊な形をしたDPの漸化式になっている. それは以下のような形のDPである.
+
+---
+
+任意の非負整数 $0 \leq i \leq n, k$ に対し, 以下のように定義されている関数を考える.
+
+$$
+D(0, k) = 0 \\
+D(i, k) = \min_{j < i}\{D(j, k - 1) + w[j + 1, i]\}
+$$
+
+<!--_-->
+
+ただし, 二変数関数 $w[i, j]$ は整数区間に対して定義されており, Concave QI性 ([Monge性]({{ "math/Monge" | absolute_url }})) を満たす.
+
+つまり, すべての $i \leq j \leq k \leq l$ について, 
+
+$$
+w[i, k] + w[j, l] \leq w[j, k] + w[i, l]
+$$
+
+が満たされている.
+
+ある $s, k$ に対し, $D(s, k)$ を求めよ.
+
+---
+
+頂点 $0$ から $n$ があり, $i, j$ 間の重みが $w[i, j]$ であるような DAGと捉えれば良い.
+
+
+これは, 先に述べた weakly-凸性 を満たす. この証明は これ[^1] に載っている.
+
+つまり, $v$ を固定すると, 有効な $k$ について,
+
+$$
+D(v, k) - D(v, k - 1) \leq D(v, k + 1) - D(v, k)
+$$
+
+を満たすということである.
+
+
+# kをある範囲とするとき
+
+問題によっては, $k$ 本以下の辺を使う, といった場合もあるかもしれない.
+
+
+以下のようなグラフの拡張を考える.
+
+$G$ の $t$ ( = $0$) 以外の各頂点 $v$ について, v-t の辺があるなら, その重みを持った辺を, 新たな頂点 $-1 \sim -m$ へと張る.  
+頂点 $-i = -1 \sim -m$ について, $-i$ から $-(i - 1)$ へと重み $0$ の辺を張る.
+
+![extend]({{ "img/penalize-speedup-extend.png" | absolute_url }} "拡張")
+
+上図は完全DAGを拡張しているが, 完全DAGでなくともよい.
+
+
+さて, 新しいグラフを $F$ とする. $G$ 上に距離$w$ の $k$ 辺路があるなら, それに対応する $F$ 上の , 距離 $w$ の $k \sim (k + m)$ 辺路が存在する.
+
+逆に, $F$ 上の $k$ 辺路というのは, $G$ 上の $(k - m) \sim k$ 辺路ということになる.
+
+なので, $k$ 辺以下どころか, $l \sim r$ 辺で問題を解くことができる. ([実装](#実装)の中では, `droppable` が, 捨てることのできる辺の使用回数, としている. つまり, $k - droppable \sim k$ 辺で解いている)
+
+### 凸性の保持
+
+$F$ が weakly-凸性 を保持することを確認する. 頂点 $v$ を固定して, $G$ でweakly-凸性を満たしていたとすると, 元の関数での, 左 $m$ 個のうちの最小値を取るので, 次の図のようになる.
+
+![convex-preserve]({{ "img/penalize-speedup-convex-preserve.png" | absolute_url }} "weakly-凸性を保持")
+
+
+最小値の点から右へ引き伸ばしたような形になる. (ちゃんと証明を書くなら, 場合分けなどをしてやればいい)
+
+### 実装上の注意
+
+実際にグラフを拡張してやる必要はない. なぜなら, ペナルティが負である場合は, 必ず, 拡張されたすべての辺を通る. 正であれば, すべて使わない.
+
+なので, 最終的な距離に $\min(penalty * m, 0)$ を足してやればよい. 詳しくは[実装](#実装)を見てほしい.
+
+
+# 整数と小数
+
+重みが全て整数なら, 距離も整数となるため, 小数で求めてから, `round`してやればよい.
+
+整数だけで求めているような実装を見ることもあるかもしれない. それは, strongly-凸性が成り立ち, 辺の本数を最小化/最大化できるなら, 使ってもいいだろう.
+
+# 狙った精度を得るためにひつようなループの回数
+
+二分探索の範囲が $E$ 以下になるまで探索をしたとします.
+
+$low$ から $hi$ という範囲まで探索したとします. $mid = (low + hi) / 2$ を採用することで $E / 2$ 程度のズレがでます.
+
+$dist(v, k) = d(v) - k \cdot penalty$ という式で求めるので, $d(v)$ の誤差がそのまま, $dist(v, k)$ の誤差になります.
+
+![error]({{ "img/penalize-speedup-error.png" | absolute_url }})
+
+誤差は, 上図のように, 傾きに応じて大きくなってしまいます. つまり $d(v)$ は $kE/2$ 程度の誤差がでることになります.
+
+つまり, 誤差を $\epsilon$ で抑えたいなら, $kE/2 \lt \epsilon \iff E \lt 2\epsilon/k$ にしたいのですが,
+
+元の範囲を $R$ とすると, $t$ 回ループすれば, $R2^{-t} \lt E$ としたいため, $$-t \lt \log \{2\epsilon / (Rk)\}$$ より, $$t \gt \log \{Rk / (2\epsilon)\}$$ となります.
+
+---
+
+$$\log (Rk / \epsilon)$$ 回程度のループが必要であることがわかりました. ($/2$ は除きました)
+
+例えば, `round`して整数で求めたい場合, 誤差は $0.5$ 未満になってほしいので, $R \leq 2N\cdot diff, k \leq N$ を使うと, 必要な二分探索のループ回数は$\log (6 N \cdot diff)$ ぐらい, ということになります.
+
+90回ぐらい回せば, 競プロでは, たいてい大丈夫だと思います.
+
+
+# AlienDPを適用するときにやるべきことまとめ
+
+1. DPに帰着する.
+2. AlienDPの形にする.
+3. Monge性を証明する.
+4. `calc` を効率的な方法で実装する.
+
+以上です. もしIOIなどで使うから空で書きたい, という場合でも, アイデアを抑えておけば, 書けるのではないでしょうか. がんばってください.
+
+# 実装
+
+
+```cpp
+// single pair k'-edge shortest path on DAG G
+// k' can move in [k - droppable, k]
+// from s to t; s, t is State
+// dist(v, k) := k-edge shortest path from v to t
+// dist(t, 0) = 0
+// dist(s, k') can be answer when k' is in [k - droppable, k]
+// for every fixed v, dist(v, k) must be downward convex function regarding k as input
+// (call this condition Convexity)
+//
+// when G is perfect DAG,
+// that the cost function w satisfies Convex QI is sufficient for Convexity
+//
+// O(T(Nf + r)) : T is times, N is number of nodes,
+// calc, reset can be done in O(f), O(r), resp.
+//
+// hi is sufficient if it is the max of w
+
+// GeneralPenalizeSpeedup<State>
+// (to, from, k, droppable, reset, calc, lo, hi, times, comp?)
+// {{"{{"}}{
+#include <cassert>
+#include <functional>
+#include <map>
+#include <tuple>
+template < class State, class Float = double, class ResetF, class CalcF,
+           class Compare = less< Float > >
+Float GeneralPenalizeSpeedup(const State &to, const State &from, int k, int droppable,
+                             ResetF reset, CalcF calc, Float lo, Float hi, int times,
+                             Compare comp = Compare()) {
+  assert(droppable >= 0);
+  if(from == to) return Float(0);
+  assert(k > 0);
+  Float C;
+  map< State, Float > memo;
+  map< State, int > links;
+
+  function< Float(State) > D = [&](State s) {
+    if(memo.count(s)) return memo[s];
+    Float val;
+    State before;
+    tie(val, before) = calc(D, s);
+    links[s] = links[before] + 1;
+    return memo[s] = val + C;
+  };
+
+  const auto solve = [&](const Float &_C) {
+    C = _C;
+    memo.clear();
+    links.clear();
+
+    memo[to] = Float(0);
+    links[to] = 0;
+
+    reset();
+
+    D(from);
+
+    // NOTE : acutualy, all nodes are added
+    if(comp(C, 0)) {
+      memo[from] += C * droppable;
+      links[from] += droppable;
+    }
+  };
+
+  if(comp(hi, lo)) swap(lo, hi); // for maximize
+
+  // binary search
+  for(int t = 0; t < times; t++) {
+    Float mid = (lo + hi) / 2;
+    solve(mid);
+    if(links[from] <= k)
+      hi = mid;
+    else
+      lo = mid;
+  }
+
+  // assume that we used just K edges
+  solve(lo);
+
+  return memo[from] - hi * k;
+}
+// }}}
+// GeneralPenalizeSpeedup<State>(to, from, k, droppable, reset, calc, lo, hi, comp?) {{"{{"}}{
+template < class State, class Float = double, class ResetF, class CalcF,
+           class Compare = less< Float > >
+Float GeneralPenalizeSpeedup(const State &to, const State &from, int k, int droppable,
+                             const ResetF &reset, const CalcF &calc, Float lo, Float hi,
+                             Compare comp = Compare()) {
+  return GeneralPenalizeSpeedup< State, Float, ResetF, CalcF, Compare >(
+      to, from, k, droppable, reset, calc, lo, hi, ceil(log2(abs(hi - lo) * 2 * k)) + 1,
+      comp);
+}
+// }}}
+// GeneralPenalizeSpeedup<State>(to, from, k, droppable, reset, calc, hi, comp?) {{"{{"}}{
+template < class State, class Float = double, class ResetF, class CalcF,
+           class Compare = less< Float > >
+Float GeneralPenalizeSpeedup(const State &to, const State &from, int k, int droppable,
+                             const ResetF &reset, const CalcF &calc, Float hi,
+                             Compare comp = Compare()) {
+  return GeneralPenalizeSpeedup< State, Float, ResetF, CalcF, Compare >(
+      to, from, k, droppable, reset, calc, -hi, hi, comp);
+}
+// }}}
+
+// when the dp is the folloing form
+// d(i, k) = min(j < i, d(j, k - 1) + w[j + 1, i])
+// and w is Convex QI
+
+// NOTE : 1-indexed
+// PenalizeSpeedup(int n, k, droppable, reset, calc, lo, hi, times, comp?) {{"{{"}}{
+#include <cassert>
+#include <functional>
+#include <map>
+#include <tuple>
+#include <vector>
+template < class Float = double, class ResetF, class CalcF,
+           class Compare = less< Float > >
+Float PenalizeSpeedup(int n, int k, int droppable, const ResetF &reset, const CalcF &calc,
+                      Float lo, Float hi, int times, Compare comp = Compare()) {
+  assert(droppable >= 0);
+  if(n == 0) return 0;
+  assert(k > 0 && n > 0);
+  using State = int;
+  const int from = n, to = 0;
+  vector< Float > memo(n + 1);
+  vector< int > links(n + 1);
+
+  int now;
+  function< Float(State) > D = [&](State s) {
+    assert(0 <= s && s < now);
+    return memo[s];
+  };
+
+  const auto solve = [&](const Float &C) {
+    memo.assign(n + 1, Float(0));
+    links.assign(n + 1, 0);
+
+    memo[to] = Float(0);
+    links[to] = 0;
+
+    reset();
+
+    for(now = 1; now <= n; now++) {
+      Float val;
+      State before;
+      tie(val, before) = calc(D, now);
+      assert(0 <= before && before < now);
+      memo[now] = val + C;
+      links[now] = links[before] + 1;
+    }
+
+    // NOTE : acutualy, all nodes (except "to") are added
+    if(comp(C, 0)) {
+      memo[from] += C * droppable;
+      links[from] += droppable;
+    }
+  };
+
+  if(comp(hi, lo)) swap(lo, hi); // for maximize
+
+  // binary serach
+  for(int t = 0; t < times; t++) {
+    Float mid = (lo + hi) / 2;
+    solve(mid);
+    if(links[from] <= k)
+      hi = mid;
+    else
+      lo = mid;
+  }
+
+  // assume that we used just K edges
+  hi = (hi + lo) / 2;
+  solve(hi);
+
+  return memo[from] - hi * k;
+}
+// }}}
+// PenalizeSpeedup(int n, k, droppable, reset, calc, lo, hi, comp?) {{"{{"}}{
+template < class Float = double, class ResetF, class CalcF,
+           class Compare = less< Float > >
+Float PenalizeSpeedup(int n, int k, int droppable, const ResetF &reset, const CalcF &calc,
+                      Float lo, Float hi, Compare comp = Compare()) {
+  return PenalizeSpeedup< Float, ResetF, CalcF, Compare >(
+      n, k, droppable, reset, calc, lo, hi, ceil(log2(abs(hi - lo) * k)) + 1, comp);
+}
+// }}}
+// PenalizeSpeedup(int n, k, droppable, reset, calc, hi, comp?) {{"{{"}}{
+template < class Float = double, class ResetF, class CalcF,
+           class Compare = less< Float > >
+Float PenalizeSpeedup(int n, int k, int droppable, const ResetF &reset, const CalcF &calc,
+                      Float hi, Compare comp = Compare()) {
+  return PenalizeSpeedup< Float, ResetF, CalcF, Compare >(
+      n, k, droppable, reset, calc, -hi, hi, comp);
+}
+// }}}
+
+// reset : () => void
+// calc : (D : InpuType, state) => (value, before)
+
+template < class State = int, class Float = double >
+using InputType = function< Float(State) >;
+
+using State = int;
+using Float = double;
+void reset() {}
+// DO USE D function , DO NOT determine by yourself
+// to be careful about TYPE (particular, use Float)
+pair< Float, State > calc(const InputType< State, Float > &D, State i) {}
+```
+
+
+# 検証
+
+* IOI2016 day2 Aliens
+  * [PDF: 公式 statement](https://www.ioi-jp.org/ioi/2016/tasks/day2-aliens-ISC.pdf){:target="_blank"}<!--_-->
+  * [PEG Online Judge (statement)](https://wcipeg.com/problem/ioi1623){:target="_blank"}<!--_-->
+  * [PEG Online Judge (submission)](https://wcipeg.com/submissions/src/613303){:target="_blank"}<!--_--> ([mirror](https://gist.github.com/LumaKernel/e8c771f3ccc1c865112a157835915284#file-ioi2016-aliens-cpp){:target="_blank"}<!--_-->)
+    * 本人しか見れないですね, mirrorを見てください. 満点を取りました.
+
+* ルーマニアIOI選抜2017 2 - Popcorn
+  * [CSAcademy (statement)](https://csacademy.com/contest/romanian-ioi-2017-selection-2/task/popcorn/statement/){:target="_blank"}<!--_-->
+  * [CSAcademy (code)](https://csacademy.com/submission/2148452/){:target="_blank"}<!--_--> ([mirror](https://gist.github.com/LumaKernel/e8c771f3ccc1c865112a157835915284#file-romanian-ioi-2017-selection-2-popcorn-cpp){:target="_blank"}<!--_-->)
+
+
+# 練習問題
+
+* [#56 Or Problem - CSAcademy](https://csacademy.com/contest/round-56/task/or-problem/){:target="_blank"}<!--_-->
+* [#351 C - Levels and Regions - codeforces](https://codeforces.com/contest/674/problem/C){:target="_blank"}<!--_-->
+* [#381 div1 E - Gosha is hunting - codeforces](https://codeforces.com/contest/739/problem/E){:target="_blank"}<!--_-->
+  * 下の参考にも書いたが, この問題がAlienDPを適用できる条件を満たしていることの証明がない
+
+# 参考
+
+* [Round #56 (Div. 1 + Div. 2) with prizes - codeforces](https://codeforces.com/blog/entry/55638){:target="_blank"}<!--_-->
+* [Incredibly beautiful DP optimization from N^3 to N log^2 N - codeforces](https://codeforces.com/blog/entry/49691){:target="_blank"}<!--_-->
+  * やっていることはAlienDPだが, 誰も $f(b) \coloneqq dp[i][a][b]$ が上に凸である事を証明できていない. この問題は最大化なので, 上に凸であればいい.
+  * 証明については, 直感的に, 得する順にソートするといったことを考えると良さそうだ. だが, 使えるbが増えたときに, 他の組合せを変えて得することがある. それも含めた証明は, そんなに自明なことではない
+  * (コメントを見る限り) 誰も証明できていないが, おそらく凸だと思われる
+* [競技プログラミングにおける動的計画法更新最適化まとめ - はまやんはまやんはまやん](https://www.hamayanhamayan.com/entry/2017/03/20/234711){:target="_blank"}<!--_-->
+
+
+[^1]: [Computing a Minimum Weight k-Link Path in Graphs with the Concave Monge Property](http://www.cs.ust.hk/mjg_lib/bibs/DPSu/DPSu.Files/sdarticle_204.pdf){:target="_blank"}<!--_-->. 完全DAG上での話だが, 内容はAlienDPと捉えて問題ない
+
+
