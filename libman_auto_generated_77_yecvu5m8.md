@@ -209,7 +209,7 @@ $\zeta_3 = \omega$ だ
 
 位数なんて難しい話は抜きにして，
 
-$\displaystyle \zeta_N = \cos(\frac{2\pi}{N}) +\sqrt {-1}\sin(\frac{2\pi}{N})$
+$\displaystyle \zeta_N = \cos(\frac{2\pi}{N}) +\sqrt {-1}\sin(\frac{2\pi}{N}) = \exp(\frac{2\pi}{N})$
 
 と定めれば条件を満たす
 
