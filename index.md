@@ -1,6 +1,6 @@
 ---
 layout: home
-last_update : 2019-06-04
+last_update : 2019-06-13
 ---
 
 えかえか
@@ -115,7 +115,7 @@ last_update : 2019-06-04
 * [√a mod p (Tonelli-Shanks algorithm)]({{ "math/number-theory/Tonelli-Shanks" | relative_url }})
 * [x^a=b mod pなるxを求める]({{ "math/number-theory/discrete-root" | relative_url }})
 
-## 線形代数
+## [線形代数]({{ "math/linear-algebra" | relative_url }})
 
 * [行列の積と累乗]({{ "math/linear-algebra/matrix" | relative_url }})
 * [連立一次方程式, 行列式, 行列のランク (ガウスの消去法 (Gaussian Elimination) )]({{ "math/linear-algebra/GaussianElimination" | relative_url }})
